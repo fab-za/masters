@@ -9,8 +9,11 @@ public class ManageGrid : MonoBehaviour
     int vertical, horizontal, columns, rows;
     public float sizeFactor;
     public int density;
+    private ConnectSP sp;
+    private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
     void Start()
     {
+        sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
         vertical = (int) Camera.main.orthographicSize;
         horizontal = vertical * (Screen.width / Screen.height);
         columns = horizontal * (int)(3/sizeFactor);
@@ -22,6 +25,7 @@ public class ManageGrid : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.N)){
             updateColourPerDensity(density);
+            sp.writeSP(alphabet[density]);
         }
         
     }
