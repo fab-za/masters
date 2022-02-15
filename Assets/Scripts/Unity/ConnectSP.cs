@@ -17,8 +17,8 @@ public class ConnectSP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        readSP();
-        Debug.Log(receivedString);
+        // readSP();
+        // Debug.Log(receivedString);
     }
 
     public void readSP(){

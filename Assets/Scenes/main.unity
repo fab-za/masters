@@ -899,7 +899,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947615841}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe8368ff5b3e5dc47ba5bcf20c53de60, type: 3}
   m_Name: 
@@ -1013,6 +1013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2110943984}
   - component: {fileID: 2110943983}
+  - component: {fileID: 2110943985}
   m_Layer: 0
   m_Name: GridManager
   m_TagString: Untagged
@@ -1054,3 +1055,16 @@ RectTransform:
   m_AnchoredPosition: {x: -7, y: -4.8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.49675325, y: 0.4943183}
+--- !u!114 &2110943985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110943982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00a9af046d30164cb42441fa79671c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackedObject: {fileID: 467071746}
