@@ -13,12 +13,9 @@ public class ManageGrid : MonoBehaviour
     {
         vertical = (int) Camera.main.orthographicSize;
         horizontal = vertical * (Screen.width / Screen.height);
-        Debug.Log(vertical+", "+horizontal);
         columns = horizontal * (int)(3/sizeFactor);
         rows = vertical * (int)(2/sizeFactor);
         grid = new float[columns, rows];
-
-        // generateWhiteGrid();
     }
 
     void Update()
@@ -29,61 +26,12 @@ public class ManageGrid : MonoBehaviour
         
     }
 
-    // private void generateRandomGrid(){
-    //     for (int i = 0; i < columns; i++){
-    //         for (int j = 0; j < rows; j++){
-    //             grid[i,j] = Random.Range(0.0f, 1.0f);
-    //             SpawnTile(i,j,grid[i,j]);
-    //         }
-    //     }
-
-    //     this.gameObject.transform.localScale = new Vector3(sizeFactor, sizeFactor, 1.0f);
-    // }
-
-    // private void generateWhiteGrid(){
-    //     for (int i = 0; i < columns; i++){
-    //         for (int j = 0; j < rows; j++){
-    //             SpawnTile(i,j,255);
-    //         }
-    //     }
-
-    //     this.gameObject.transform.localScale = new Vector3(sizeFactor, sizeFactor, 1.0f);
-    // }
-
-    // private void generatePerDensity(int skip){
-    //     for (int i = 0; i < columns; i+=2){
-    //         for (int j = 0; j < rows; j++){
-    //             if ((j + 1) % (skip + 1) == 0) {
-    //                 SpawnTile(i,j,0);             
-    //             }
-    //             else {
-    //                 SpawnTile(i,j,1);  
-    //             }
-    //         }
-    //     }
-
-    //     this.gameObject.transform.localScale = new Vector3(sizeFactor, sizeFactor, 1.0f);
-    // }
-
-    // private void updateColourPerDensity(int skip){
-    //     for (int j = 0; j < rows; j+=2){
-    //         for (int i = 0; i < columns; i++){
-    //             GameObject cur = GameObject.Find("x: "+i+"y: "+j);
-
-    //             if ((i + 1) % (skip + 1) == 0) {
-    //                 cur.GetComponent<SpriteRenderer>().color = new Color(0,0,0);
-    //             }
-    //             else {
-    //                 cur.GetComponent<SpriteRenderer>().color = new Color(255,255,255);
-    //             }
-    //         }
-    //     }
-    // }
-
     private void updateColourPerDensity(int skip){
+        // delete old grid
         GameObject curGrid = GameObject.Find("grid");
         Destroy(curGrid);
 
+        // make new grid
         GameObject newGrid = new GameObject("grid");
         newGrid.transform.position = this.gameObject.transform.position;
 
