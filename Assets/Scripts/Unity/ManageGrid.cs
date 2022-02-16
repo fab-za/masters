@@ -41,7 +41,7 @@ public class ManageGrid : MonoBehaviour
             }
         }
 
-        newGrid.transform.localScale = new Vector3(sizeFactor, sizeFactor, 1.0f);
+        newGrid.transform.localScale = new Vector3(sizeFactor*skip, sizeFactor*skip, 1.0f);
     }
 
     private void SpawnTile(int x, int y, float value, GameObject parentGrid){
