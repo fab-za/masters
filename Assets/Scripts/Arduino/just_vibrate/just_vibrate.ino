@@ -1,5 +1,5 @@
 int fine = round(1000000/300);
-int mid = round(1000000/200);
+int mid = round(1000000/260);
 int coarse = round(1000000/130);
 
 int hapticPin = 9;
@@ -12,13 +12,15 @@ void setup() {
 
   pinMode(hapticPin, OUTPUT);
 
+//  testVibrate();
+
 }
 
 void loop() {
-  testVibrate();
-  
-//  char c = Serial.read();
-//
+  char c = Serial.read();
+
+  if(c == 'A'){vibrate(hapticPin, mid);}
+
 //  if(c == 'C'){vibrate(hapticPin, fine);}
 //  else if(c == 'D'){vibrate(hapticPin, mid);}
 //  else if(c == 'E'){vibrate(hapticPin, coarse);}

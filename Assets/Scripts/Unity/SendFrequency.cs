@@ -23,7 +23,7 @@ public class SendFrequency : MonoBehaviour
             Debug.Log("cursor is moving: "+ g.density);
             sp.writeSP(alphabet[g.density]);
         }
-
+        
         prevPosition = trackedObject.transform.position;
     }
 }
