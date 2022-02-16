@@ -49,7 +49,7 @@ public class ManageGrid : MonoBehaviour
         g.transform.position = new Vector3(x-(horizontal-0.5f), y-(vertical-0.5f));
         g.transform.parent = parentGrid.transform;
         g.AddComponent<BoxCollider2D>();
-        g.AddComponent<VibrateOnSquare>();
+        // g.AddComponent<VibrateOnSquare>();
         var s = g.AddComponent<SpriteRenderer>();
         s.sprite = sprite;
         s.color = new Color(value, value, value);

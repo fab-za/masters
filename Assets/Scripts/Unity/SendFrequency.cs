@@ -20,10 +20,10 @@ public class SendFrequency : MonoBehaviour
     void Update()
     {
         if(trackedObject.transform.position != prevPosition){
-            Debug.Log("cursor is moving: "+ g.density);
+            // Debug.Log("cursor is moving: "+ g.density);
             sp.writeSP(alphabet[g.density]);
         }
-        
+
         prevPosition = trackedObject.transform.position;
     }
 }

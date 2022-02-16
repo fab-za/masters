@@ -1,11 +1,16 @@
-int fine = round(1000000/300);
-int mid = round(1000000/260);
-int coarse = round(1000000/130);
-
 int hapticPin = 9;
 
 long elapsedtime = 0;
 long duration = 8000000;
+
+int train1 = round(1000000/130);
+int train2 = round(1000000/215);
+int train3 = round(1000000/300);
+
+int test1 = round(1000000/280);
+int test2 = round(1000000/150);
+int test3 = round(1000000/260);
+int test4 = round(1000000/180);
 
 void setup() {
   Serial.begin(9600);
@@ -19,11 +24,16 @@ void setup() {
 void loop() {
   char c = Serial.read();
 
-  if(c == 'A'){vibrate(hapticPin, mid);}
+  if(c == 'A'){vibrate(hapticPin, train2);}
 
-//  if(c == 'C'){vibrate(hapticPin, fine);}
-//  else if(c == 'D'){vibrate(hapticPin, mid);}
-//  else if(c == 'E'){vibrate(hapticPin, coarse);}
+  else if(c == 'C'){vibrate(hapticPin, train1);}
+  else if(c == 'D'){vibrate(hapticPin, train2);}
+  else if(c == 'E'){vibrate(hapticPin, train3);}
+  
+  else if(c == 'F'){vibrate(hapticPin, test1);}
+  else if(c == 'G'){vibrate(hapticPin, test2);}
+  else if(c == 'H'){vibrate(hapticPin, test3);}
+  else if(c == 'I'){vibrate(hapticPin, test4);}
 }
 
 void vibrate(int pin, int f){
@@ -35,20 +45,20 @@ void vibrate(int pin, int f){
 
 void testVibrate(){
   while(elapsedtime < duration){
-    vibrate(hapticPin, fine);
-    elapsedtime += fine;
+    vibrate(hapticPin, train1);
+    elapsedtime += train1;
     }
   elapsedtime = 0;
   
   while(elapsedtime < duration){
-    vibrate(hapticPin, mid);
-    elapsedtime += mid;
+    vibrate(hapticPin, train2);
+    elapsedtime += train2;
     }
   elapsedtime = 0;
   
   while(elapsedtime < duration){
-    vibrate(hapticPin, coarse);
-    elapsedtime += coarse;
+    vibrate(hapticPin, train3);
+    elapsedtime += train3;
     }
   elapsedtime = 0;
 }

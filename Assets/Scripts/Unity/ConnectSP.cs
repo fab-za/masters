@@ -26,7 +26,7 @@ public class ConnectSP : MonoBehaviour
     }
 
     public void writeSP(string message){
-        Debug.Log(message);
+        // Debug.Log(message);
         sp.Write(message);
     }
 }
