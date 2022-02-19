@@ -8,7 +8,9 @@ public class ManageGrid : MonoBehaviour
     public float[,] grid;
     int vertical, horizontal, columns, rows;
     public float sizeFactor;
-    public int density;
+    private int lastPair = 5; // last pair + 1
+    private int startPair = 1; // start pair - 1
+    public int curPair;
     void Start()
     {
         vertical = (int) Camera.main.orthographicSize;
@@ -16,12 +18,20 @@ public class ManageGrid : MonoBehaviour
         columns = horizontal * (int)(3/sizeFactor);
         rows = vertical * (int)(2/sizeFactor);
         grid = new float[columns, rows];
+        curPair = startPair;
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.N)){
-            updateColourPerDensity(density);
+        if(Input.GetMouseButtonDown(0)){
+            curPair += 1;
+            if (curPair < lastPair){
+                updateColourPerDensity(curPair);
+            }
+            else{
+                curPair = startPair+1;
+                updateColourPerDensity(curPair);
+            }
         }
         
     }

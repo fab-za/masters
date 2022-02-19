@@ -3,9 +3,9 @@ int hapticPin = 9;
 long elapsedtime = 0;
 long duration = 8000000;
 
-int train1 = round(1000000/130);
-int train2 = round(1000000/215);
-int train3 = round(1000000/300);
+int train1 = round(1000000/325);
+int train2 = round(1000000/275);
+int train3 = round(1000000/200);
 
 int test1 = round(1000000/280);
 int test2 = round(1000000/150);

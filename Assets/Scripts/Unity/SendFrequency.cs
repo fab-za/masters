@@ -21,7 +21,7 @@ public class SendFrequency : MonoBehaviour
     {
         if(trackedObject.transform.position != prevPosition){
             // Debug.Log("cursor is moving: "+ g.density);
-            sp.writeSP(alphabet[g.density]);
+            sp.writeSP(alphabet[g.curPair]);
         }
 
         prevPosition = trackedObject.transform.position;
