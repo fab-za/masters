@@ -11,25 +11,37 @@ public class ManageGrid : MonoBehaviour
     private int lastPair = 5; // last pair + 1
     private int startPair = 1; // start pair - 1
     public int curPair;
+    // private int[] pairs;
     void Start()
     {
         vertical = (int) Camera.main.orthographicSize;
         horizontal = vertical * (Screen.width / Screen.height);
-        columns = horizontal * (int)(3/sizeFactor);
-        rows = vertical * (int)(2/sizeFactor);
+        columns = horizontal * (int)(3.5f/sizeFactor);
+        rows = vertical * (int)(2.2f/sizeFactor);
         grid = new float[columns, rows];
         curPair = startPair;
     }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)){
+        if(Input.GetKeyDown(KeyCode.RightArrow)){
             curPair += 1;
             if (curPair < lastPair){
                 updateColourPerDensity(curPair);
             }
             else{
                 curPair = startPair+1;
+                updateColourPerDensity(curPair);
+            }
+        }
+
+        else if(Input.GetKeyDown(KeyCode.LeftArrow)){
+            curPair -= 1;
+            if (curPair > startPair){
+                updateColourPerDensity(curPair);
+            }
+            else{
+                curPair = lastPair-1;
                 updateColourPerDensity(curPair);
             }
         }
@@ -51,7 +63,7 @@ public class ManageGrid : MonoBehaviour
             }
         }
 
-        newGrid.transform.localScale = new Vector3(sizeFactor*skip, sizeFactor*skip, 1.0f);
+        newGrid.transform.localScale = new Vector3(sizeFactor*skip*0.5f, sizeFactor*skip*0.5f, 1.0f);
     }
 
     private void SpawnTile(int x, int y, float value, GameObject parentGrid){
