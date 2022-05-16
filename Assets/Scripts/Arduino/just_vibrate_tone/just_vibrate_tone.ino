@@ -3,8 +3,8 @@
 int hapticPin = 8;
 
 long elapsedtime = 0;
-long duration = 8000000;
-int toneDuration = 400;
+long duration = 50000000;
+int toneDuration = 500;
 
 int train1 = 300;
 int train2 = 275;
@@ -20,7 +20,7 @@ void setup() {
 
   pinMode(hapticPin, OUTPUT);
 
-//  testVibrate();
+  testVibrate();
 
 }
 
@@ -52,12 +52,16 @@ void testVibrate(){
     elapsedtime += train1;
     }
   elapsedtime = 0;
+
+  delay(500);
   
   while(elapsedtime < duration){
     vibrate(hapticPin, train2);
     elapsedtime += train2;
     }
   elapsedtime = 0;
+  
+  delay(500);
   
   while(elapsedtime < duration){
     vibrate(hapticPin, train3);
