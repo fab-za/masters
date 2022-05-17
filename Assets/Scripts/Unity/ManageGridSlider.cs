@@ -11,12 +11,12 @@ public class ManageGridSlider : MonoBehaviour
     // public float y_boundary;
     [System.Serializable]
     public struct GridParameters{
-        public string type;
+        public int type;
         public int panel;    // left = -1, right = +1
         public float size;
         public float spacing;
 
-        public GridParameters(string t, int p, float si, float sp){
+        public GridParameters(int t, int p, float si, float sp){
             type = t;
             panel = p;
             size = si;
@@ -54,8 +54,8 @@ public class ManageGridSlider : MonoBehaviour
         Debug.Log(columns);
         Debug.Log(rows);
 
-        leftGrid = new GridParameters("A",-1,1,0);
-        rightGrid = new GridParameters("A",1,1,0);
+        leftGrid = new GridParameters(0,-1,1,0);
+        rightGrid = new GridParameters(0,1,1,0);
 
         slider = new SliderValues(1,1,0,0);
 
@@ -134,6 +134,18 @@ public class ManageGridSlider : MonoBehaviour
 
         rightGrid.size = slider.size_right;
         rightGrid.spacing = slider.spacing_right;
+    }
+
+    public void convertToType(){
+        // somehow based on the current grid parameters, categorise into types
+        
+        // lower size + lower spacing = smoother
+        // lower size + higher spacing = ?
+        // higher size + lower spacing = ?
+        // higher size +  higher spacing = ?
+        
+        // return higher number = rougher
+
     }
 
 }
