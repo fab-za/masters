@@ -43,8 +43,12 @@ public class SendTension : MonoBehaviour
     void Update()
     {
         // write message
+        selectRelationState();
+        findPosition();
 
         if(trackedObject.transform.position != prevPosition){
+            // Debug.Log("cursor is moving");
+
             if(onBoundary){
                 message = currentState.left + currentState.right;
             } 
@@ -55,7 +59,7 @@ public class SendTension : MonoBehaviour
                 message = currentState.right + currentState.right;
             }
 
-            // Debug.Log("cursor is moving: " + message);
+            // Debug.Log("message: " + message);
 
             sp.writeSP(message);
         }
@@ -64,10 +68,10 @@ public class SendTension : MonoBehaviour
     }
 
     public void selectRelationState(){
-        if(grid.leftGrid.type > grid.rightGrid.type){
+        if(grid.leftGrid.roughness > grid.rightGrid.roughness){
             currentState = rougher_left;
         } 
-        else if(grid.leftGrid.type < grid.rightGrid.type){
+        else if(grid.leftGrid.roughness < grid.rightGrid.roughness){
             currentState = rougher_right;
         }
         else{
@@ -80,16 +84,19 @@ public class SendTension : MonoBehaviour
             onLeftPanel = true;
             onBoundary = false;
             onRightPanel = false;
+            // Debug.Log("left");
         }
         else if(trackedObject.transform.position.x > boundary_right){
             onLeftPanel = false;
             onBoundary = false;
             onRightPanel = true;
+            // Debug.Log("right");
         }
         else{
             onLeftPanel = false;
             onBoundary = true;
             onRightPanel = false;
+            // Debug.Log("boundary");
         }
     }
 }

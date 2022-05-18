@@ -11,13 +11,13 @@ public class ManageGridSlider : MonoBehaviour
     // public float y_boundary;
     [System.Serializable]
     public struct GridParameters{
-        public int type;
+        public int roughness;
         public int panel;    // left = -1, right = +1
         public float size;
         public float spacing;
 
-        public GridParameters(int t, int p, float si, float sp){
-            type = t;
+        public GridParameters(int r, int p, float si, float sp){
+            roughness = r;
             panel = p;
             size = si;
             spacing = sp;
@@ -42,6 +42,8 @@ public class ManageGridSlider : MonoBehaviour
     public SliderValues slider;
     // public int trial = 0;
     // private GameObject newGrid;
+    public int tempLeftRoughness;
+    public int tempRightRoughness;
 
     void Start()
     {
@@ -51,8 +53,8 @@ public class ManageGridSlider : MonoBehaviour
         rows = vertical * (int)(2.2f/sizeFactor);
         // grid = new float[columns, rows];
 
-        Debug.Log(columns);
-        Debug.Log(rows);
+        // Debug.Log(columns);
+        // Debug.Log(rows);
 
         leftGrid = new GridParameters(0,-1,1,0);
         rightGrid = new GridParameters(0,1,1,0);
@@ -66,6 +68,8 @@ public class ManageGridSlider : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        leftGrid.roughness = tempLeftRoughness;
+        rightGrid.roughness = tempRightRoughness;
         updateGridParameters();
     }
 
@@ -136,8 +140,8 @@ public class ManageGridSlider : MonoBehaviour
         rightGrid.spacing = slider.spacing_right;
     }
 
-    public void convertToType(){
-        // somehow based on the current grid parameters, categorise into types
+    public void convertToRoughness(){
+        // somehow based on the current grid parameters, categorise into roughness
         
         // lower size + lower spacing = smoother
         // lower size + higher spacing = ?

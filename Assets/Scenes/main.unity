@@ -3174,7 +3174,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947615841}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe8368ff5b3e5dc47ba5bcf20c53de60, type: 3}
   m_Name: 
@@ -3369,6 +3369,7 @@ GameObject:
   - component: {fileID: 2110943983}
   - component: {fileID: 2110943985}
   - component: {fileID: 2110943986}
+  - component: {fileID: 2110943987}
   m_Layer: 0
   m_Name: GridManager
   m_TagString: Untagged
@@ -3439,12 +3440,12 @@ MonoBehaviour:
   sizeFactor: 0.3
   sprite: {fileID: 21300000, guid: 4b3b32e8a9a6d3d408c636ac2f853506, type: 3}
   leftGrid:
-    type: 
+    roughness: 0
     panel: 0
     size: 0
     spacing: 0
   rightGrid:
-    type: 
+    roughness: 0
     panel: 0
     size: 0
     spacing: 0
@@ -3453,3 +3454,24 @@ MonoBehaviour:
     size_right: 0
     spacing_left: 0
     spacing_right: 0
+  tempLeftRoughness: 0
+  tempRightRoughness: 1
+--- !u!114 &2110943987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110943982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2bdc9a7f6d6c824784af68ac73ae88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackedObject: {fileID: 467071746}
+  currentState:
+    left: 
+    right: 
+  message: 
+  boundary_left: -1
+  boundary_right: 1
