@@ -30,16 +30,6 @@ void loop() {
   char tensionMode_right = message[1];
   char vibrationMode_left = message[3];
 
-//  if (tensionMode_left != curTensionMode_left) {
-//    moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
-//  }
-//  if (tensionMode_right != curTensionMode_right) {
-//    moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
-//  }
-//
-//  curTensionMode_left = tensionMode_left;
-//  curTensionMode_right = tensionMode_right;
-
   moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
   moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
 
