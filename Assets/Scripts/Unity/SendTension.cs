@@ -67,7 +67,9 @@ public class SendTension : MonoBehaviour
 
             // Debug.Log("message: " + message);
 
-            sp.writeSP(message);
+            // sp.writeSP(message);
+
+            sp.tensionModes = message;
         }
 
         prevPosition = position;
@@ -119,7 +121,7 @@ public class SendTension : MonoBehaviour
             // onBoundary = false;
             // onRightPanel = true;
 
-            position = 1;
+            position = 2;
             // Debug.Log("right");
         }
         else{
@@ -127,7 +129,7 @@ public class SendTension : MonoBehaviour
             // onBoundary = true;
             // onRightPanel = false;
 
-            position = 2;
+            position = 1;
             // Debug.Log("boundary");
         }
     }

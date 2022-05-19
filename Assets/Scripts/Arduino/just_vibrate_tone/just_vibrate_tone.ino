@@ -1,9 +1,9 @@
 #include "pitches.h"
 
-int hapticPin = 8;
+int hapticPin = 11;
 
 long elapsedtime = 0;
-long duration = 50000000;
+long duration = 500000;
 int toneDuration = 500;
 
 int train1 = 300;

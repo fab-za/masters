@@ -12,7 +12,7 @@ bool firstRead = true;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Serial.setTimeout(200);
+//  Serial.setTimeout(200);
   
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -35,7 +35,7 @@ void loop() {
 //    Serial.println(rtime);
 //  }
 
-//  betweenArduinoUnity(message);
+  betweenArduinoUnity(message);
   betweenArduinoMotor(message);
 }
 

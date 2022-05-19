@@ -10,6 +10,8 @@ public class ConnectSP : MonoBehaviour
     public string receivedString;
     public GameObject test_data;
     public float speed = 0.01f;
+    public string tensionModes;
+    public string vibrationModes;
     void Start()
     {
         sp.Open();
@@ -21,6 +23,7 @@ public class ConnectSP : MonoBehaviour
     {
         // readSP();
         // Debug.Log(receivedString);
+        combineMessages();
     }
 
     public void readSP(){
@@ -36,5 +39,10 @@ public class ConnectSP : MonoBehaviour
     public void testSP(){
         sp.Write("test");
         // serialController.SendSerialMessage("test");
+    }
+    public void combineMessages(){
+        string message = tensionModes + vibrationModes;
+        sp.Write(message);
+        // Debug.Log(message);
     }
 }
