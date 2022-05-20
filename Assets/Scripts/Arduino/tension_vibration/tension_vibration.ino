@@ -32,6 +32,8 @@ char tensionMode_right = 'S';
 char vibrationMode_left = 'A';
 char vibrationMode_right = 'A';
 
+char buf[4];
+
 void setup() {
   pinMode(hapticPin_left, OUTPUT);
   pinMode(hapticPin_right, OUTPUT);
@@ -42,31 +44,45 @@ void setup() {
   Serial.begin(9600);
   Serial.setTimeout(200);
 
-  tensionMotor_left.write(0);
-  tensionMotor_right.write(0);
+  tensionMotor_left.write(110);
+  tensionMotor_right.write(70);
 
-  delay(1000);
+  delay(500);
   
-  tensionMotor_left.write(180);
-  tensionMotor_right.write(180);
+  tensionMotor_left.write(slack);
+  tensionMotor_right.write(slack);
 
-  delay(1000);
+  delay(500);
 
   longVibrate(hapticPin_left, 275);
 }
 
 void loop() {
-  String message = Serial.readString();
+  String message = Serial.readStringUntil('\n');
+//  Serial.println("message received: " + message);
 
-  tensionMode_left = message[0];
-  tensionMode_right = message[1];
-  vibrationMode_left = message[2];
-  vibrationMode_right = message[3];
+  if(message != ""){
+    message.toCharArray(buf, 4);
+  }
+
+//  delay(10);
+
+  tensionMode_left = buf[0];
+  tensionMode_right = buf[1];
+  vibrationMode_left = buf[2];
+  vibrationMode_right = buf[3];
+
+//  Serial.println("left tension received: " + tensionMode_left);
 
   moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
   moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
-//  callVibrate(hapticPin_left, vibrationMode_left);
-//  callVibrate(hapticPin_right, vibrationMode_right);
+  
+//  if(vibrationMode_left != 'A'){
+//    
+//  }
+
+  callVibrate(hapticPin_left, vibrationMode_left);
+  callVibrate(hapticPin_right, vibrationMode_right);
 
 }
 
@@ -77,6 +93,7 @@ void moveTensionMotor(Servo motor, char mode, int dir) {
   else if (mode == 'T') {
     motor.write(slack + (tense * dir));
   }
+//  delay(100);
 }
 
 void vibrate(int pin, int f){

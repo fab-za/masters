@@ -49,7 +49,7 @@ public class SendTension : MonoBehaviour
         // write message
         // Debug.Log(Input.GetAxis("Mouse X"));
         selectRelationState();
-        defineBoundary();
+        // defineBoundary();
         findPosition();
 
         if(position != prevPosition){
@@ -138,7 +138,7 @@ public class SendTension : MonoBehaviour
         float cursorSpeed = Input.GetAxis("Mouse X");
         float offset = cursorSpeed * motorLag;
         // Debug.Log(offset);
-        // boundary_left = -1 -offset;
-        // boundary_right = 1 - offset;
+        boundary_left = -1 -offset;
+        boundary_right = 1 - offset;
     }
 }

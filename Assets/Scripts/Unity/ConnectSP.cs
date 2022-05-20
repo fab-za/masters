@@ -5,44 +5,50 @@ using UnityEngine;
 
 public class ConnectSP : MonoBehaviour
 {
-    SerialPort sp = new SerialPort("COM3", 9600);
-    // private SerialController serialController;
+    private SerialController serialController;
     public string receivedString;
     public GameObject test_data;
     public float speed = 0.01f;
     public string tensionModes;
     public string vibrationModes;
+    private int timeout = 20;
+    private int elapsedFrames;
     void Start()
     {
-        sp.Open();
-        // serialController = GameObject.Find("SerialController").GetComponent<SerialController>();
+        serialController = GameObject.Find("SerialController").GetComponent<SerialController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // readSP();
-        // Debug.Log(receivedString);
-        combineMessages();
+        if(elapsedFrames > timeout){
+            combineMessages();
+            elapsedFrames = 0;
+        }
+
+        elapsedFrames += 1;
     }
 
     public void readSP(){
-        receivedString = sp.ReadLine();
-        // receivedString = serialController.ReadSerialMessage();
+        receivedString = serialController.ReadSerialMessage();
+        Debug.Log(receivedString);
     }
 
     public void writeSP(string message){
         // Debug.Log(message);
-        sp.Write(message);
+        serialController.SendSerialMessage(message);
     }
 
     public void testSP(){
-        sp.Write("test");
-        // serialController.SendSerialMessage("test");
+        // sp.Write("test");
+        serialController.SendSerialMessage("test");
+        Debug.Log("sent test");
+        
     }
     public void combineMessages(){
         string message = tensionModes + vibrationModes;
-        sp.Write(message);
+        serialController.SendSerialMessage(message);
         // Debug.Log(message);
     }
 }

@@ -12,7 +12,7 @@ bool firstRead = true;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-//  Serial.setTimeout(200);
+  Serial.setTimeout(200);
   
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -23,17 +23,19 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-//  prevTime = millis();
+  prevTime = millis();
   String message = Serial.readString();
-//  if(firstRead){
-//    readTime = millis() - prevTime;
-//    firstRead = false;
-//    
-//    char buf[50];
-//    String rtime = ltoa(readTime, buf, 10);
-//    
-//    Serial.println(rtime);
-//  }
+  if(firstRead){
+    readTime = millis() - prevTime;
+    firstRead = false;
+    
+    char buf[50];
+    String rtime = ltoa(readTime, buf, 10);
+    
+    Serial.println(rtime);
+    
+  }
+  Serial.println("message received: " + message);
 
   betweenArduinoUnity(message);
   betweenArduinoMotor(message);
