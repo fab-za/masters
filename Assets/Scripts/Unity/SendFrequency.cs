@@ -5,7 +5,7 @@ using UnityEngine;
 public class SendFrequency : MonoBehaviour
 {
     // private ManageGrid g;
-    private ManageGridSlider grid;
+    private ManageGridSlider visual;
     private ConnectSP sp;
     private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
     public GameObject trackedObject;
@@ -14,7 +14,7 @@ public class SendFrequency : MonoBehaviour
     {
         sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
         // g = this.gameObject.GetComponent<ManageGrid>();
-        grid = this.gameObject.GetComponent<ManageGridSlider>();
+        visual = this.gameObject.GetComponent<ManageGridSlider>();
         prevPosition = trackedObject.transform.position;
     }
 
@@ -25,7 +25,7 @@ public class SendFrequency : MonoBehaviour
             // Debug.Log("cursor is moving: "+ g.density);
             // sp.writeSP(alphabet[g.curPair]);
 
-            sp.vibrationModes = alphabet[grid.leftGrid.roughness+1] + alphabet[grid.rightGrid.roughness+1];
+            sp.vibrationModes = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
         } else{sp.vibrationModes = "AA";}
 
         prevPosition = trackedObject.transform.position;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SendTension : MonoBehaviour
 {
-    private ManageGridSlider grid;
+    private ManageGridSlider visual;
     private ConnectSP sp;
     public GameObject trackedObject;
     // private Vector3 prevPosition;
@@ -35,7 +35,7 @@ public class SendTension : MonoBehaviour
     void Start()
     {
         sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
-        grid = this.gameObject.GetComponent<ManageGridSlider>();
+        visual = this.gameObject.GetComponent<ManageGridSlider>();
         prevPosition = 0;
 
         rougher_left = new Relation("T","S");
@@ -96,10 +96,10 @@ public class SendTension : MonoBehaviour
     }
 
     public void selectRelationState(){
-        if(grid.leftGrid.roughness > grid.rightGrid.roughness){
+        if(visual.leftGrid.roughness > visual.rightGrid.roughness){
             currentState = rougher_left;
         } 
-        else if(grid.leftGrid.roughness < grid.rightGrid.roughness){
+        else if(visual.leftGrid.roughness < visual.rightGrid.roughness){
             currentState = rougher_right;
         }
         else{
