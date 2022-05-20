@@ -47,7 +47,9 @@ public class ManageLineGrid : MonoBehaviour
     // private GameObject newGrid;
     public int tempLeftRoughness;
     public int tempRightRoughness;
-    public int points;
+    public int samplingRate;
+    public float weightAmplitude;
+    public float weightPeriod;
     
     void Start()
     {
@@ -57,8 +59,8 @@ public class ManageLineGrid : MonoBehaviour
         // rightGrid = new GridParameters(0,1,1,0);
         // slider = new SliderValues(1,1,0,0);
 
-        // leftGrid.positions = new Vector3[points];
-        // rightGrid.positions = new Vector3[points];
+        // leftGrid.positions = new Vector3[samplingRate];
+        // rightGrid.positions = new Vector3[samplingRate];
     }
 
     // Update is called once per frame
@@ -101,11 +103,8 @@ public class ManageLineGrid : MonoBehaviour
 
     public void convertToRoughness(){
         // somehow based on the current grid parameters, categorise into roughness
-        
-        // lower amplitude + lower period = smoother
-        // lower amplitude + higher period = ?
-        // higher amplitude + lower period = ?
-        // higher amplitude +  higher period = ?
+          
+        // roughness = (weightAmplitude * amplitude) /( weightPeriod * period);
         
         // return higher number = rougher
 
@@ -119,9 +118,9 @@ public class ManageLineGrid : MonoBehaviour
         rightGrid.lineRenderer.SetPositions(rightGrid.positions);
     }
     public Vector3[] parametersToPositions(GridParameters panel){
-        Vector3[] positions = new Vector3[points];
+        Vector3[] positions = new Vector3[samplingRate];
 
-        double[] x = Generate.LinearSpaced(points, 0, (10*panel.side));
+        double[] x = Generate.LinearSpaced(samplingRate, 0, (10*panel.side));
 
         for(int i = 0; i < x.Length; i++){
             float y = (panel.amplitude * Mathf.Sin(panel.period * (float)x[i]));

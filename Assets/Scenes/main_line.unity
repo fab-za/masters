@@ -3483,7 +3483,9 @@ MonoBehaviour:
     period_right: 0
   tempLeftRoughness: 0
   tempRightRoughness: 0
-  points: 630
+  samplingRate: 630
+  weightAmplitude: 0
+  weightPeriod: 0
 --- !u!114 &1783163933
 MonoBehaviour:
   m_ObjectHideFlags: 0
