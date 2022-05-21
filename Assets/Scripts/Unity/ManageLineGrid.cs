@@ -26,30 +26,31 @@ public class ManageLineGrid : MonoBehaviour
 
         }
     }
-    [System.Serializable]
-    public struct SliderValues{
-        public float amplitude_left;
-        public float amplitude_right;
-        public float period_left;
-        public float period_right;
-
-        public SliderValues(float sil, float sir, float spl, float spr){
-            amplitude_left = sil;
-            amplitude_right = sir;
-            period_left = spl;
-            period_right = spr;
-        }
-    }
     public GridParameters leftGrid;
     public GridParameters rightGrid;
-    public SliderValues slider;
+    // public ManageSlider slider;
+    // [System.Serializable]
+    // public struct SliderValues{
+    //     public float amplitude_left;
+    //     public float amplitude_right;
+    //     public float period_left;
+    //     public float period_right;
+
+    //     public SliderValues(float sil, float sir, float spl, float spr){
+    //         amplitude_left = sil;
+    //         amplitude_right = sir;
+    //         period_left = spl;
+    //         period_right = spr;
+    //     }
+    // }
+    // public SliderValues slider;
     // public int trial = 0;
     // private GameObject newGrid;
-    public int tempLeftRoughness;
-    public int tempRightRoughness;
+    // public int tempLeftRoughness;
+    // public int tempRightRoughness;
     public int samplingRate;
-    public float weightAmplitude;
-    public float weightPeriod;
+    // public float weightAmplitude;
+    // public float weightPeriod;
     
     void Start()
     {
@@ -68,45 +69,48 @@ public class ManageLineGrid : MonoBehaviour
     {
         // lr.numCornerVertices = numCornerVertices;
 
-        leftGrid.roughness = tempLeftRoughness;
-        rightGrid.roughness = tempRightRoughness;
-        updateParameters();
-        updateLine();
-    }
-
-    public void AdjustAmplitudeLeft(float newAmplitude){
-        slider.amplitude_left = newAmplitude;
-    }
-
-    public void AdjustPeriodLeft(float newPeriod){
-        slider.period_left = newPeriod;
-    }
-
-    public void AdjustAmplitudeRight(float newAmplitude){
-        slider.amplitude_right = newAmplitude;
-    }
-
-    public void AdjustPeriodRight(float newPeriod){
-        slider.period_right = newPeriod;
-    }
-
-    private void updateParameters(){
-        leftGrid.amplitude = slider.amplitude_left;
-        leftGrid.period = slider.period_left;
-
-        rightGrid.amplitude = slider.amplitude_right;
-        rightGrid.period = slider.period_right;
+        // leftGrid.roughness = tempLeftRoughness;
+        // rightGrid.roughness = tempRightRoughness;
 
         leftGrid.positions = parametersToPositions(leftGrid);
         rightGrid.positions = parametersToPositions(rightGrid);
+        
+        // updateParameters();
+        updateLine();
     }
 
-    public void convertToRoughness(){
-        // somehow based on the current grid parameters, categorise into roughness
-          
-        // roughness = (weightAmplitude * amplitude) /( weightPeriod * period);
-        
-        // return higher number = rougher
+    // public void AdjustAmplitudeLeft(float newAmplitude){
+    //     slider.amplitude_left = newAmplitude;
+    // }
+
+    // public void AdjustPeriodLeft(float newPeriod){
+    //     slider.period_left = newPeriod;
+    // }
+
+    // public void AdjustAmplitudeRight(float newAmplitude){
+    //     slider.amplitude_right = newAmplitude;
+    // }
+
+    // public void AdjustPeriodRight(float newPeriod){
+    //     slider.period_right = newPeriod;
+    // }
+
+    // private void updateParameters(){
+    //     leftGrid.amplitude = slider.amplitude_left;
+    //     leftGrid.period = slider.period_left;
+
+    //     rightGrid.amplitude = slider.amplitude_right;
+    //     rightGrid.period = slider.period_right;
+    // }
+
+    public void updateParameters(float left_amplitude, float left_period, int left_roughness, float right_amplitude, float right_period, int right_roughness){
+        leftGrid.amplitude = left_amplitude;
+        leftGrid.period = left_period;
+        leftGrid.roughness = left_roughness;
+
+        rightGrid.amplitude = right_amplitude;
+        rightGrid.period = right_period;
+        rightGrid.roughness = right_roughness;
 
     }
 

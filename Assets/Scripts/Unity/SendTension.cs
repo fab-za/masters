@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SendTension : MonoBehaviour
 {
-    private ManageGridSlider visual;
+    // private ManageGridSlider visual;
+    private ManageLineGrid visual;
     private ConnectSP sp;
     public GameObject trackedObject;
-    // private Vector3 prevPosition;
     [System.Serializable]
     public struct Relation{
         public string left;
@@ -23,9 +23,6 @@ public class SendTension : MonoBehaviour
     private Relation rougher_equal;
     public Relation currentState;
     public string message;
-    // private bool onLeftPanel;
-    // private bool onBoundary;
-    // private bool onRightPanel;
     private int position;
     private int prevPosition;
     public float boundary_left;
@@ -35,7 +32,7 @@ public class SendTension : MonoBehaviour
     void Start()
     {
         sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
-        visual = this.gameObject.GetComponent<ManageGridSlider>();
+        visual = this.gameObject.GetComponent<ManageLineGrid>();
         prevPosition = 0;
 
         rougher_left = new Relation("T","S");
@@ -73,26 +70,6 @@ public class SendTension : MonoBehaviour
         }
 
         prevPosition = position;
-
-        // if(trackedObject.transform.position != prevPosition){
-        //     // Debug.Log("cursor is moving");
-
-        //     if(onBoundary){
-        //         message = currentState.left + currentState.right;
-        //     } 
-        //     else if (onLeftPanel){
-        //         message = currentState.left + currentState.left;
-        //     } 
-        //     else if (onRightPanel){
-        //         message = currentState.right + currentState.right;
-        //     }
-
-        //     // Debug.Log("message: " + message);
-
-        //     // sp.writeSP(message);
-        // }
-
-        // prevPosition = trackedObject.transform.position;
     }
 
     public void selectRelationState(){
@@ -109,26 +86,14 @@ public class SendTension : MonoBehaviour
 
     public void findPosition(){
         if(trackedObject.transform.position.x < boundary_left){
-            // onLeftPanel = true;
-            // onBoundary = false;
-            // onRightPanel = false;
-
             position = 0;
             // Debug.Log("left");
         }
         else if(trackedObject.transform.position.x > boundary_right){
-            // onLeftPanel = false;
-            // onBoundary = false;
-            // onRightPanel = true;
-
             position = 2;
             // Debug.Log("right");
         }
         else{
-            // onLeftPanel = false;
-            // onBoundary = true;
-            // onRightPanel = false;
-
             position = 1;
             // Debug.Log("boundary");
         }

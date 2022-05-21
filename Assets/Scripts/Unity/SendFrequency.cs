@@ -5,7 +5,8 @@ using UnityEngine;
 public class SendFrequency : MonoBehaviour
 {
     // private ManageGrid g;
-    private ManageGridSlider visual;
+    // private ManageGridSlider visual;
+    private ManageLineGrid visual;
     private ConnectSP sp;
     private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
     public GameObject trackedObject;
@@ -14,7 +15,7 @@ public class SendFrequency : MonoBehaviour
     {
         sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
         // g = this.gameObject.GetComponent<ManageGrid>();
-        visual = this.gameObject.GetComponent<ManageGridSlider>();
+        visual = this.gameObject.GetComponent<ManageLineGrid>();
         prevPosition = trackedObject.transform.position;
     }
 
