@@ -11,8 +11,13 @@ int motorPin_right = 6;
 
 //-------- VARIABLES ---------------------
 
+char buf[4];
+
 int slack = 90;
 int tense = 20;
+
+char tensionMode_left = 'S';
+char tensionMode_right = 'S';
 
 int train1 = 300;
 int train2 = 275;
@@ -27,12 +32,8 @@ int test3 = 290;
 long elapsedtime = 0;
 long duration = 100000;
 
-char tensionMode_left = 'S';
-char tensionMode_right = 'S';
 char vibrationMode_left = 'A';
 char vibrationMode_right = 'A';
-
-char buf[4];
 
 void setup() {
   pinMode(hapticPin_left, OUTPUT);
@@ -77,10 +78,6 @@ void loop() {
   moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
   moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
   
-//  if(vibrationMode_left != 'A'){
-//    
-//  }
-
   callVibrate(hapticPin_left, vibrationMode_left);
   callVibrate(hapticPin_right, vibrationMode_right);
 
