@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ManageSlider : MonoBehaviour
 {
-    private ManageExperiment experiment;
+    public ManageExperiment experiment;
     private ManageLineGrid visual;
     [System.Serializable]
     public struct SliderValues{
@@ -26,7 +26,6 @@ public class ManageSlider : MonoBehaviour
     void Start()
     {
         visual = this.gameObject.GetComponent<ManageLineGrid>();
-        experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
     }
 
     // Update is called once per frame
@@ -51,8 +50,11 @@ public class ManageSlider : MonoBehaviour
         slider.frequency_right = newFrequency;
     }
     public void saveParticipantChoice(float amplitude, float frequency){
+        Debug.Log(amplitude + ", " + frequency);
+        Debug.Log(experiment.currentData.participantAmplitude + ", " + experiment.currentData.participantFrequency);
         experiment.currentData.participantAmplitude = amplitude;
         experiment.currentData.participantFrequency = frequency;
+        Debug.Log(experiment.currentData.participantAmplitude + ", " + experiment.currentData.participantFrequency);
 
         experiment.currentData.participantRoughness = experiment.convertToRoughness(amplitude, frequency);
 
@@ -60,6 +62,7 @@ public class ManageSlider : MonoBehaviour
     }
 
     public void saveLeft(){
+        Debug.Log(slider.amplitude_left + ", " + slider.frequency_left);
         saveParticipantChoice(slider.amplitude_left, slider.frequency_left);
     }
 

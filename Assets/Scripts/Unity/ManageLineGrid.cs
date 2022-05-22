@@ -20,7 +20,7 @@ public class ManageLineGrid : MonoBehaviour
             roughness = r;
             side = s;
             frequency = p;
-            amplitude = 0.01f*a;
+            amplitude = a;
             lineRenderer = l;
             positions = pos;
 
@@ -68,7 +68,7 @@ public class ManageLineGrid : MonoBehaviour
         double[] x = Generate.LinearSpaced(samplingRate, 0, (10*panel.side));
 
         for(int i = 0; i < x.Length; i++){
-            float y = (panel.amplitude * Mathf.Sin(panel.frequency * (float)x[i]));
+            float y = ((0.05f*panel.amplitude) * Mathf.Sin(panel.frequency * (float)x[i]));
             Vector3 coord = new Vector3((float)x[i], y, 0);
 
             positions[i] = coord;
