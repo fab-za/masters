@@ -13,7 +13,7 @@ public class SendFrequency : MonoBehaviour
     private Vector3 prevPosition;
     void Start()
     {
-        sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
+        sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
         // g = this.gameObject.GetComponent<ManageGrid>();
         visual = this.gameObject.GetComponent<ManageLineGrid>();
         prevPosition = trackedObject.transform.position;

@@ -50,11 +50,8 @@ public class ManageSlider : MonoBehaviour
         slider.frequency_right = newFrequency;
     }
     public void saveParticipantChoice(float amplitude, float frequency){
-        Debug.Log(amplitude + ", " + frequency);
-        Debug.Log(experiment.currentData.participantAmplitude + ", " + experiment.currentData.participantFrequency);
         experiment.currentData.participantAmplitude = amplitude;
         experiment.currentData.participantFrequency = frequency;
-        Debug.Log(experiment.currentData.participantAmplitude + ", " + experiment.currentData.participantFrequency);
 
         experiment.currentData.participantRoughness = experiment.convertToRoughness(amplitude, frequency);
 

@@ -49,6 +49,6 @@ public class ConnectSP : MonoBehaviour
     public void combineMessages(){
         string message = tensionModes + vibrationModes;
         serialController.SendSerialMessage(message);
-        // Debug.Log(message);
+        Debug.Log("sending: "+message);
     }
 }

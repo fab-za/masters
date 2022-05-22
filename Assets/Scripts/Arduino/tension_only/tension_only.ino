@@ -1,10 +1,13 @@
 #include <Servo.h>
+#include <SoftwareSerial.h>
 
 Servo tensionMotor_left;
 Servo tensionMotor_right;
 
-int motorPin_left = 5;
-int motorPin_right = 6;
+int motorPin_left = 6;
+int motorPin_right = 5;
+
+SoftwareSerial Serial2(7, 2); // RX, TX
 
 //-------- VARIABLES ---------------------
 
@@ -21,7 +24,12 @@ void setup() {
   tensionMotor_right.attach(motorPin_right);
 
   Serial.begin(9600);
+//  Serial1.begin(9600);
+  Serial2.begin(9600);
+  
   Serial.setTimeout(200);
+//  Serial1.setTimeout(200);
+  Serial2.setTimeout(200);
 
   tensionMotor_left.write(110);
   tensionMotor_right.write(70);

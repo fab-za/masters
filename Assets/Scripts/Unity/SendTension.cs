@@ -31,7 +31,7 @@ public class SendTension : MonoBehaviour
     public bool sendMessage;
     void Start()
     {
-        sp = GameObject.Find("SPManager").GetComponent<ConnectSP>();
+        sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
         visual = this.gameObject.GetComponent<ManageLineGrid>();
         prevPosition = 0;
 
