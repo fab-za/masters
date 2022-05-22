@@ -5,27 +5,27 @@ using UnityEngine;
 public class DataStruct 
 {
     public float trialFrequency;
-    public float trialPeriod;
+    public float trialRoughness;
     public float trialAmplitude;
     public float participantFrequency;
-    public float participantPeriod;
+    public float participantRoughness;
     public float participantAmplitude;
     public float errorFrequency;
-    public float errorPeriod;
+    public float errorRoughness;
     public float errorAmplitude;
     public DataStruct(){}
     public DataStruct(float tf, float tp, float ta, float pf, float pp ,float pa, float ef, float ep, float ea)
     {
         trialFrequency = tf;
-        trialPeriod = tp;
+        trialRoughness = tp;
         trialAmplitude = ta;
     
         participantFrequency = pf;
-        participantPeriod = pp;
+        participantRoughness = pp;
         participantAmplitude = pa;
 
         errorFrequency = ef;
-        errorPeriod = ep;
+        errorRoughness = ep;
         errorAmplitude = ea;
     }
 }
