@@ -27,7 +27,8 @@ public class SendFrequency : MonoBehaviour
             // sp.writeSP(alphabet[g.curPair]);
 
             sp.vibrationModes = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
-        } else{sp.vibrationModes = "AA";}
+        } 
+        else{sp.vibrationModes = "AA";}
 
         prevPosition = trackedObject.transform.position;
     }

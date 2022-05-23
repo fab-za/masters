@@ -4732,8 +4732,8 @@ MonoBehaviour:
     amplitude_right: 0
     frequency_left: 0
     frequency_right: 0
-  tempLeftRoughness: 0
-  tempRightRoughness: 1
+  tempLeftRoughness: 1
+  tempRightRoughness: 2
 --- !u!1 &1784579732
 GameObject:
   m_ObjectHideFlags: 0
