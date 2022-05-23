@@ -24,13 +24,13 @@ public class SendFrequency : MonoBehaviour
     {
         if(mouse.mousePosition != prevPosition){
             if(mouse.position == 1){
-                message = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
+                message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
             } 
             else if (mouse.position == 0){
-                message = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.leftGrid.roughness+1];
+                message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.leftGrid.roughness+1];
             } 
             else if (mouse.position == 2){
-                message = alphabet[visual.rightGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
+                message = alphabet[(int)visual.rightGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
             }
 
             // Debug.Log("message: " + message);

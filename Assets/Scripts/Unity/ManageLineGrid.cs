@@ -9,14 +9,14 @@ public class ManageLineGrid : MonoBehaviour
     
     [System.Serializable]
     public struct GridParameters{
-        public int roughness;
+        public float roughness;
         public int side;    // left = -1, right = +1
         public float frequency;
         public float amplitude;
         public LineRenderer lineRenderer;
         public Vector3[] positions;
 
-        public GridParameters(int r, int s, float p, float a, LineRenderer l, Vector3[] pos){
+        public GridParameters(float r, int s, float p, float a, LineRenderer l, Vector3[] pos){
             roughness = r;
             side = s;
             frequency = p;
@@ -44,7 +44,7 @@ public class ManageLineGrid : MonoBehaviour
         updateLine();
     }
 
-    public void updateParameters(float left_amplitude, float left_frequency, int left_roughness, float right_amplitude, float right_frequency, int right_roughness){
+    public void updateParameters(float left_amplitude, float left_frequency, float left_roughness, float right_amplitude, float right_frequency, float right_roughness){
         leftGrid.amplitude = left_amplitude;
         leftGrid.frequency = left_frequency;
         leftGrid.roughness = left_roughness;

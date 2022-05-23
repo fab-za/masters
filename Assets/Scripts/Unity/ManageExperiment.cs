@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ManageExperiment : MonoBehaviour
 {
+    private int mode;
     public ManageSlider slider;
     public GameObject sliderUI;
     public ManageTraining training;
     public GameObject trainingUI;
-    public bool trainingMode;
+    public ManagePrelim prelim;
+    public GameObject prelimUI;
     public List<DataStruct> fullData;
     public DataStruct currentData;
     public CsvWriter csvWriter;
@@ -16,6 +18,7 @@ public class ManageExperiment : MonoBehaviour
     public List<float> variableList;
     // public float weightAmplitude;
     // public float weightFrequency;
+    public List<TrialParameters> allParameters;
     public TrialParameters train1;
     public TrialParameters train2;
     public TrialParameters train3;
@@ -25,7 +28,7 @@ public class ManageExperiment : MonoBehaviour
 
     void Start()
     {
-        List<TrialParameters> allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
+        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
         foreach(TrialParameters trial in allParameters){
             variableList.Add(trial.frequency_left);
             variableList.Add(trial.frequency_right);
@@ -36,25 +39,42 @@ public class ManageExperiment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(trainingMode){
+        if(mode == 0){
             training.enabled = true;
             trainingUI.SetActive(true);
 
             slider.enabled = false;
             sliderUI.SetActive(false);
-        } else{
+
+            prelim.enabled = false;
+            prelimUI.SetActive(false);
+        } 
+        else if(mode == 1){
             training.enabled = false;
             trainingUI.SetActive(false);
 
             slider.enabled = true;
             sliderUI.SetActive(true);
+
+            prelim.enabled = false;
+            prelimUI.SetActive(false);
+        }
+        else if(mode == 2){
+            training.enabled = false;
+            trainingUI.SetActive(false);
+
+            slider.enabled = true;      // prelim uses slider script as well
+            sliderUI.SetActive(false);
+
+            prelim.enabled = true;
+            prelimUI.SetActive(true);
         }
     }
     public void changeModes(){
-        if(trainingMode){
-            trainingMode = false;
+        if(mode < 2){
+            mode += 1;
         } else{
-            trainingMode = true;
+            mode = 0;
         }
     }
     public void initData(){
@@ -75,5 +95,12 @@ public class ManageExperiment : MonoBehaviour
         
         // return higher number = rougher
         return roughness;
+    }
+
+    public void convertAllRoughness(){
+        foreach(TrialParameters trial in allParameters){
+            trial.roughness_left = convertToRoughness(trial.amplitude_left, trial.frequency_left);
+            trial.roughness_right = convertToRoughness(trial.amplitude_right, trial.frequency_right);
+        }
     }
 }
