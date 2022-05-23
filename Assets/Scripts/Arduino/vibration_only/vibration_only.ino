@@ -2,26 +2,24 @@
 int hapticPin_left = 11;
 int hapticPin_right = 10;
 
+int inputPin_left = A0;
+int inputPin_right = A1;
+
 //-------- VARIABLES ---------------------
 
 char buf[5];
 
-int train1 = 300;
-int train2 = 275;
-int train3 = 250;
-
-int test1 = 280;
-int test2 = 260;
-int test3 = 290;
-//int test4 = 270;
-//int test5 = 270;
-
 long elapsedtime = 0;
+long elapsedtime_left = 0;
+long elapsedtime_right = 0;
+
 long duration = 30;
 long microduration = 200000;
 
-int vibrationMode_left = 0;
-int vibrationMode_right = 0;
+int frequency_left = 0;
+int frequency_right = 0;
+int prevFreq_left = 0;
+int prevFreq_right = 0;
 
 unsigned long startLoop = 0;
 unsigned long startVibration = 0;
@@ -34,84 +32,43 @@ void setup() {
   pinMode(hapticPin_left, OUTPUT);
   pinMode(hapticPin_right, OUTPUT);
 
-  Serial.begin(9600);
-  Serial.setTimeout(200);
+  pinMode(inputPin_left, INPUT);
+  pinMode(inputPin_right, INPUT);
 
   longVibrate(hapticPin_left, 275);
   longVibrate(hapticPin_right, 275);
 }
 
 void loop() {
-//  Serial.println("reading");
-  checkMessage();
-//  Serial.println(String(vibrationMode_left) + ", " + String(vibrationMode_right));
-    
-  if(vibrationMode_left > 0 && vibrationMode_right > 0){
-//    Serial.println("start vibrating");
-    startLoop = millis();
-    longVibrateBoth(vibrationMode_left, vibrationMode_right);
+  frequency_left = analogRead(inputPin_left);
+  frequency_right = analogRead(inputPin_right);
 
-    leftVal = LOW;
-    rightVal = LOW; 
-    digitalWrite(hapticPin_left, leftVal);
-    digitalWrite(hapticPin_right, rightVal);
-
+  if(frequency_left > 0 && frequency_right > 0){
+    longVibrateBoth(frequency_left, frequency_right);
 //    Serial.println("exited longvibrateboth");
+
+    if(frequency_left != prevFreq_left){elapsedtime_left = 0;}
+    if(frequency_right != prevFreq_right){elapsedtime_right = 0;}
   }
+  else{
+    digitalWrite(hapticPin_left, LOW);
+    digitalWrite(hapticPin_right, LOW);
+    }
+
+  prevFreq_left = frequency_left;
+  prevFreq_right = frequency_right;
 }
 
 // ---------- SUB FUNCTIONS ------------------------
-
-int vibrationModeToFrequency(char c) {
-  int frequency;
-
-  if(c == 'A'){frequency = 0;}
-  
-  else if(c == 'B'){frequency = train1;}  
-  else if(c == 'C'){frequency = train2;}
-  else if(c == 'D'){frequency = train3;}
-  
-  else if(c == 'E'){frequency = test1;}
-  else if(c == 'F'){frequency = test2;}
-  else if(c == 'G'){frequency = test3;}
-//  else if(c == 'H'){frequency = test4;}
-//  else if(c == 'I'){frequency = test5;}
-
-  return frequency;
-}
-
-void checkMessage(){
-  Serial.println(millis());
-  String message = Serial.readStringUntil('\n');
-  Serial.println("hello");
-  Serial.println(millis());
-  
-  if(message != ""){
-    message.toCharArray(buf, 5);
-//
-//    Serial.print("converting: ");
-//    Serial.print(buf[0]);
-//    Serial.print(buf[1]);
-//    Serial.print(buf[2]);
-//    Serial.println(buf[3]);
-//    Serial.print("split into: ");
-//    Serial.print(buf[2]);
-//    Serial.println(buf[3]);
-
-    vibrationMode_left = vibrationModeToFrequency(buf[2]);
-    vibrationMode_right = vibrationModeToFrequency(buf[3]);
-    }
-}
-
 void vibrateBoth(int f_left, int f_right){
 //  Serial.println("entered vibrateboth");
   
-  if((elapsedtime % (f_left/2)) == 0){
+  if((elapsedtime_left % (f_left/2)) == 0){
     if(leftVal == LOW){leftVal = HIGH;} 
     else{leftVal = LOW;}
   }
   
-  if((elapsedtime % (f_right/2)) == 0){
+  if((elapsedtime_right % (f_right/2)) == 0){
     if(rightVal == LOW){rightVal = HIGH;} 
     else{rightVal = LOW;}
   }
@@ -119,15 +76,10 @@ void vibrateBoth(int f_left, int f_right){
   digitalWrite(hapticPin_right, rightVal);
 }
 
-void longVibrateBoth(int f_left, int f_right){
-  elapsedtime = 0;
-//  Serial.println("entered longvibrateboth");
-  
-  while(elapsedtime < duration){
-    vibrateBoth(f_left, f_right);
-    elapsedtime = millis() - startLoop;
-//    Serial.println("elapsed time: " + String(elapsedtime));
-    }
+void longVibrateBoth(int f_left, int f_right){  
+  vibrateBoth(f_left, f_right);
+  elapsedtime_left = millis() - startLoop;
+  elapsedtime_right = millis() - startLoop;
 }
 
 void longVibrate(int pin, int f){
@@ -138,17 +90,6 @@ void longVibrate(int pin, int f){
   elapsedtime = 0;
 }
 
-
-// ---------------------------- UNUSED -----------------------------
-
-void callVibrate(int pin, char mode){
-  int f = vibrationModeToFrequency(mode);
-  if(f > 0){
-//    longVibrate(pin, f);
-    vibrate(pin, f);
-    vibrate(pin, f);
-  }
-}
 void vibrate(int pin, int f){
   digitalWrite(pin, HIGH);
   delayMicroseconds(f/2);

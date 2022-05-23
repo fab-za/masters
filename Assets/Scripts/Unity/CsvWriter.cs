@@ -48,10 +48,16 @@ public class CsvWriter : MonoBehaviour
         writer.Close();
         Debug.Log($"result CSV file written to \"{path}\"");
     }
-    public void initRoughnessCSVs(float[] roughness){
-        Debug.Log("hello");
-        foreach(float r in roughness){
-            string path = Application.dataPath + "/Data/" + (int)r + "_result.csv";
+    public void initIndvCSVs(List<float> list, string type){
+        // Debug.Log("hello");
+        foreach(float l in list){
+            string folderpath = Application.dataPath + "/Data/" + type + "/";
+
+            if(!System.IO.File.Exists(folderpath)){
+                Directory.CreateDirectory(folderpath);
+            }
+
+            string path = folderpath + (int)l + "_result.csv";
 
             if(!System.IO.File.Exists(path)){
                 var result  = new StringBuilder("Trial Frequency, Trial Roughness, Trial Amplitude, Participant Frequency, Participant Roughness, Participant Amplitude, Frequency Error, Roughness Error, Amplitude Error");

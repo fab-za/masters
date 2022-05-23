@@ -26,6 +26,7 @@ public class ManageSlider : MonoBehaviour
     void Start()
     {
         visual = this.gameObject.GetComponent<ManageLineGrid>();
+        slider = new SliderValues(1,1,40,40);
     }
 
     // Update is called once per frame

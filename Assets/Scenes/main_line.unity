@@ -199,6 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4715f05af9755a84a8ebd9206843fd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  position: 0
+  boundary_left: 0
+  boundary_right: 0
+  mousePosition: {x: 0, y: 0, z: 0}
 --- !u!212 &12488867
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -398,7 +402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &66411442
 RectTransform:
   m_ObjectHideFlags: 0
@@ -419,7 +423,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 17.2}
+  m_AnchoredPosition: {x: 0, y: 61.9}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &66411443
@@ -700,7 +704,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1078,7 +1082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &230342835
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1267,7 +1271,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 58}
+  m_AnchoredPosition: {x: 0, y: 16.8}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &307228364
@@ -1313,10 +1317,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 470581169}
   m_HandleRect: {fileID: 937345131}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 50
+  m_MinValue: 35
+  m_MaxValue: 60
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 35
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1686,7 +1690,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451841363}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bc5f48af2cffd747a079fe8c632e2c8, type: 3}
   m_Name: 
@@ -1718,13 +1722,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451841363}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe8368ff5b3e5dc47ba5bcf20c53de60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   receivedString: 
-  test_data: {fileID: 0}
   speed: 0.01
   tensionModes: 
   vibrationModes: 
@@ -1980,12 +1983,48 @@ MonoBehaviour:
     errorAmplitude: 0
   csvWriter: {fileID: 1300657995}
   index: 0
-  roughnessArray:
-  - 0
-  - 1
-  - 2
-  weightAmplitude: 1
-  weightFrequency: 1
+  train1:
+    roughness_left: 250
+    amplitude_left: 1
+    frequency_left: 250
+    roughness_right: 250
+    amplitude_right: 1
+    frequency_right: 250
+  train2:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  train3:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial1:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial2:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial3:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
 --- !u!1 &510165513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,6 +2266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4715f05af9755a84a8ebd9206843fd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  position: 0
+  boundary_left: 0
+  boundary_right: 0
+  mousePosition: {x: 0, y: 0, z: 0}
 --- !u!224 &651745674
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2923,7 +2966,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4112,7 +4155,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4637,13 +4680,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2bdc9a7f6d6c824784af68ac73ae88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackedObject: {fileID: 651745671}
+  mouse: {fileID: 651745673}
   currentState:
     left: 
     right: 
   message: 
-  boundary_left: -1
-  boundary_right: 1
   motorLag: 2
   sendMessage: 0
 --- !u!114 &1783163934
@@ -4658,7 +4699,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00a9af046d30164cb42441fa79671c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackedObject: {fileID: 651745671}
+  mouse: {fileID: 651745673}
+  message: 
 --- !u!224 &1783163935
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4693,27 +4735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b97f1f1267249428d34f7b4098beac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  train1:
-    roughness_left: 0
-    amplitude_left: 1
-    frequency_left: 50
-    roughness_right: 0
-    amplitude_right: 2
-    frequency_right: 50
-  train2:
-    roughness_left: 0
-    amplitude_left: 2
-    frequency_left: 25
-    roughness_right: 0
-    amplitude_right: 1
-    frequency_right: 25
-  train3:
-    roughness_left: 0
-    amplitude_left: 1
-    frequency_left: 1
-    roughness_right: 0
-    amplitude_right: 2
-    frequency_right: 1
+  experiment: {fileID: 499952019}
 --- !u!114 &1783163937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5411,7 +5433,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5697,10 +5719,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1808979679}
   m_HandleRect: {fileID: 163864717}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 50
+  m_MinValue: 35
+  m_MaxValue: 60
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 35
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

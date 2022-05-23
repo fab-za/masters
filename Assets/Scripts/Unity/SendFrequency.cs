@@ -9,28 +9,36 @@ public class SendFrequency : MonoBehaviour
     private ManageLineGrid visual;
     private ConnectSP sp;
     private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
-    public GameObject trackedObject;
     private Vector3 prevPosition;
+    public FollowMouse mouse;
+    public string message;
     void Start()
     {
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
-        // g = this.gameObject.GetComponent<ManageGrid>();
         visual = this.gameObject.GetComponent<ManageLineGrid>();
-        prevPosition = trackedObject.transform.position;
+        prevPosition = mouse.mousePosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(trackedObject.transform.position != prevPosition){
-            // Debug.Log("cursor is moving: "+ g.density);
-            // sp.writeSP(alphabet[g.curPair]);
+        if(mouse.mousePosition != prevPosition){
+            if(mouse.position == 1){
+                message = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
+            } 
+            else if (mouse.position == 0){
+                message = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.leftGrid.roughness+1];
+            } 
+            else if (mouse.position == 2){
+                message = alphabet[visual.rightGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
+            }
 
-            sp.vibrationModes = alphabet[visual.leftGrid.roughness+1] + alphabet[visual.rightGrid.roughness+1];
+            // Debug.Log("message: " + message);
+            sp.vibrationModes = message;
         } 
         else{sp.vibrationModes = "AA";}
 
-        prevPosition = trackedObject.transform.position;
+        prevPosition = mouse.mousePosition;
     }
 
 }

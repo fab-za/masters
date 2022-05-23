@@ -11,7 +11,7 @@ int motorPin_right = 6;
 
 //-------- VARIABLES ---------------------
 
-char buf[4];
+char buf[5];
 
 int slack = 90;
 int tense = 20;
@@ -63,7 +63,7 @@ void loop() {
 //  Serial.println("message received: " + message);
 
   if(message != ""){
-    message.toCharArray(buf, 4);
+    message.toCharArray(buf, 5);
   }
 
 //  delay(10);

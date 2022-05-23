@@ -7,7 +7,6 @@ public class ConnectSP : MonoBehaviour
 {
     private SerialController serialController;
     public string receivedString;
-    public GameObject test_data;
     public float speed = 0.01f;
     public string tensionModes;
     public string vibrationModes;
@@ -49,6 +48,6 @@ public class ConnectSP : MonoBehaviour
     public void combineMessages(){
         string message = tensionModes + vibrationModes;
         serialController.SendSerialMessage(message);
-        Debug.Log("sending: "+message);
+        // Debug.Log("sending: "+message);
     }
 }

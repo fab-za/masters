@@ -7,7 +7,7 @@ public class SendTension : MonoBehaviour
     // private ManageGridSlider visual;
     private ManageLineGrid visual;
     private ConnectSP sp;
-    public GameObject trackedObject;
+    public FollowMouse mouse;
     [System.Serializable]
     public struct Relation{
         public string left;
@@ -23,21 +23,19 @@ public class SendTension : MonoBehaviour
     private Relation rougher_equal;
     public Relation currentState;
     public string message;
-    private int position;
-    private int prevPosition;
-    public float boundary_left;
-    public float boundary_right;
     public float motorLag;
     public bool sendMessage;
+    private int prevPosition;
     void Start()
     {
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
         visual = this.gameObject.GetComponent<ManageLineGrid>();
-        prevPosition = 0;
 
         rougher_left = new Relation("T","S");
         rougher_right = new Relation("S","T");
         rougher_equal = new Relation("S","S");
+        
+        prevPosition = 0;   
     }
 
     // Update is called once per frame
@@ -46,19 +44,16 @@ public class SendTension : MonoBehaviour
         // write message
         // Debug.Log(Input.GetAxis("Mouse X"));
         selectRelationState();
-        // defineBoundary();
-        findPosition();
 
-        if(position != prevPosition){
-            // Debug.Log("cursor is moving");
+        if(mouse.position != prevPosition){
 
-            if(position == 1){
+            if(mouse.position == 1){
                 message = currentState.left + currentState.right;
             } 
-            else if (position == 0){
+            else if (mouse.position == 0){
                 message = currentState.left + currentState.left;
             } 
-            else if (position == 2){
+            else if (mouse.position == 2){
                 message = currentState.right + currentState.right;
             }
 
@@ -69,7 +64,7 @@ public class SendTension : MonoBehaviour
             sp.tensionModes = message;
         }
 
-        prevPosition = position;
+        prevPosition = mouse.position;
     }
 
     public void selectRelationState(){
@@ -82,28 +77,5 @@ public class SendTension : MonoBehaviour
         else{
             currentState = rougher_equal; 
         }
-    }
-
-    public void findPosition(){
-        if(trackedObject.transform.position.x < boundary_left){
-            position = 0;
-            // Debug.Log("left");
-        }
-        else if(trackedObject.transform.position.x > boundary_right){
-            position = 2;
-            // Debug.Log("right");
-        }
-        else{
-            position = 1;
-            // Debug.Log("boundary");
-        }
-    }
-
-    public void defineBoundary(){
-        float cursorSpeed = Input.GetAxis("Mouse X");
-        float offset = cursorSpeed * motorLag;
-        // Debug.Log(offset);
-        boundary_left = -1 -offset;
-        boundary_right = 1 - offset;
     }
 }

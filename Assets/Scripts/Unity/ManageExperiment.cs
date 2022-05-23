@@ -13,12 +13,24 @@ public class ManageExperiment : MonoBehaviour
     public DataStruct currentData;
     public CsvWriter csvWriter;
     public int index;
-    public float[] roughnessArray;
-    public float weightAmplitude;
-    public float weightFrequency;
+    public List<float> variableList;
+    // public float weightAmplitude;
+    // public float weightFrequency;
+    public TrialParameters train1;
+    public TrialParameters train2;
+    public TrialParameters train3;
+    public TrialParameters trial1;
+    public TrialParameters trial2;
+    public TrialParameters trial3;
+
     void Start()
     {
-        csvWriter.initRoughnessCSVs(roughnessArray);
+        List<TrialParameters> allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
+        foreach(TrialParameters trial in allParameters){
+            variableList.Add(trial.frequency_left);
+            variableList.Add(trial.frequency_right);
+        }
+        csvWriter.initIndvCSVs(variableList, "frequencies");
     }
 
     // Update is called once per frame
@@ -58,7 +70,8 @@ public class ManageExperiment : MonoBehaviour
     public float convertToRoughness(float amplitude, float frequency){
         // somehow based on the current grid parameters, categorise into roughness
           
-        float roughness = (weightAmplitude * amplitude) /(weightFrequency * frequency);
+        // float roughness = (weightAmplitude * amplitude) /(weightFrequency * frequency);
+        float roughness = -(250f + 2f*(frequency - 35f));
         
         // return higher number = rougher
         return roughness;
