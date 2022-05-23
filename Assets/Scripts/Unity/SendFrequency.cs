@@ -22,7 +22,7 @@ public class SendFrequency : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(mouse.mousePosition != prevPosition){
+        if(mouse.mousePosition != prevPosition & mouse.moveFinger){
             if(mouse.position == 1){
                 message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
             } 

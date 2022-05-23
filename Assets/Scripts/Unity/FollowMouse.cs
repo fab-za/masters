@@ -8,10 +8,12 @@ public class FollowMouse : MonoBehaviour
     public float boundary_left;
     public float boundary_right;
     public Vector3 mousePosition;
+    public bool moveFinger;
     void Start()
     {
         boundary_left = -1;
-        boundary_right = 1;     
+        boundary_right = 1;    
+        moveFinger = false; 
     }
 
     // Update is called once per frame
@@ -19,8 +21,9 @@ public class FollowMouse : MonoBehaviour
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
-        transform.position = mousePosition;
-
+        if(moveFinger){
+            transform.position = new Vector3(mousePosition.x, transform.position.y, mousePosition.z);
+        }
         findPosition();
     }
 
@@ -36,6 +39,15 @@ public class FollowMouse : MonoBehaviour
         else{
             position = 1;
             // Debug.Log("boundary");
+        }
+    }
+
+    public void toggleFinger(){
+        if(moveFinger){
+            moveFinger = false;
+        }
+        else{
+            moveFinger = true;
         }
     }
 }

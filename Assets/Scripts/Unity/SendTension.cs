@@ -5,6 +5,7 @@ using UnityEngine;
 public class SendTension : MonoBehaviour
 {
     // private ManageGridSlider visual;
+    private ManageExperiment experiment;
     private ManageLineGrid visual;
     private ConnectSP sp;
     public FollowMouse mouse;
@@ -25,17 +26,16 @@ public class SendTension : MonoBehaviour
     public string message;
     public float motorLag;
     public bool sendMessage;
-    private int prevPosition;
     void Start()
     {
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
         visual = this.gameObject.GetComponent<ManageLineGrid>();
+        experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
 
         rougher_left = new Relation("T","S");
         rougher_right = new Relation("S","T");
         rougher_equal = new Relation("S","S");
-        
-        prevPosition = 0;   
+        currentState = new Relation("S","S");
     }
 
     // Update is called once per frame
@@ -43,28 +43,20 @@ public class SendTension : MonoBehaviour
     {
         // write message
         // Debug.Log(Input.GetAxis("Mouse X"));
-        selectRelationState();
+        // selectRelationState();
 
-        if(mouse.position != prevPosition){
-
-            if(mouse.position == 1){
-                message = currentState.left + currentState.right;
-            } 
-            else if (mouse.position == 0){
-                message = currentState.left + currentState.left;
-            } 
-            else if (mouse.position == 2){
-                message = currentState.right + currentState.right;
-            }
-
-            // Debug.Log("message: " + message);
-
-            // sp.writeSP(message);
-
-            sp.tensionModes = message;
+        if(mouse.position == 1){
+            message = currentState.left + currentState.right;
+        } 
+        else if (mouse.position == 0){
+            message = currentState.left + currentState.left;
+        } 
+        else if (mouse.position == 2){
+            message = currentState.right + currentState.right;
         }
 
-        prevPosition = mouse.position;
+        sp.tensionModes = message;
+        // prevPosition = mouse.position;
     }
 
     public void selectRelationState(){

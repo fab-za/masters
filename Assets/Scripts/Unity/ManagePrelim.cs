@@ -14,11 +14,14 @@ public class ManagePrelim : MonoBehaviour
     public TrialParameters prelim5;
     public TrialParameters prelim6;
     private int current;
+    private SendTension tension;
     void Start()
     {
         visual = GameObject.Find("VisualManager").GetComponent<ManageLineGrid>();
         slider = GameObject.Find("VisualManager").GetComponent<ManageSlider>();
+        tension = GameObject.Find("VisualManager").GetComponent<SendTension>();
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
+        current = 0;
     }
 
     // Update is called once per frame
@@ -34,8 +37,11 @@ public class ManagePrelim : MonoBehaviour
         experiment.convertAllRoughness();
 
         // visual.updateParameters(experiment.allParameters[current].amplitude_left, experiment.allParameters[current].frequency_left, experiment.allParameters[current].roughness_left, experiment.allParameters[current].amplitude_right, experiment.allParameters[current].frequency_right, experiment.allParameters[current].roughness_right);
-        slider.tempLeftRoughness = Mathf.Abs(experiment.allParameters[current].roughness_left) - 249;
-        slider.tempRightRoughness = Mathf.Abs(experiment.allParameters[current].roughness_right) - 249;
+        slider.tempLeftRoughness = Mathf.Abs(experiment.allParameters[current].roughness_left)/20;
+        slider.tempRightRoughness = Mathf.Abs(experiment.allParameters[current].roughness_right)/20;
+
+        amplitudeToTension();
+
     }
 
     public void changeVisual(){
@@ -46,4 +52,19 @@ public class ManagePrelim : MonoBehaviour
         }
     }
 
+    public void amplitudeToTension(){
+        if(experiment.allParameters[current].amplitude_left == 1){
+            tension.currentState.left = "S";
+        }
+        else if(experiment.allParameters[current].amplitude_left == 2){
+            tension.currentState.left = "T";
+        }
+        
+        if(experiment.allParameters[current].amplitude_right == 1){
+            tension.currentState.right = "S";
+        }
+        else if(experiment.allParameters[current].amplitude_right == 2){
+            tension.currentState.right = "T";
+        }
+    }
 }

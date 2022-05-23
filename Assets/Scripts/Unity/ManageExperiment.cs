@@ -28,17 +28,19 @@ public class ManageExperiment : MonoBehaviour
 
     void Start()
     {
-        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
         foreach(TrialParameters trial in allParameters){
             variableList.Add(trial.frequency_left);
             variableList.Add(trial.frequency_right);
         }
         csvWriter.initIndvCSVs(variableList, "frequencies");
+        mode = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
+        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
+
         if(mode == 0){
             training.enabled = true;
             trainingUI.SetActive(true);
@@ -91,7 +93,7 @@ public class ManageExperiment : MonoBehaviour
         // somehow based on the current grid parameters, categorise into roughness
           
         // float roughness = (weightAmplitude * amplitude) /(weightFrequency * frequency);
-        float roughness = -(250f + 2f*(frequency - 35f));
+        float roughness = -(250f + 4f*(frequency - 35f));
         
         // return higher number = rougher
         return roughness;

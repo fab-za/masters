@@ -13,7 +13,7 @@ long elapsedtime = 0;
 long elapsedtime_left = 0;
 long elapsedtime_right = 0;
 
-long duration = 30;
+long duration = 30000;
 long microduration = 200000;
 
 int frequency_left = 0;
@@ -47,8 +47,8 @@ void loop() {
     longVibrateBoth(frequency_left, frequency_right);
 //    Serial.println("exited longvibrateboth");
 
-    if(frequency_left != prevFreq_left){elapsedtime_left = 0;}
-    if(frequency_right != prevFreq_right){elapsedtime_right = 0;}
+    if(frequency_left != prevFreq_left){startLoop = millis();}
+    if(frequency_right != prevFreq_right){startLoop = millis();}
   }
   else{
     digitalWrite(hapticPin_left, LOW);
@@ -76,7 +76,9 @@ void vibrateBoth(int f_left, int f_right){
   digitalWrite(hapticPin_right, rightVal);
 }
 
-void longVibrateBoth(int f_left, int f_right){  
+void longVibrateBoth(int f_left, int f_right){
+  f_left = (1/f_left)* 1000;
+  f_right = (1/f_right)* 1000;
   vibrateBoth(f_left, f_right);
   elapsedtime_left = millis() - startLoop;
   elapsedtime_right = millis() - startLoop;

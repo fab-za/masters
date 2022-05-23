@@ -19,9 +19,9 @@ char buf[5];
 int slack = 90;
 int tense = 20;
 
-int train1 = 300;
-int train2 = 275;
-int train3 = 250;
+int train1 = 20;
+int train2 = 300;
+int train3 = 400;
 
 int test1 = 280;
 int test2 = 260;
@@ -97,9 +97,9 @@ int vibrationModeToFrequency(char c) {
 
   if(c == 'A'){frequency = 0;}
   
-  else if(c == 'B'){frequency = train1;}  
-  else if(c == 'C'){frequency = train2;}
-  else if(c == 'D'){frequency = train3;}
+  else if(c == 'N'){frequency = train1;}  
+  else if(c == 'Q'){frequency = train2;}
+  else if(c == 'S'){frequency = train3;}
   
   else if(c == 'E'){frequency = test1;}
   else if(c == 'F'){frequency = test2;}

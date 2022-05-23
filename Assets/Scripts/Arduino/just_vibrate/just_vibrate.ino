@@ -1,4 +1,4 @@
-int hapticPin = 9;
+int hapticPin = 10;
 
 long elapsedtime = 0;
 long duration = 8000000;
@@ -22,7 +22,9 @@ void setup() {
 }
 
 void loop() {
-  char c = Serial.read();
+//  char c = Serial.read();
+
+  char c = 'A';
 
   if(c == 'A'){vibrate(hapticPin, train2);}
 
