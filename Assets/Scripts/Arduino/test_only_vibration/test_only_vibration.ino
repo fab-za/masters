@@ -1,12 +1,21 @@
 int hapticPin_left = 11;
 int hapticPin_right = 10;
 
-long elapsedtime_left = 0;
-long elapsedtime_right = 0;
-unsigned long startLoop = 0;
+//long elapsedtime_left = 0;
+//long elapsedtime_right = 0;
+//unsigned long startLoop = 0;
+
+unsigned long startPeriod_left = 0;
+unsigned long startPeriod_right = 0;
+unsigned long startPeriod = 0;
+unsigned long endPeriod = 0;
 
 int leftVal = LOW;
 int rightVal = LOW; 
+
+int f_left = 2;
+int f_right = 2;
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -14,47 +23,79 @@ void setup() {
   pinMode(hapticPin_right, OUTPUT);
 
   Serial.begin(9600);
-  Serial.setTimeout(1000);
 
   Serial.println("started");
+//  startPeriod_left = millis();
+//  startPeriod_right = millis();
 }
 
 void loop() {
-  Serial.println("loop");
-  int f_left = 100000/200;
-//  int f_left = 275;
+//  long p = 1000/2;
+//  
+//  digitalWrite(hapticPin_left, HIGH);
+//  
+//  startPeriod = millis();
+//  delay(p/2);
+//  endPeriod = millis();
+//  Serial.println(p/2);
+//  Serial.println(endPeriod - startPeriod);
+//  
+//  digitalWrite(hapticPin_left, LOW);
+////  startPeriod = millis();
+//  delay(p/2);
+////  endPeriod = millis();
+////  Serial.println(p/2);
+////  Serial.println(endPeriod - startPeriod);
 
-  digitalWrite(hapticPin_left, HIGH);
-  delayMicroseconds(f_left/2);
-  digitalWrite(hapticPin_left, LOW);
-  delayMicroseconds(f_left/2);
-  
-//  longVibrateBoth(20, 20);
+  startPeriod_left = millis();
+  startPeriod_right = millis();
+
+  while(true){ 
+    long period_left = 1000/f_left;
+    long period_right = 1000/f_right;
+
+    vibrateBoth(period_left, period_right);
+
+//    if((millis() - startPeriod_left) > (period_left/2)){
+//      endPeriod = millis();
+//      
+//      if(leftVal == LOW){
+//        leftVal = HIGH;
+//        } 
+//      else{
+//        leftVal = LOW;
+//        }
+//      digitalWrite(hapticPin_left, leftVal);
+//      startPeriod_left = millis();
+//    }
+  }
 }
 
-void vibrateBoth(int f_left, int f_right){
-//  Serial.println("entered vibrateboth");
-  
-  if((elapsedtime_left % (f_left/2)) == 0){
-    if(leftVal == LOW){leftVal = HIGH;} 
-    else{leftVal = LOW;}
+void vibrateBoth(long period_left, long period_right){
+  if((millis() - startPeriod_left) > (period_left/2)){
+    endPeriod = millis();
+    
+    if(leftVal == LOW){
+      leftVal = HIGH;
+      } 
+    else{
+      leftVal = LOW;
+      }
+    
+    digitalWrite(hapticPin_left, leftVal);
+    startPeriod_left = millis();
   }
-  
-  if((elapsedtime_right % (f_right/2)) == 0){
-    if(rightVal == LOW){rightVal = HIGH;} 
-    else{rightVal = LOW;}
+
+  if((millis() - startPeriod_right) > (period_right/2)){
+    
+    if(rightVal == LOW){
+      rightVal = HIGH;
+      } 
+    else{
+      rightVal = LOW;
+      }
+
+    digitalWrite(hapticPin_right, rightVal);
+    startPeriod_right = millis();
   }
-  digitalWrite(hapticPin_left, leftVal);
-  digitalWrite(hapticPin_right, rightVal);
-}
-
-void longVibrateBoth(int f_left, int f_right){
-  f_left = (1/f_left)* 1000;
-  f_right = (1/f_right)* 1000;
-  vibrateBoth(f_left, f_right);
-  elapsedtime_left = millis() - startLoop;
-  elapsedtime_right = millis() - startLoop;
-
-  Serial.println("left period: " + f_left);
-  Serial.println("elapsed time: " + elapsedtime_left);
 }

@@ -9,22 +9,21 @@ int inputPin_right = A1;
 
 char buf[5];
 
-long elapsedtime = 0;
-long elapsedtime_left = 0;
-long elapsedtime_right = 0;
-
-long duration = 30000;
-long microduration = 200000;
-
 int frequency_left = 0;
 int frequency_right = 0;
 int prevFreq_left = 0;
 int prevFreq_right = 0;
 
-unsigned long startLoop = 0;
-unsigned long startVibration = 0;
-unsigned long leftTime = 0;
-unsigned long rightTime = 0;
+long elapsedtime = 0;
+//long duration = 30;
+long microduration = 200000;
+
+unsigned long elapsedtime_left = 0;
+unsigned long elapsedtime_right = 0;
+
+unsigned long startLoop_left = 0;
+unsigned long startLoop_right = 0;
+
 int leftVal = LOW;
 int rightVal = LOW; 
 
@@ -35,8 +34,8 @@ void setup() {
   pinMode(inputPin_left, INPUT);
   pinMode(inputPin_right, INPUT);
 
-  longVibrate(hapticPin_left, 275);
-  longVibrate(hapticPin_right, 275);
+  testVibrate(hapticPin_left, 275);
+  testVibrate(hapticPin_right, 275);
 }
 
 void loop() {
@@ -47,8 +46,8 @@ void loop() {
     longVibrateBoth(frequency_left, frequency_right);
 //    Serial.println("exited longvibrateboth");
 
-    if(frequency_left != prevFreq_left){startLoop = millis();}
-    if(frequency_right != prevFreq_right){startLoop = millis();}
+    if(frequency_left != prevFreq_left){startLoop_left = millis();}
+    if(frequency_right != prevFreq_right){startLoop_right = millis();}
   }
   else{
     digitalWrite(hapticPin_left, LOW);
@@ -60,15 +59,15 @@ void loop() {
 }
 
 // ---------- SUB FUNCTIONS ------------------------
-void vibrateBoth(int f_left, int f_right){
+void vibrateBoth(int period_left, int period_right){
 //  Serial.println("entered vibrateboth");
   
-  if((elapsedtime_left % (f_left/2)) == 0){
+  if((elapsedtime_left % (period_left/2)) == 0){
     if(leftVal == LOW){leftVal = HIGH;} 
     else{leftVal = LOW;}
   }
   
-  if((elapsedtime_right % (f_right/2)) == 0){
+  if((elapsedtime_right % (period_right/2)) == 0){
     if(rightVal == LOW){rightVal = HIGH;} 
     else{rightVal = LOW;}
   }
@@ -77,24 +76,23 @@ void vibrateBoth(int f_left, int f_right){
 }
 
 void longVibrateBoth(int f_left, int f_right){
-  f_left = (1/f_left)* 1000;
-  f_right = (1/f_right)* 1000;
-  vibrateBoth(f_left, f_right);
-  elapsedtime_left = millis() - startLoop;
-  elapsedtime_right = millis() - startLoop;
+  int period_left = (1/f_left)* 100;
+  int period_right = (1/f_right)* 100;
+  
+  vibrateBoth(period_left, period_right);
+  
+  elapsedtime_left = millis() - startLoop_left;
+  elapsedtime_right = millis() - startLoop_right;
 }
 
-void longVibrate(int pin, int f){
+void testVibrate(int pin, int f){
+  int period = (1/f)* 100000;
   while(elapsedtime < microduration){
-    vibrate(pin, f);
+    digitalWrite(pin, HIGH);
+    delayMicroseconds(period/2);
+    digitalWrite(pin, LOW);
+    delayMicroseconds(period/2);
     elapsedtime += f;
     }
   elapsedtime = 0;
-}
-
-void vibrate(int pin, int f){
-  digitalWrite(pin, HIGH);
-  delayMicroseconds(f/2);
-  digitalWrite(pin, LOW);
-  delayMicroseconds(f/2);
 }
