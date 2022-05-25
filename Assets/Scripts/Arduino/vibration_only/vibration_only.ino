@@ -2,15 +2,16 @@
 int hapticPin_left = 11;
 int hapticPin_right = 10;
 
-int inputPin_left = A0;
-int inputPin_right = A1;
+int inputPins[2][5] = {{5,4,3,2,A5}, {A4,A3,A2,A1,A0}};
 
 //-------- VARIABLES ---------------------
 
 char buf[5];
 
-int frequency_left = 1;
-int frequency_right = 1;
+long frequency_left = 0;
+long frequency_right = 0;
+long frequencyMode_left = 0;
+long frequencyMode_right = 0;
 
 long elapsedtime = 0;
 //long duration = 30;
@@ -25,12 +26,24 @@ int rightVal = LOW;
 long period_left;
 long period_right;
 
+String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+int train1 = 20;
+int train2 = 80;
+int train3 = 200;
+
+int test1 = 280;
+int test2 = 260;
+int test3 = 290;
+//int test4 = 270;
+//int test5 = 270;
+
 void setup() {
   pinMode(hapticPin_left, OUTPUT);
   pinMode(hapticPin_right, OUTPUT);
 
-  pinMode(inputPin_left, INPUT);
-  pinMode(inputPin_right, INPUT);
+  for(int i=0; i<5; i++)  {pinMode(inputPins[0][i], INPUT);}
+  for(int i=0; i<5; i++)  {pinMode(inputPins[1][i], INPUT);}
 
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -41,35 +54,27 @@ void setup() {
 }
 
 void loop() {
-//  frequency_left = analogRead(inputPin_left);
-//  frequency_right = analogRead(inputPin_right);
+  frequencyMode_left = readToBuffer(5, 0);
+  frequencyMode_right = readToBuffer(5, 1);
 
-
-  frequency_left = Serial.read();
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(frequency_left);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(frequency_left);
-  
-//  analogWrite(A2, frequency_left);
-
-  Serial.println(frequency_left);
+  frequency_left = vibrationModeToFrequency(frequencyMode_left);
+  frequency_right = vibrationModeToFrequency(frequencyMode_right);
 
 //  long period_left = 1000/(frequency_left);
 //  long period_right = 1000/(frequency_right);
 //
 //  vibrateBoth(period_left, period_right);
 
-//  period_left = 1000/frequency_left;
-//  period_right = 1000/frequency_right;
-//  
-//  if(frequency_left > 0 && frequency_right > 0){
-//    vibrateBoth(period_left, period_right);
-//    }
-//  else{
-//    digitalWrite(hapticPin_left, LOW);
-//    digitalWrite(hapticPin_right, LOW);
-//    }
+  period_left = 1000/frequency_left;
+  period_right = 1000/frequency_right;
+  
+  if(frequency_left > 0 && frequency_right > 0){
+    vibrateBoth(period_left, period_right);
+    }
+  else{
+    digitalWrite(hapticPin_left, LOW);
+    digitalWrite(hapticPin_right, LOW);
+    }
 }
 
 // ---------- SUB FUNCTIONS ------------------------
@@ -111,4 +116,49 @@ void testVibrate(int pin, int f){
     elapsedtime += f;
     }
   elapsedtime = 0;
+}
+
+long binary4ToInt(bool buf[]){
+  long decimal = (buf[4]*16) + (buf[3]*8) + (buf[2]*4) + (buf[1]*2) + (buf[0]*1);
+  return decimal;
+}
+
+long readToBuffer(int s, int side){
+  bool buf[s];
+  
+  for(int i=0; i<s; i++){
+    bool current = digitalRead(inputPins[side][i]);
+    buf[i] = current;
+  }
+  
+  long dec = binary4ToInt(buf);
+//  printbuf(buf, 5);
+
+  return dec;
+}
+
+void printbuf(bool buf[], int s){
+  for(int i=(s-1); i>=0; i--){
+    Serial.print(buf[i]);
+  }
+  Serial.println(" ");
+}
+
+int vibrationModeToFrequency(long m) {
+  int frequency;
+  char c = alphabet.charAt(m);
+
+  if(c == 'A'){frequency = 0;}
+  
+  else if(c == 'N'){frequency = train1;}  
+  else if(c == 'Q'){frequency = train2;}
+  else if(c == 'S'){frequency = train3;}
+  
+  else if(c == 'E'){frequency = test1;}
+  else if(c == 'F'){frequency = test2;}
+  else if(c == 'G'){frequency = test3;}
+//  else if(c == 'H'){frequency = test4;}
+//  else if(c == 'I'){frequency = test5;}
+
+  return frequency;
 }
