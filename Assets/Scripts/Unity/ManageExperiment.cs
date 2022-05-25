@@ -26,6 +26,10 @@ public class ManageExperiment : MonoBehaviour
     public TrialParameters trial2;
     public TrialParameters trial3;
 
+    void Awake(){
+        Debug.Log($"Initialized");
+    }
+
     void Start()
     {
         foreach(TrialParameters trial in allParameters){

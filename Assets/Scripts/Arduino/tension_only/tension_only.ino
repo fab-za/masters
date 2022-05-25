@@ -20,8 +20,8 @@ int slack = 90;
 int tense = 20;
 
 int train1 = 20;
-int train2 = 300;
-int train3 = 400;
+int train2 = 80;
+int train3 = 200;
 
 int test1 = 280;
 int test2 = 260;
@@ -29,10 +29,15 @@ int test3 = 290;
 //int test4 = 270;
 //int test5 = 270;
 
+int frequency_left = 0;
+int frequency_right = 0;
+
 char tensionMode_left = 'S';
 char tensionMode_right = 'S';
 int vibrationMode_left = 'A';
 int vibrationMode_right = 'A';
+
+int count = 0;
 
 void setup() {  
   pinMode(hapticOutputPin_left, OUTPUT);
@@ -41,13 +46,13 @@ void setup() {
   tensionMotor_left.attach(motorPin_left);
   tensionMotor_right.attach(motorPin_right);
 
-  Serial.begin(9600);
-//  Serial1.begin(9600);
-  Serial2.begin(9600);
-  
+  Serial.begin(115200);
   Serial.setTimeout(200);
-//  Serial1.setTimeout(200);
+
+  Serial2.begin(9600);
   Serial2.setTimeout(200);
+
+  while(Serial.available()>0){Serial.read();}
 
   tensionMotor_left.write(110);
   tensionMotor_right.write(70);
@@ -56,30 +61,48 @@ void setup() {
   
   tensionMotor_left.write(slack);
   tensionMotor_right.write(slack);
+
+  Serial.print("start");
+//  Serial.println(millis());
 }
 
 void loop() {
-  String message = Serial.readStringUntil('\n');
-//  Serial.println("message received: " + message);
-
-  if(message != ""){
-    message.toCharArray(buf, 5);
-  }
-
-//  delay(10);
-
+//  buf[0] = 'X';
+//  Serial.println(Serial.available());
+//  Serial.println(millis());
+//  long check = millis();
+  Serial.readBytesUntil('\n', buf, 5);
+//  long endcheck = millis();
+  Serial.println(String(buf[0])+String(buf[1])+String(buf[2])+String(buf[3]));
+  
   tensionMode_left = buf[0];
   tensionMode_right = buf[1];
   vibrationMode_left = buf[2];
   vibrationMode_right = buf[3];
 
-//  Serial.println("left tension received: " + tensionMode_left);
-
+  
   moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
   moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
+  
 
-  analogWrite(hapticOutputPin_left, vibrationModeToFrequency(vibrationMode_left));
-  analogWrite(hapticOutputPin_right, vibrationModeToFrequency(vibrationMode_right));
+  frequency_left = vibrationModeToFrequency(vibrationMode_left);
+  frequency_right = vibrationModeToFrequency(vibrationMode_right);
+
+  if(frequency_left > -1){
+    analogWrite(hapticOutputPin_left, frequency_left);
+    Serial.println(frequency_left);
+    Serial2.println(frequency_left);
+
+  }
+  if(frequency_right > -1){
+    analogWrite(hapticOutputPin_right, frequency_right);
+//    Serial2.println(frequency_right);
+  }
+
+//  Serial.println(analogRead(A5));
+//  Serial.println(endcheck - check);
+
+//  Serial.println(Serial2.read());
 }
 
 void moveTensionMotor(Servo motor, char mode, int dir) {

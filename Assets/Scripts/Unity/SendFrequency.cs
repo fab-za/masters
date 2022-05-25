@@ -22,23 +22,33 @@ public class SendFrequency : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(mouse.mousePosition != prevPosition & mouse.moveFinger){
-            if(mouse.position == 1){
-                message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+        // Debug.Log(Input.GetAxis("Mouse X"));
+        if(mouse.moveFinger){
+            if(Input.GetAxis("Mouse X") == 0){
+                // Debug.Log("stationary");
+                sp.vibrationModes = "AA";
             } 
-            else if (mouse.position == 0){
-                message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.leftGrid.roughness+1];
-            } 
-            else if (mouse.position == 2){
-                message = alphabet[(int)visual.rightGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+            else{
+                if(mouse.position == 1){
+                    message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+                } 
+                else if (mouse.position == 0){
+                    message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.leftGrid.roughness+1];
+                } 
+                else if (mouse.position == 2){
+                    message = alphabet[(int)visual.rightGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+                }
+
+                // Debug.Log("message: " + message);
+                sp.vibrationModes = message;
             }
 
-            // Debug.Log("message: " + message);
-            sp.vibrationModes = message;
-        } 
-        else{sp.vibrationModes = "AA";}
+            // Debug.Log(sp.vibrationModes);
 
-        prevPosition = mouse.mousePosition;
+        }
+        else{sp.vibrationModes = "AA";}
+        
+        // prevPosition = mouse.mousePosition;
     }
 
 }

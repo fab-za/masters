@@ -9,23 +9,21 @@ int inputPin_right = A1;
 
 char buf[5];
 
-int frequency_left = 0;
-int frequency_right = 0;
-int prevFreq_left = 0;
-int prevFreq_right = 0;
+int frequency_left = 1;
+int frequency_right = 1;
 
 long elapsedtime = 0;
 //long duration = 30;
-long microduration = 200000;
+long milliduration = 2000;
 
-unsigned long elapsedtime_left = 0;
-unsigned long elapsedtime_right = 0;
-
-unsigned long startLoop_left = 0;
-unsigned long startLoop_right = 0;
+unsigned long startPeriod_left = 0;
+unsigned long startPeriod_right = 0;
 
 int leftVal = LOW;
 int rightVal = LOW; 
+
+long period_left;
+long period_right;
 
 void setup() {
   pinMode(hapticPin_left, OUTPUT);
@@ -34,64 +32,82 @@ void setup() {
   pinMode(inputPin_left, INPUT);
   pinMode(inputPin_right, INPUT);
 
-  testVibrate(hapticPin_left, 275);
-  testVibrate(hapticPin_right, 275);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  testVibrate(hapticPin_left, 100);
+  testVibrate(hapticPin_right, 100);
+
+  Serial.begin(9600);
 }
 
 void loop() {
-  frequency_left = analogRead(inputPin_left);
-  frequency_right = analogRead(inputPin_right);
+//  frequency_left = analogRead(inputPin_left);
+//  frequency_right = analogRead(inputPin_right);
 
-  if(frequency_left > 0 && frequency_right > 0){
-    longVibrateBoth(frequency_left, frequency_right);
-//    Serial.println("exited longvibrateboth");
 
-    if(frequency_left != prevFreq_left){startLoop_left = millis();}
-    if(frequency_right != prevFreq_right){startLoop_right = millis();}
-  }
-  else{
-    digitalWrite(hapticPin_left, LOW);
-    digitalWrite(hapticPin_right, LOW);
-    }
+  frequency_left = Serial.read();
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(frequency_left);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(frequency_left);
+  
+//  analogWrite(A2, frequency_left);
 
-  prevFreq_left = frequency_left;
-  prevFreq_right = frequency_right;
+  Serial.println(frequency_left);
+
+//  long period_left = 1000/(frequency_left);
+//  long period_right = 1000/(frequency_right);
+//
+//  vibrateBoth(period_left, period_right);
+
+//  period_left = 1000/frequency_left;
+//  period_right = 1000/frequency_right;
+//  
+//  if(frequency_left > 0 && frequency_right > 0){
+//    vibrateBoth(period_left, period_right);
+//    }
+//  else{
+//    digitalWrite(hapticPin_left, LOW);
+//    digitalWrite(hapticPin_right, LOW);
+//    }
 }
 
 // ---------- SUB FUNCTIONS ------------------------
-void vibrateBoth(int period_left, int period_right){
-//  Serial.println("entered vibrateboth");
-  
-  if((elapsedtime_left % (period_left/2)) == 0){
-    if(leftVal == LOW){leftVal = HIGH;} 
-    else{leftVal = LOW;}
+void vibrateBoth(long period_left, long period_right){
+  if((millis() - startPeriod_left) > (period_left/2)){
+        
+    if(leftVal == LOW){
+      leftVal = HIGH;
+      } 
+    else{
+      leftVal = LOW;
+      }
+    
+    digitalWrite(hapticPin_left, leftVal);
+    startPeriod_left = millis();
   }
-  
-  if((elapsedtime_right % (period_right/2)) == 0){
-    if(rightVal == LOW){rightVal = HIGH;} 
-    else{rightVal = LOW;}
-  }
-  digitalWrite(hapticPin_left, leftVal);
-  digitalWrite(hapticPin_right, rightVal);
-}
 
-void longVibrateBoth(int f_left, int f_right){
-  int period_left = (1/f_left)* 100;
-  int period_right = (1/f_right)* 100;
-  
-  vibrateBoth(period_left, period_right);
-  
-  elapsedtime_left = millis() - startLoop_left;
-  elapsedtime_right = millis() - startLoop_right;
+  if((millis() - startPeriod_right) > (period_right/2)){
+    
+    if(rightVal == LOW){
+      rightVal = HIGH;
+      } 
+    else{
+      rightVal = LOW;
+      }
+
+    digitalWrite(hapticPin_right, rightVal);
+    startPeriod_right = millis();
+  }
 }
 
 void testVibrate(int pin, int f){
-  int period = (1/f)* 100000;
-  while(elapsedtime < microduration){
+  int period = (1000/f);
+  while(elapsedtime < milliduration){
     digitalWrite(pin, HIGH);
-    delayMicroseconds(period/2);
+    delay(period/2);
     digitalWrite(pin, LOW);
-    delayMicroseconds(period/2);
+    delay(period/2);
     elapsedtime += f;
     }
   elapsedtime = 0;

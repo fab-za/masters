@@ -1889,7 +1889,7 @@ MonoBehaviour:
   baudRate: 9600
   messageListener: {fileID: 0}
   reconnectionDelay: 1000
-  maxUnreadMessages: 10
+  maxUnreadMessages: 1
 --- !u!4 &451841365
 Transform:
   m_ObjectHideFlags: 0
@@ -1921,6 +1921,7 @@ MonoBehaviour:
   speed: 0.01
   tensionModes: 
   vibrationModes: 
+  started: 0
 --- !u!1 &467779364
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,23 +10,30 @@ public class ConnectSP : MonoBehaviour
     public float speed = 0.01f;
     public string tensionModes;
     public string vibrationModes;
-    private int timeout = 20;
+    private int timeout = 0;
     private int elapsedFrames;
+    public bool started;
     void Start()
     {
         serialController = GameObject.Find("SerialController").GetComponent<SerialController>();
+        Application.targetFrameRate = 15;
     }
 
     // Update is called once per frame
     void Update()
     {
         // readSP();
-        if(elapsedFrames > timeout){
+
+        // Debug.Log(Time.realtimeSinceStartup);
+
+        if(started){
+            if(elapsedFrames > timeout){
             combineMessages();
             elapsedFrames = 0;
-        }
+            }
 
-        elapsedFrames += 1;
+            elapsedFrames += 1;
+        }
     }
 
     public void readSP(){
@@ -41,7 +48,7 @@ public class ConnectSP : MonoBehaviour
 
     public void testSP(){
         // sp.Write("test");
-        serialController.SendSerialMessage("test");
+        serialController.SendSerialMessage("TEST");
         Debug.Log("sent test");
         
     }
@@ -49,5 +56,6 @@ public class ConnectSP : MonoBehaviour
         string message = tensionModes + vibrationModes;
         serialController.SendSerialMessage(message);
         // Debug.Log("sending: "+message);
+        // readSP();
     }
 }
