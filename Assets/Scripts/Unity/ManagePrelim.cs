@@ -45,7 +45,7 @@ public class ManagePrelim : MonoBehaviour
     }
 
     public void changeVisual(){
-        if(current < 5){
+        if(current < 2){
             current += 1;
         } else{
             current = 0;

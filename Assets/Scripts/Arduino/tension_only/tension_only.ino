@@ -12,7 +12,7 @@ int outputPins[2][5] = {{5,4,3,2,A5}, {A4,A3,A2,A1,A0}};
 
 char buf[5];
 
-int slack = 90;
+int slack = 100;
 int tense = 20;
 
 long frequencyMode_left = 0;
@@ -46,7 +46,7 @@ void setup() {
   tensionMotor_left.write(slack);
   tensionMotor_right.write(slack);
 
-  Serial.print("start");
+//  Serial.print("start");
 //  Serial.println(millis());
 }
 
@@ -67,15 +67,15 @@ void loop() {
   moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
   moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
 
-  check = millis();
+//  check = millis();
   frequencyMode_left = alphabet.indexOf(vibrationMode_left);
   frequencyMode_right = alphabet.indexOf(vibrationMode_right);
 
   intToBinary(frequencyMode_left, 5, 0);
   intToBinary(frequencyMode_right, 5, 1);
-  endcheck = millis();
+//  endcheck = millis();
 
-  Serial.println(endcheck - check);
+//  Serial.println(endcheck - check);
 }
 
 void moveTensionMotor(Servo motor, char mode, int dir) {
@@ -98,7 +98,7 @@ void intToBinary(int f, int s, int side){
     buf[i] = m;
   }
 
-  printbuf(buf, s);
+//  printbuf(buf, s);
   toPin(buf, s, side);
 }
 
