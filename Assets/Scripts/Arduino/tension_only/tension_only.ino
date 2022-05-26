@@ -3,8 +3,8 @@
 Servo tensionMotor_left;
 Servo tensionMotor_right;
 
-int motorPin_left = 11;
-int motorPin_right = 10;
+int motorPin_left = 10;
+int motorPin_right = 11;
 
 int outputPins[2][5] = {{5,4,3,2,A5}, {A4,A3,A2,A1,A0}};
 
@@ -12,16 +12,16 @@ int outputPins[2][5] = {{5,4,3,2,A5}, {A4,A3,A2,A1,A0}};
 
 char buf[5];
 
-int slack = 100;
+int slack = 120;
 int tense = 20;
 
 long frequencyMode_left = 0;
 long frequencyMode_right = 0;
 
-char tensionMode_left = 'S';
-char tensionMode_right = 'S';
-int vibrationMode_left = 'A';
-int vibrationMode_right = 'A';
+char tensionMode_left = 'Z';
+char tensionMode_right = 'Z';
+int vibrationMode_left = 'Z';
+int vibrationMode_right = 'Z';
 
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -59,20 +59,26 @@ void loop() {
   
 //  Serial.println(String(buf[0])+String(buf[1])+String(buf[2])+String(buf[3]));
   
-  tensionMode_left = buf[0];
-  tensionMode_right = buf[1];
-  vibrationMode_left = buf[2];
-  vibrationMode_right = buf[3];
-
-  moveTensionMotor(tensionMotor_left, tensionMode_left, 1);
-  moveTensionMotor(tensionMotor_right, tensionMode_right, -1);
+  if(buf[0] != tensionMode_left){
+    tensionMode_left = buf[0];
+    moveTensionMotor(tensionMotor_left, tensionMode_left, -1);
+  }
+  if(buf[1] != tensionMode_right){
+    tensionMode_right = buf[1];
+    moveTensionMotor(tensionMotor_right, tensionMode_right, 1);
+  }
+  if(buf[2] != vibrationMode_left){
+    vibrationMode_left = buf[2];
+    frequencyMode_left = alphabet.indexOf(vibrationMode_left);
+    intToBinary(frequencyMode_left, 5, 0);    
+  }
+  if(buf[3] != vibrationMode_right){
+    vibrationMode_right = buf[3];
+    frequencyMode_right = alphabet.indexOf(vibrationMode_right);
+    intToBinary(frequencyMode_right, 5, 1);    
+  }
 
 //  check = millis();
-  frequencyMode_left = alphabet.indexOf(vibrationMode_left);
-  frequencyMode_right = alphabet.indexOf(vibrationMode_right);
-
-  intToBinary(frequencyMode_left, 5, 0);
-  intToBinary(frequencyMode_right, 5, 1);
 //  endcheck = millis();
 
 //  Serial.println(endcheck - check);

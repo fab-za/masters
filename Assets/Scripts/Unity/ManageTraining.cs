@@ -5,38 +5,60 @@ using UnityEngine;
 public class ManageTraining : MonoBehaviour
 {
     public ManageExperiment experiment;
+    public DisplayCount display;
     private GameObject visualManager;
     private ManageLineGrid visual;
+    private SendTension tension;
     private int currentTraining;
+    private TrialParameters chosen;
 
     void Start()
     {
         visualManager = GameObject.Find("VisualManager"); 
         visual = visualManager.GetComponent<ManageLineGrid>();
-        currentTraining = 1;
+        tension = GameObject.Find("VisualManager").GetComponent<SendTension>();
+        currentTraining = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         selectTraining(currentTraining);
+        display.counter = currentTraining;
     }
     public void changeTraining(){
-        if(currentTraining < 3){
+        if(currentTraining < 1){
             currentTraining += 1;
         } else{
-            currentTraining = 1;
+            currentTraining = 0;
         }
     }
     public void selectTraining(int cur){
-        if(cur == 1){
-            visual.updateParameters(experiment.train1.amplitude_left, experiment.train1.frequency_left, experiment.train1.roughness_left, experiment.train1.amplitude_right, experiment.train1.frequency_right, experiment.train1.roughness_right);
-        } 
+        if(cur == 0){
+            chosen = experiment.train1;
+            } 
+        else if(cur == 1){
+            chosen = experiment.train2;
+            }
         else if(cur == 2){
-            visual.updateParameters(experiment.train2.amplitude_left, experiment.train2.frequency_left, experiment.train2.roughness_left, experiment.train2.amplitude_right, experiment.train2.frequency_right, experiment.train2.roughness_right);
+            chosen = experiment.train3;
+            }
+        visual.updateParameters(1, chosen.frequency_left, (-chosen.roughness_left/20), 1, chosen.frequency_right, (-chosen.roughness_right/20));
+        amplitudeToTension(chosen);
+    }
+    public void amplitudeToTension(TrialParameters trial){
+        if(trial.amplitude_left == 1){
+            tension.currentState.left = "S";
         }
-        else if(cur == 3){
-            visual.updateParameters(experiment.train3.amplitude_left, experiment.train3.frequency_left, experiment.train3.roughness_left, experiment.train3.amplitude_right, experiment.train3.frequency_right, experiment.train3.roughness_right);
+        else if(trial.amplitude_left == 2){
+            tension.currentState.left = "T";
+        }
+        
+        if(trial.amplitude_right == 1){
+            tension.currentState.right = "S";
+        }
+        else if(trial.amplitude_right == 2){
+            tension.currentState.right = "T";
         }
     }
 }

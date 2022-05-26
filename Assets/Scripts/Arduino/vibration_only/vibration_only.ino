@@ -29,7 +29,7 @@ long period_right;
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 int train1 = 20;
-int train2 = 80;
+int train2 = 110;
 int train3 = 200;
 
 int test1 = 280;
@@ -150,9 +150,9 @@ int vibrationModeToFrequency(long m) {
 
   if(c == 'A'){frequency = 0;}
   
-  else if(c == 'N'){frequency = train1;}  
-  else if(c == 'Q'){frequency = train2;}
-  else if(c == 'S'){frequency = train3;}
+  else if(c == 'C'){frequency = train1;}  
+  else if(c == 'G'){frequency = train2;}
+  else if(c == 'L'){frequency = train3;}
   
   else if(c == 'E'){frequency = test1;}
   else if(c == 'F'){frequency = test2;}

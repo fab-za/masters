@@ -70,4 +70,5 @@ public class SendTension : MonoBehaviour
             currentState = rougher_equal; 
         }
     }
+    
 }

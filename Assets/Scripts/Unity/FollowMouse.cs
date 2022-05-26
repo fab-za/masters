@@ -11,8 +11,6 @@ public class FollowMouse : MonoBehaviour
     public bool moveFinger;
     void Start()
     {
-        boundary_left = -1;
-        boundary_right = 1;    
         moveFinger = false; 
     }
 

@@ -13,6 +13,7 @@ public class ConnectSP : MonoBehaviour
     private int timeout = 2;
     private int elapsedFrames;
     public bool started;
+    public string longDummy;
     void Start()
     {
         serialController = GameObject.Find("SerialController").GetComponent<SerialController>();
@@ -51,6 +52,13 @@ public class ConnectSP : MonoBehaviour
         serialController.SendSerialMessage("TEST");
         Debug.Log("sent test");
         
+    }
+
+    public void sendLongMessage(){
+        Debug.Log("sending loop of: " + longDummy);
+        for(int i=0; i<100; i++){
+            serialController.SendSerialMessage(longDummy);
+        }
     }
     public void combineMessages(){
         string message = tensionModes + vibrationModes;

@@ -11,8 +11,11 @@ public class ManageExperiment : MonoBehaviour
     public GameObject trainingUI;
     public ManagePrelim prelim;
     public GameObject prelimUI;
+    public bool finished = false;
+    public GameObject finishedUI;
     public List<DataStruct> fullData;
-    public DataStruct currentData;
+    public DataStruct currentData_left;
+    public DataStruct currentData_right;
     public CsvWriter csvWriter;
     public int index;
     public List<float> variableList;
@@ -25,6 +28,10 @@ public class ManageExperiment : MonoBehaviour
     public TrialParameters trial1;
     public TrialParameters trial2;
     public TrialParameters trial3;
+    public TrialParameters trial4;
+    public TrialParameters trial5;
+    public TrialParameters trial6;
+    public bool newStart = false;
 
     void Awake(){
         Debug.Log($"Initialized");
@@ -32,18 +39,23 @@ public class ManageExperiment : MonoBehaviour
 
     void Start()
     {
-        foreach(TrialParameters trial in allParameters){
-            variableList.Add(trial.frequency_left);
-            variableList.Add(trial.frequency_right);
-        }
-        csvWriter.initIndvCSVs(variableList, "frequencies");
-        mode = 2;
+        mode = 0;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3};
+    {        
+        convertAllRoughness();
+        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3,trial4,trial5,trial6};
+
+        if(newStart){
+            foreach(TrialParameters trial in allParameters){
+                variableList.Add(trial.frequency_left);
+                variableList.Add(trial.frequency_right);
+            }
+            csvWriter.initIndvCSVs(variableList, "frequencies");
+            newStart = false;
+        }
 
         if(mode == 0){
             training.enabled = true;
@@ -75,10 +87,15 @@ public class ManageExperiment : MonoBehaviour
             prelim.enabled = true;
             prelimUI.SetActive(true);
         }
+
+        if(finished){
+            saveFullData();
+            finishedUI.SetActive(true);
+        }
     }
     public void changeModes(){
         if(mode < 2){
-            mode += 1;
+            mode += 2;
         } else{
             mode = 0;
         }
@@ -89,15 +106,14 @@ public class ManageExperiment : MonoBehaviour
     public void saveFullData(){
         csvWriter.storeParticipantCSV(fullData, index);
     }
-    public void saveSlider(){
-        csvWriter.addToCSV(currentData);
-        fullData.Add(currentData);
+    public void saveSlider(DataStruct data){
+        csvWriter.addToCSV(data);
     }
     public float convertToRoughness(float amplitude, float frequency){
         // somehow based on the current grid parameters, categorise into roughness
           
         // float roughness = (weightAmplitude * amplitude) /(weightFrequency * frequency);
-        float roughness = -(250f + 4f*(frequency - 35f));
+        float roughness = -(20f + 4f*(frequency - 30f));
         
         // return higher number = rougher
         return roughness;
