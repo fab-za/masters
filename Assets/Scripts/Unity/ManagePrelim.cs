@@ -19,7 +19,7 @@ public class ManagePrelim : MonoBehaviour
     public TrialParameters prelim7;
     public TrialParameters prelim8;
     public TrialParameters prelim9;
-    private int current;
+    public int current;
     private int cur;
     public int[] order = new int[]{0,1,2,3,4,5};
     private int temp;
@@ -44,7 +44,7 @@ public class ManagePrelim : MonoBehaviour
 
         experiment.newStart = true;
 
-        // Shuffle();
+        Shuffle();
 
         // Debug.Log(experiment.allParameters.Count);
     }
@@ -65,6 +65,7 @@ public class ManagePrelim : MonoBehaviour
         // experiment.convertAllRoughness();
 
         display.counter = cur;
+        current = order[cur];
 
         slider.tempLeftRoughness = Mathf.Abs(experiment.allParameters[current].roughness_left)/20;
         slider.tempRightRoughness = Mathf.Abs(experiment.allParameters[current].roughness_right)/20;
@@ -78,6 +79,7 @@ public class ManagePrelim : MonoBehaviour
     public void changeVisual(){
         slider.saveLeft();
         slider.saveRight();
+        slider.saveComparisonFile(current);
         saved.text = "Saved for Pattern: " + (cur+1);
 
         if(cur < 5){
@@ -86,7 +88,6 @@ public class ManagePrelim : MonoBehaviour
             experiment.finished = true;
             cur = 0;
         }
-        current = order[cur];
     }
 
      public void Shuffle() 

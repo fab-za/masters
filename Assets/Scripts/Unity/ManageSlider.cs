@@ -87,4 +87,31 @@ public class ManageSlider : MonoBehaviour
 
         saveParticipantChoice(slider.amplitude_right, slider.frequency_right, tempFrame);
     }
+    public void saveComparisonFile(int experimentIndex){
+        ComparisonDataStruct comparisonFrame = new ComparisonDataStruct(
+            experimentIndex, // index of experiment actually
+            experiment.index, // participant index (my naming sucks sorry @ self)
+
+            experiment.currentData_left.trialFrequency,
+            experiment.currentData_left.trialRoughness,
+            experiment.currentData_left.trialAmplitude,
+
+            experiment.currentData_right.trialFrequency,
+            experiment.currentData_right.trialRoughness,
+            experiment.currentData_right.trialAmplitude,
+
+            slider.frequency_left,
+            experiment.convertToRoughness(slider.amplitude_left, slider.frequency_left),
+            slider.amplitude_left,
+
+            slider.frequency_right,
+            experiment.convertToRoughness(slider.amplitude_right, slider.frequency_right),
+            slider.amplitude_right
+            
+        );
+
+        experiment.saveComparison(comparisonFrame);
+    }
+
+    
 }

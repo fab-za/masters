@@ -16,6 +16,7 @@ public class ManageExperiment : MonoBehaviour
     public List<DataStruct> fullData;
     public DataStruct currentData_left;
     public DataStruct currentData_right;
+    public List<ComparisonDataStruct> fullComparisonData;
     public CsvWriter csvWriter;
     public int index;
     public List<float> variableList;
@@ -40,6 +41,7 @@ public class ManageExperiment : MonoBehaviour
     void Start()
     {
         mode = 0;
+        initParticipantCSVs();
     }
 
     // Update is called once per frame
@@ -91,6 +93,7 @@ public class ManageExperiment : MonoBehaviour
         if(finished){
             saveFullData();
             finishedUI.SetActive(true);
+            finished = false;
         }
     }
     public void changeModes(){
@@ -124,5 +127,12 @@ public class ManageExperiment : MonoBehaviour
             trial.roughness_left = convertToRoughness(trial.amplitude_left, trial.frequency_left);
             trial.roughness_right = convertToRoughness(trial.amplitude_right, trial.frequency_right);
         }
+    }
+    public void saveComparison(ComparisonDataStruct data){
+        data.experimentIndex = prelim.current;
+        csvWriter.addToComparisonCSV(data);        
+    }
+    public void initParticipantCSVs(){
+        csvWriter.initCSV(index);
     }
 }

@@ -7,15 +7,37 @@ using System.IO;
 public class CsvWriter : MonoBehaviour
 {
     public void initCSV(int index){
-        var result  = new StringBuilder("Trial Frequency, Trial Roughness, Trial Amplitude, Participant Frequency, Participant Roughness, Participant Amplitude, Frequency Error, Roughness Error, Amplitude Error");
-        result.Append('\n');
+        string folderpath = Application.dataPath + "/Data/" + index + "/";
 
-        string path = Application.dataPath + "/Data/" + index + "/result.csv";
-        var writer = new StreamWriter(path, false); // true for append, false for overwrite
-        writer.Write(result);
-        writer.Close();
-        Debug.Log($"result CSV file written to \"{path}\"");
+        if(!System.IO.File.Exists(folderpath)){
+            Directory.CreateDirectory(folderpath);
+        }
+
+        string resultpath = folderpath + "result.csv";
+
+        if(!System.IO.File.Exists(resultpath)){
+            var result  = new StringBuilder("Trial Frequency, Trial Roughness, Trial Amplitude, Participant Frequency, Participant Roughness, Participant Amplitude, Frequency Error, Roughness Error, Amplitude Error");
+            result.Append('\n');
+
+            var writer = new StreamWriter(resultpath, false); // true for append, false for overwrite
+            writer.Write(result);
+            writer.Close();
+            Debug.Log($"new CSV file written to \"{resultpath}\"");
+        }
+
+        string comparisonpath = folderpath + "comparison_result.csv";
+
+        if(!System.IO.File.Exists(comparisonpath)){
+            var result2  = new StringBuilder("Experiment Index, Participant Index, Trial Left Frequency, Trial Left Roughness, Trial Left Amplitude, Trial Right Frequency, Trial Right Roughness, Trial Right Amplitude, Left Frequency, Left Roughness, Left Amplitude, Right Frequency, Right Roughness, Right Amplitude, Visual Frequency Difference Between Sides, Haptic Frequency Difference Between Sides, Amplitude Difference Between Sides");
+            result2.Append('\n');
+
+            var writer2 = new StreamWriter(comparisonpath, false); // true for append, false for overwrite
+            writer2.Write(result2);
+            writer2.Close();
+            Debug.Log($"new CSV file written to \"{comparisonpath}\"");
+        }
     }
+    
 
     public void addToCSV(DataStruct frame){
         var result = new StringBuilder("");
@@ -32,18 +54,8 @@ public class CsvWriter : MonoBehaviour
         Debug.Log($"result CSV file written to \"{path}\"");
     }
     public void storeParticipantCSV(List<DataStruct> data, int index){
-        string folderpath = Application.dataPath + "/Data/" + index + "/";
-
-        if(!System.IO.File.Exists(folderpath)){
-            Directory.CreateDirectory(folderpath);
-        }
-
-        string path = folderpath + "result.csv";
+        string path = Application.dataPath + "/Data/" + index + "/result.csv";
         var result = new StringBuilder("");
-        var writer = new StreamWriter(path, false); // true for append, false for overwrite
-        result.Append("Trial Frequency, Trial Roughness, Trial Amplitude, Participant Frequency, Participant Roughness, Participant Amplitude, Frequency Error, Roughness Error, Amplitude Error");
-        result.Append('\n');
-        // Debug.Log(path);
 
         foreach (DataStruct frame in data)
         {
@@ -52,7 +64,7 @@ public class CsvWriter : MonoBehaviour
         }
 
         result.ToString();
-        // writer = new StreamWriter(path, true); // true for append, false for overwrite
+        var writer = new StreamWriter(path, true); // true for append, false for overwrite
         writer.Write(result);
         writer.Close();
         Debug.Log($"result CSV file written to \"{path}\"");
@@ -81,6 +93,44 @@ public class CsvWriter : MonoBehaviour
             }
         }
         
+    }
+
+    public void addToComparisonCSV(ComparisonDataStruct frame){
+        var result = new StringBuilder("");
+        result.Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialLeftFrequency.ToString()).Append(',').Append(frame.trialLeftRoughness.ToString()).Append(',').Append(frame.trialLeftAmplitude.ToString()).Append(',').Append(frame.trialRightFrequency.ToString()).Append(',').Append(frame.trialRightRoughness.ToString()).Append(',').Append(frame.trialRightAmplitude.ToString()).Append(',').Append(frame.leftFrequency.ToString()).Append(',').Append(frame.leftRoughness.ToString()).Append(',').Append(frame.leftAmplitude.ToString()).Append(',').Append(frame.rightFrequency.ToString()).Append(',').Append(frame.rightRoughness.ToString()).Append(',').Append(frame.rightAmplitude.ToString()).Append(',').Append(frame.differenceBetweenSidesFrequency.ToString()).Append(',').Append(frame.differenceBetweenSidesRoughness.ToString()).Append(',').Append(frame.differenceBetweenSidesAmplitude.ToString()).Append('\n');
+        //Debug.Log(result);
+
+        result.ToString();
+
+        string path = Application.dataPath + "/Data/" + frame.participantIndex + "/comparison_result.csv";
+        var writer = new StreamWriter(path, true); // true for append, false for overwrite
+        writer.Write(result);
+        writer.Close();
+        Debug.Log($"participant comparison result CSV file written to \"{path}\"");
+
+        //---------- WRITE PER EXPERIMENT INDEX
+
+        string experimentFolder = Application.dataPath + "/Data/Pairings/" + frame.experimentIndex;
+        if(!System.IO.File.Exists(experimentFolder)){
+            Directory.CreateDirectory(experimentFolder);
+        }
+
+        string experimentpath = experimentFolder + "/comparison_result.csv";
+
+        if(!System.IO.File.Exists(experimentpath)){
+            var titles  = new StringBuilder("Experiment Index, Participant Index, Trial Left Frequency, Trial Left Roughness, Trial Left Amplitude, Trial Right Frequency, Trial Right Roughness, Trial Right Amplitude, Left Frequency, Left Roughness, Left Amplitude, Right Frequency, Right Roughness, Right Amplitude, Visual Frequency Difference Between Sides, Haptic Frequency Difference Between Sides, Amplitude Difference Between Sides");
+            titles.Append('\n');
+
+            var writerTemp = new StreamWriter(experimentpath, false); // true for append, false for overwrite
+            writerTemp.Write(titles);
+            writerTemp.Close();
+            Debug.Log($"new CSV file written to \"{experimentpath}\"");
+        }
+        
+        var writer2 = new StreamWriter(experimentpath, true); // true for append, false for overwrite
+        writer2.Write(result);
+        writer2.Close();
+        Debug.Log($"experiment comparison result CSV file written to \"{experimentpath}\"");
     }
 
 }

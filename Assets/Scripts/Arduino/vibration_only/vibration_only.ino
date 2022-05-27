@@ -60,6 +60,9 @@ void loop() {
   frequency_left = vibrationModeToFrequency(frequencyMode_left);
   frequency_right = vibrationModeToFrequency(frequencyMode_right);
 
+//  Serial.println(millis());
+//  Serial.println(frequency_left);
+
 //  long period_left = 1000/(frequency_left);
 //  long period_right = 1000/(frequency_right);
 //
