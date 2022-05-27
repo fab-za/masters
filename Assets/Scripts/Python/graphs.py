@@ -18,7 +18,7 @@ comparisonDir = "Pairings"
 comparisonInds = range(6)
 comparisonFile = "comparison_result.csv"
 comparisonCols = ["Experiment Index", "Participant Index", "Trial Left Frequency", "Trial Left Roughness", "Trial Left Amplitude", "Trial Right Frequency", "Trial Right Roughness", "Trial Right Amplitude", "Left Frequency", "Left Roughness", "Left Amplitude", "Right Frequency", "Right Roughness", "Right Amplitude", "Visual Frequency Difference Between Sides", "Haptic Frequency Difference Between Sides", "Amplitude Difference Between Sides"]
-comparisonPatterns = ["80 Hz Tensioned","110 Hz Tensioned","200 Hz Tensioned","80 Hz Control","110 Hz Control","200 Hz Control"]
+comparisonPatterns = ["80 Hz Tensioned","80 Hz Control","110 Hz Tensioned","110 Hz Control","200 Hz Tensioned","200 Hz Control"]
 
 
 #---------- READING FUNCTIONS
@@ -45,7 +45,7 @@ def definePlots():
     pltParameters = {
         "hapticFrequencyComparison_box": {
             "data": comparisonDict,
-            "indArray": comparisonInds,
+            "indArray": [0,3,1,4,2,5],
             "targetVariable": "Haptic Frequency Difference Between Sides",
             "suptitle": "Perceived Haptic Frequency Difference Between Sides",
             "subplt_titles": [""],
@@ -55,7 +55,7 @@ def definePlots():
             "xmin": 0,
             "xmax": 10,
             "ymin": 0,
-            "ymax": 120,
+            "ymax": 160,
             "xNames": comparisonPatterns
         },
     }
@@ -74,7 +74,7 @@ def createTargetArray(cur):
 
     for i in cur["indArray"]:
         tempData = cur["data"][i][cur["targetVariable"]].loc[[cur["targetVariable"]]].T
-        print(tempData)
+        # print(tempData)
         # tempArray = [tempArray, tempData]
         tempDataframe[i] = tempData
     
@@ -86,7 +86,7 @@ def plotBox(cur):
 
     for subplot in range(cur["plt_num"]):
         targetdf = createTargetArray(cur)
-        print(type(targetdf))
+        # print(type(targetdf))
 
         # b = time_all[experiments[i]].plot(kind="box", ax=axs[i])
         a,bp = targetdf.boxplot(ax=axs[0,subplot], return_type="both", showmeans=True)
