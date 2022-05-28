@@ -7,6 +7,8 @@ public class ManagePrelim : MonoBehaviour
 {
     private ManageExperiment experiment;
     private ManageLineGrid visual;
+    private SendTension tension;
+    private SendFrequency frequencyManager;
     public ManageSlider slider;    
     public DisplayCount display;
     public Text saved;
@@ -23,25 +25,27 @@ public class ManagePrelim : MonoBehaviour
     private int cur;
     public int[] order = new int[]{0,1,2,3,4,5};
     private int temp;
-    private SendTension tension;
+    
     void Start()
     {
         visual = GameObject.Find("VisualManager").GetComponent<ManageLineGrid>();
         slider = GameObject.Find("VisualManager").GetComponent<ManageSlider>();
         tension = GameObject.Find("VisualManager").GetComponent<SendTension>();
+        frequencyManager = GameObject.Find("VisualManager").GetComponent<SendFrequency>();
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         current = 0;
 
-        experiment.train1 = prelim1;
-        experiment.train2 = prelim2;
-        experiment.train3 = prelim3;
-        experiment.trial1 = prelim4;
-        experiment.trial2 = prelim5;
-        experiment.trial3 = prelim6;
-        experiment.trial4 = prelim7;
-        experiment.trial5 = prelim8;
-        experiment.trial6 = prelim9;
+        // experiment.train1 = prelim1;
+        // experiment.train2 = prelim2;
+        // experiment.train3 = prelim3;
+        // experiment.trial1 = prelim4;
+        // experiment.trial2 = prelim5;
+        // experiment.trial3 = prelim6;
+        // experiment.trial4 = prelim7;
+        // experiment.trial5 = prelim8;
+        // experiment.trial6 = prelim9;
 
+        experiment.experimentType = "frequencies";
         experiment.newStart = true;
 
         Shuffle();
@@ -62,7 +66,9 @@ public class ManagePrelim : MonoBehaviour
         // experiment.trial5 = prelim8;
         // experiment.trial6 = prelim9;
 
-        // experiment.convertAllRoughness();
+        experiment.convertAllRoughness();
+
+        experiment.allParameters = new List<TrialParameters>(){prelim1, prelim2, prelim3, prelim4, prelim5, prelim6, prelim7, prelim8, prelim9};
 
         display.counter = cur;
         current = order[cur];
@@ -71,6 +77,8 @@ public class ManagePrelim : MonoBehaviour
         slider.tempRightRoughness = Mathf.Abs(experiment.allParameters[current].roughness_right)/20;
 
         amplitudeToTension();
+        frequencyManager.left_roughness = visual.leftGrid.roughness;
+        frequencyManager.right_roughness = visual.rightGrid.roughness;
 
         updateCurrentDataFrame();
 
@@ -90,7 +98,7 @@ public class ManagePrelim : MonoBehaviour
         }
     }
 
-     public void Shuffle() 
+    public void Shuffle() 
     {
         for (int i = 0; i < order.Length - 1; i++) 
         {

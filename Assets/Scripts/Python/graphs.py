@@ -14,11 +14,12 @@ import scipy.stats as stats
 curDir = os.path.dirname(os.path.realpath(__file__))
 dataDir = curDir.replace("Scripts\Python","Data")
 numParticipants = 1
+
 comparisonDir = "Pairings"
 comparisonInds = range(6)
 comparisonFile = "comparison_result.csv"
 comparisonCols = ["Experiment Index", "Participant Index", "Trial Left Frequency", "Trial Left Roughness", "Trial Left Amplitude", "Trial Right Frequency", "Trial Right Roughness", "Trial Right Amplitude", "Left Frequency", "Left Roughness", "Left Amplitude", "Right Frequency", "Right Roughness", "Right Amplitude", "Visual Frequency Difference Between Sides", "Haptic Frequency Difference Between Sides", "Amplitude Difference Between Sides"]
-comparisonPatterns = ["80 Hz Tensioned","80 Hz Control","110 Hz Tensioned","110 Hz Control","200 Hz Tensioned","200 Hz Control"]
+comparisonPatterns = ["20 Hz Tensioned","20 Hz Control","110 Hz Tensioned","110 Hz Control","200 Hz Tensioned","200 Hz Control"]
 
 
 #---------- READING FUNCTIONS
@@ -45,6 +46,7 @@ def definePlots():
     pltParameters = {
         "hapticFrequencyComparison_box": {
             "data": comparisonDict,
+            "targetdf": 0,
             "indArray": [0,3,1,4,2,5],
             "targetVariable": "Haptic Frequency Difference Between Sides",
             "suptitle": "Perceived Haptic Frequency Difference Between Sides",
@@ -57,6 +59,22 @@ def definePlots():
             "ymin": 0,
             "ymax": 160,
             "xNames": comparisonPatterns
+        },
+        "hapticFrequencyComparison_dist": {
+            "data": comparisonDict,
+            "targetdf": 0,
+            "indArray": [0,3,1,4,2,5],
+            "targetVariable": "Haptic Frequency Difference Between Sides",
+            "suptitle": "Distribution",
+            "subplt_titles": comparisonPatterns,
+            "plt_num": 6,
+            "xlabel": "Frequency (Hz)",
+            "ylabel": "Distribution",
+            "xmin": 0,
+            "xmax": 4,
+            "ymin": 0,
+            "ymax": 0.3,
+            "xNames": ["20Hz", "110Hz", "200Hz"]
         },
     }
     return pltParameters
@@ -85,11 +103,8 @@ def plotBox(cur):
     fig.suptitle(cur["suptitle"])
 
     for subplot in range(cur["plt_num"]):
-        targetdf = createTargetArray(cur)
-        # print(type(targetdf))
-
         # b = time_all[experiments[i]].plot(kind="box", ax=axs[i])
-        a,bp = targetdf.boxplot(ax=axs[0,subplot], return_type="both", showmeans=True)
+        a,bp = cur["targetdf"].boxplot(ax=axs[0,subplot], return_type="both", showmeans=True)
 
         # m = [round(item.get_ydata()[0], 1) for item in bp['means']]
 
@@ -100,11 +115,48 @@ def plotBox(cur):
 
         axs[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
         axs[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
-            
+
+def checkDistribution(cur):
+    figD, axsD = plt.subplots(ncols=cur["plt_num"], squeeze=False, figsize=(8,8))
+    figD.suptitle(cur["suptitle"])
+
+    for subplot in range(cur["plt_num"]):
+        w, pvalue = stats.shapiro(cur["targetdf"][subplot])
+        print(w, pvalue)
+
+        axsD[0,subplot].hist(cur["targetdf"][subplot], bins=10, histtype='bar', ec='k') 
+        axsD[0,subplot].set_title(cur["subplt_titles"][subplot])
+        axsD[0,subplot].set_xlabel(cur["xlabel"])
+        axsD[0,0].set_ylabel(cur["ylabel"])
+
+def findWilcoxonSignRank(cur):
+    for subplot in range((int)(cur["plt_num"]/2)):
+        w, pvalue = stats.wilcoxon(cur["targetdf"][subplot], cur["targetdf"][subplot+3], alternative="greater")
+        print(cur["xNames"][subplot], w, pvalue)
     
 #----------- CALL PLOT FUNCTIONS
+plt.close('all')
 plotParameters = definePlots()
+
+plotParameters["hapticFrequencyComparison_box"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_box"])
+plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_dist"])
+
+# PLOT INDV RESULT
+# plotParameters["hapticFrequencyComparison_box"]["targetdf"] = pd.DataFrame(plotParameters["hapticFrequencyComparison_box"]["targetdf"].iloc[4]).T
+
+# print(type(targetdf))
+
+#--- PLOT BOX
 plotBox(plotParameters["hapticFrequencyComparison_box"])
+
+# could create an analysis for percentage of people who thought X was rougher than Y
+# ie. do a check between left and right results for each pair
+
+#--- CHECK DISTRIBUTION (PLOT HISTOGRAMS)
+checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
+
+#--- RUN WILCOXON SIGN RANK TEST
+findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
 
 #------------- SHOW PLOTS
 plt.show()

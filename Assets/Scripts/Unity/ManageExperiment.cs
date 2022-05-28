@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManageExperiment : MonoBehaviour
 {
     private int mode;
+    public Text title;
     public ManageSlider slider;
     public GameObject sliderUI;
     public ManageTraining training;
     public GameObject trainingUI;
     public ManagePrelim prelim;
     public GameObject prelimUI;
+    public ManageMultimodal modal;
+    public GameObject modalUI;
     public bool finished = false;
     public GameObject finishedUI;
     public List<DataStruct> fullData;
@@ -23,16 +27,17 @@ public class ManageExperiment : MonoBehaviour
     // public float weightAmplitude;
     // public float weightFrequency;
     public List<TrialParameters> allParameters;
-    public TrialParameters train1;
-    public TrialParameters train2;
-    public TrialParameters train3;
-    public TrialParameters trial1;
-    public TrialParameters trial2;
-    public TrialParameters trial3;
-    public TrialParameters trial4;
-    public TrialParameters trial5;
-    public TrialParameters trial6;
+    // public TrialParameters train1;
+    // public TrialParameters train2;
+    // public TrialParameters train3;
+    // public TrialParameters trial1;
+    // public TrialParameters trial2;
+    // public TrialParameters trial3;
+    // public TrialParameters trial4;
+    // public TrialParameters trial5;
+    // public TrialParameters trial6;
     public bool newStart = false;
+    public string experimentType;
 
     void Awake(){
         Debug.Log($"Initialized");
@@ -47,19 +52,21 @@ public class ManageExperiment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
-        convertAllRoughness();
-        allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3,trial4,trial5,trial6};
+        // convertAllRoughness();
+        // allParameters = new List<TrialParameters>(){train1,train2,train3,trial1,trial2,trial3,trial4,trial5,trial6};
 
         if(newStart){
             foreach(TrialParameters trial in allParameters){
                 variableList.Add(trial.frequency_left);
                 variableList.Add(trial.frequency_right);
             }
-            csvWriter.initIndvCSVs(variableList, "frequencies");
+            csvWriter.initIndvCSVs(variableList, experimentType);
             newStart = false;
         }
 
         if(mode == 0){
+            title.text = "TRAINING MODE";
+
             training.enabled = true;
             trainingUI.SetActive(true);
 
@@ -68,8 +75,13 @@ public class ManageExperiment : MonoBehaviour
 
             prelim.enabled = false;
             prelimUI.SetActive(false);
+
+            modal.enabled = false;
+            modalUI.SetActive(false);
         } 
-        else if(mode == 1){
+        else if(mode == 3){
+            title.text = "SLIDER";
+            
             training.enabled = false;
             trainingUI.SetActive(false);
 
@@ -78,8 +90,13 @@ public class ManageExperiment : MonoBehaviour
 
             prelim.enabled = false;
             prelimUI.SetActive(false);
+
+            modal.enabled = false;
+            modalUI.SetActive(false);
         }
-        else if(mode == 2){
+        else if(mode == 1){
+            title.text = "PRELIM EXPERIMENT";
+            
             training.enabled = false;
             trainingUI.SetActive(false);
 
@@ -88,6 +105,24 @@ public class ManageExperiment : MonoBehaviour
 
             prelim.enabled = true;
             prelimUI.SetActive(true);
+
+            modal.enabled = false;
+            modalUI.SetActive(false);
+        }
+        else if(mode == 2){
+            title.text = "MODAL EXPERIMENT";
+            
+            training.enabled = false;
+            trainingUI.SetActive(false);
+
+            slider.enabled = false;      
+            sliderUI.SetActive(false);
+
+            prelim.enabled = false;
+            prelimUI.SetActive(false);
+
+            modal.enabled = true;
+            modalUI.SetActive(true);
         }
 
         if(finished){
@@ -98,7 +133,7 @@ public class ManageExperiment : MonoBehaviour
     }
     public void changeModes(){
         if(mode < 2){
-            mode += 2;
+            mode += 1;
         } else{
             mode = 0;
         }
@@ -107,7 +142,9 @@ public class ManageExperiment : MonoBehaviour
         fullData = new List<DataStruct>();
     }
     public void saveFullData(){
-        csvWriter.storeParticipantCSV(fullData, index);
+        if(mode == 1){
+            csvWriter.storeParticipantCSV(fullData, index);
+        }        
     }
     public void saveSlider(DataStruct data){
         csvWriter.addToCSV(data);

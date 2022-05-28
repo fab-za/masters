@@ -30,8 +30,10 @@ public class ManageLineGrid : MonoBehaviour
     public GridParameters rightGrid;
     public int samplingRate;
     
+    
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -42,6 +44,7 @@ public class ManageLineGrid : MonoBehaviour
         rightGrid.positions = parametersToPositions(rightGrid);
         
         updateLine();
+
     }
 
     public void updateParameters(float left_amplitude, float left_frequency, float left_roughness, float right_amplitude, float right_frequency, float right_roughness){

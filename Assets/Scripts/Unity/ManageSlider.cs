@@ -26,6 +26,7 @@ public class ManageSlider : MonoBehaviour
     public SliderValues slider;
     public float tempLeftRoughness;
     public float tempRightRoughness;
+    
     void Start()
     {
         visual = this.gameObject.GetComponent<ManageLineGrid>();

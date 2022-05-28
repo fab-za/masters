@@ -6,16 +6,18 @@ public class SendFrequency : MonoBehaviour
 {
     // private ManageGrid g;
     // private ManageGridSlider visual;
-    private ManageLineGrid visual;
+    // private ManageLineGrid visual;
     private ConnectSP sp;
     private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
     private Vector3 prevPosition;
     public FollowMouse mouse;
     public string message;
+    public float left_roughness;
+    public float right_roughness;
     void Start()
     {
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
-        visual = this.gameObject.GetComponent<ManageLineGrid>();
+        // visual = this.gameObject.GetComponent<ManageLineGrid>();
         prevPosition = mouse.mousePosition;
     }
 
@@ -30,13 +32,13 @@ public class SendFrequency : MonoBehaviour
             } 
             else{
                 if(mouse.position == 1){
-                    message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+                    message = alphabet[(int)left_roughness+1] + alphabet[(int)right_roughness+1];
                 } 
                 else if (mouse.position == 0){
-                    message = alphabet[(int)visual.leftGrid.roughness+1] + alphabet[(int)visual.leftGrid.roughness+1];
+                    message = alphabet[(int)left_roughness+1] + alphabet[(int)left_roughness+1];
                 } 
                 else if (mouse.position == 2){
-                    message = alphabet[(int)visual.rightGrid.roughness+1] + alphabet[(int)visual.rightGrid.roughness+1];
+                    message = alphabet[(int)right_roughness+1] + alphabet[(int)right_roughness+1];
                 }
 
                 // Debug.Log("message: " + message);
