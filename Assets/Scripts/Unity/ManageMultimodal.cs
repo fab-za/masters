@@ -41,10 +41,13 @@ public class ManageMultimodal : MonoBehaviour
     // public TrialParameters trial20;
     // public TrialParameters trial21;
 
-    private List<TrialParameters> currentTrialList;
     private List<TrialParameters> unimodal_haptic;
     private List<TrialParameters> unimodal_visual;
     private List<TrialParameters> multimodal;
+    private TrialParameters currentTrial;
+
+    public int selectedClass;
+
     public int current;
     private int cur;
     public int[] order;
@@ -59,9 +62,10 @@ public class ManageMultimodal : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialControlelr").GetComponent<ConnectSP>();
         current = 0;
+        training = true;
 
-        experiment.experimentType = "multimodal";
-        experiment.newStart = true;
+        // experiment.experimentType = "Multimodal";
+        // experiment.newStart = true;
     }
 
     // Update is called once per frame
@@ -78,10 +82,7 @@ public class ManageMultimodal : MonoBehaviour
             experiment.finishedUI.SetActive(false);
             trainingButton.SetActive(false);
 
-            visual.updateParameters(1, experiment.allParameters[current].frequency_left, (-experiment.allParameters[current].roughness_left/20), 1, experiment.allParameters[current].frequency_right, (-experiment.allParameters[current].roughness_right/20));
-            amplitudeToTension(experiment.allParameters[current]);
-            frequencyManager.left_roughness = (-experiment.allParameters[current].roughness_left/20);
-            frequencyManager.right_roughness = (-experiment.allParameters[current].roughness_right/20);
+            currentTrial = experiment.allParameters[current];
         }
         else{
             display.counter = 0;
@@ -89,24 +90,20 @@ public class ManageMultimodal : MonoBehaviour
             trainingButton.SetActive(true);
 
             if(phase == 0){
-                visual.updateParameters(1, trial1.frequency_left, (-trial1.roughness_left/20), 1, trial1.frequency_right, (-trial1.roughness_right/20));
-                amplitudeToTension(trial1);
-                frequencyManager.left_roughness = (-trial1.roughness_left/20);
-                frequencyManager.right_roughness = (-trial1.roughness_right/20);
+                currentTrial = trial1;
             }
             else if(phase == 1){
-                visual.updateParameters(1, trial5.frequency_left, (-trial5.roughness_left/20), 1, trial5.frequency_right, (-trial5.roughness_right/20));
-                amplitudeToTension(trial5);
-                frequencyManager.left_roughness = (-trial5.roughness_left/20);
-                frequencyManager.right_roughness = (-trial5.roughness_right/20);
+                currentTrial = trial5;
             }
             else if(phase == 3){
                 training = false;
             }
-
-
-            
         }
+
+        visual.updateParameters(1, currentTrial.frequency_left, (-currentTrial.roughness_left/20), 1, currentTrial.frequency_right, (-currentTrial.roughness_right/20));
+        amplitudeToTension(currentTrial);
+        frequencyManager.left_roughness = (-currentTrial.roughness_left/20);
+        frequencyManager.right_roughness = (-currentTrial.roughness_right/20);
     }
     public void selectPhase(){
         if(phase == 0){
@@ -185,6 +182,23 @@ public class ManageMultimodal : MonoBehaviour
         }
     }
     public void chooseLeft(){
+        selectedClass = 1;
+    }
+    public void chooseRight(){
+        selectedClass = 2;
+    }
+    public void saveCurrentMultimodal(int experimentIndex){
+        MultimodalDataStruct multimodalFrame = new MultimodalDataStruct(
+            experimentIndex, // index of experiment actually
+            experiment.index, // participant index (my naming sucks sorry @ self)
 
+            currentTrial.frequency_left,
+            currentTrial.roughness_left,
+            currentTrial.amplitude_left,
+
+            selectedClass            
+        );
+
+        experiment.saveMultimodal(multimodalFrame);
     }
 }

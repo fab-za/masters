@@ -133,4 +133,55 @@ public class CsvWriter : MonoBehaviour
         Debug.Log($"experiment comparison result CSV file written to \"{experimentpath}\"");
     }
 
+    public void addToMultimodalCSV(MultimodalDataStruct frame){
+        var titles  = new StringBuilder("Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Frequency, Trial Amplitude, Participant Class");
+        titles.Append('\n');
+        
+        var result = new StringBuilder("");
+        result.Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.trialAmplitude.ToString()).Append(',').Append(frame.participantClass.ToString()).Append('\n');
+        result.ToString();
+
+        //---------- WRITE PER PARTICIPANT INDEX
+
+        string participantFolder = Application.dataPath + "/Data/Multimodal/" + frame.participantIndex;
+
+        if(!System.IO.File.Exists(participantFolder)){
+            Directory.CreateDirectory(participantFolder);
+        }
+
+        string participantpath = participantFolder + "/multimodal_result.csv";
+
+        if(!System.IO.File.Exists(participantpath)){
+            var writerTemp = new StreamWriter(participantpath, false); // true for append, false for overwrite
+            writerTemp.Write(titles);
+            writerTemp.Close();
+            Debug.Log($"new CSV file written to \"{participantpath}\"");
+        }
+
+        var writer = new StreamWriter(participantpath, true); // true for append, false for overwrite
+        writer.Write(result);
+        writer.Close();
+        Debug.Log($"participant multimodal result CSV file written to \"{participantpath}\"");
+
+        //---------- WRITE PER EXPERIMENT INDEX
+
+        string experimentFolder = Application.dataPath + "/Data/Multimodal/Pairings/" + frame.experimentIndex;
+        if(!System.IO.File.Exists(experimentFolder)){
+            Directory.CreateDirectory(experimentFolder);
+        }
+
+        string experimentpath = experimentFolder + "/multimodal_result.csv";
+
+        if(!System.IO.File.Exists(experimentpath)){
+            var writerTemp2 = new StreamWriter(experimentpath, false); // true for append, false for overwrite
+            writerTemp2.Write(titles);
+            writerTemp2.Close();
+            Debug.Log($"new CSV file written to \"{experimentpath}\"");
+        }
+        
+        var writer2 = new StreamWriter(experimentpath, true); // true for append, false for overwrite
+        writer2.Write(result);
+        writer2.Close();
+        Debug.Log($"experiment multimodal result CSV file written to \"{experimentpath}\"");
+    }
 }

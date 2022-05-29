@@ -9,15 +9,18 @@ public class MultimodalDataStruct
     public int participantIndex;
     public float trialVisualFrequency;
     public float trialHapticFrequency;
+    public float trialAmplitude;
     public int participantClass;
     public MultimodalDataStruct(){}
-    public MultimodalDataStruct(int e, int p, float tvf, float thf, int c)
+    public MultimodalDataStruct(int e, int p, float tvf, float thf, float ta, int c)
     {
         experimentIndex = e;
         participantIndex = p;
 
         trialVisualFrequency = tvf;
         trialHapticFrequency = thf;
+        trialAmplitude = ta;
+        
         participantClass = c;
     }
 }

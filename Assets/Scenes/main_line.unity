@@ -151,8 +151,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1927494633}
-  - {fileID: 1702693026}
   - {fileID: 1800646939}
+  - {fileID: 1702693026}
   - {fileID: 1664032210}
   - {fileID: 1381321987}
   - {fileID: 607628764}
@@ -498,7 +498,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Save Left Side Values
+  m_Text: Pattern 2
 --- !u!222 &53370563
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2837,8 +2837,9 @@ MonoBehaviour:
     errorRoughness: 0
     errorAmplitude: 0
   fullComparisonData: []
+  fullMultimodalData: []
   csvWriter: {fileID: 1300657995}
-  index: 10
+  index: 12
   variableList: []
   allParameters: []
   newStart: 0
@@ -3024,69 +3025,7 @@ MonoBehaviour:
     roughness_right: 0
     amplitude_right: 0
     frequency_right: 0
-  trial13:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial14:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial15:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial16:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial17:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial18:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial19:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial20:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
-  trial21:
-    roughness_left: 0
-    amplitude_left: 0
-    frequency_left: 0
-    roughness_right: 0
-    amplitude_right: 0
-    frequency_right: 0
+  selectedClass: 0
   current: 0
   order: 
 --- !u!1 &510165513
@@ -6544,7 +6483,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Save Right Side Values
+  m_Text: Pattern 1
 --- !u!222 &1396369802
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7378,7 +7317,7 @@ GameObject:
   - component: {fileID: 1702693028}
   - component: {fileID: 1702693027}
   m_Layer: 5
-  m_Name: Pattern 1
+  m_Name: Pattern 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7397,7 +7336,7 @@ RectTransform:
   m_Children:
   - {fileID: 53370561}
   m_Father: {fileID: 2759326}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7459,13 +7398,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 499952017}
+      - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: chooseRight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7863,6 +7802,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouse: {fileID: 651745673}
   message: 
+  left_roughness: 0
+  right_roughness: 0
 --- !u!224 &1783163935
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7984,7 +7925,7 @@ GameObject:
   - component: {fileID: 1800646941}
   - component: {fileID: 1800646940}
   m_Layer: 5
-  m_Name: Pattern 2
+  m_Name: Pattern 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8003,7 +7944,7 @@ RectTransform:
   m_Children:
   - {fileID: 1396369800}
   m_Father: {fileID: 2759326}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8065,13 +8006,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 499952017}
+      - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: chooseLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8945,7 +8886,7 @@ GameObject:
   - component: {fileID: 1927494635}
   - component: {fileID: 1927494634}
   m_Layer: 5
-  m_Name: changeModes
+  m_Name: finishTraining
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

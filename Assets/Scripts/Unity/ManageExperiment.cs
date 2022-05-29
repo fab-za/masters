@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ManageExperiment : MonoBehaviour
 {
-    private int mode;
+    public int mode;
     public Text title;
     public ManageSlider slider;
     public GameObject sliderUI;
@@ -21,6 +21,7 @@ public class ManageExperiment : MonoBehaviour
     public DataStruct currentData_left;
     public DataStruct currentData_right;
     public List<ComparisonDataStruct> fullComparisonData;
+    public List<MultimodalDataStruct> fullMultimodalData;
     public CsvWriter csvWriter;
     public int index;
     public List<float> variableList;
@@ -45,8 +46,7 @@ public class ManageExperiment : MonoBehaviour
 
     void Start()
     {
-        mode = 0;
-        initParticipantCSVs();
+        
     }
 
     // Update is called once per frame
@@ -66,6 +66,7 @@ public class ManageExperiment : MonoBehaviour
 
         if(mode == 0){
             title.text = "TRAINING MODE";
+            initParticipantCSVs();
 
             training.enabled = true;
             trainingUI.SetActive(true);
@@ -171,5 +172,9 @@ public class ManageExperiment : MonoBehaviour
     }
     public void initParticipantCSVs(){
         csvWriter.initCSV(index);
+    }
+    public void saveMultimodal(MultimodalDataStruct data){
+        data.experimentIndex = modal.current;
+        csvWriter.addToMultimodalCSV(data);        
     }
 }
