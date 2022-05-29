@@ -88,7 +88,7 @@ public class ManagePrelim : MonoBehaviour
         slider.saveLeft();
         slider.saveRight();
         slider.saveComparisonFile(current);
-        saved.text = "Saved for Pattern: " + (cur+1);
+        saved.text = "Saved for Task: " + (cur+1);
 
         if(cur < 5){
             cur += 1;

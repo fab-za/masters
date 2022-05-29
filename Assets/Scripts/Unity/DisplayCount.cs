@@ -16,6 +16,6 @@ public class DisplayCount : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        T.text = "Pattern: " + (counter+1);
+        T.text = "Task: " + (counter+1);
     }
 }

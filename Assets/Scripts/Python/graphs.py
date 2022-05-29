@@ -153,10 +153,10 @@ plotBox(plotParameters["hapticFrequencyComparison_box"])
 # ie. do a check between left and right results for each pair
 
 #--- CHECK DISTRIBUTION (PLOT HISTOGRAMS)
-# checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
+checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
 
 #--- RUN WILCOXON SIGN RANK TEST
-# findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
+findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
 
 #------------- SHOW PLOTS
 plt.show()

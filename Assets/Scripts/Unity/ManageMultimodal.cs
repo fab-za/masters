@@ -15,21 +15,24 @@ public class ManageMultimodal : MonoBehaviour
     public Text indicator;
     public GameObject visualblock;
     public GameObject trainingButton;
+    public GameObject selectButtons;
 
-    public TrialParameters trial1;  // TRAINING
+    public TrialParameters trial1;
     public TrialParameters trial2;
+
     public TrialParameters trial3;
     public TrialParameters trial4;
 
-    public TrialParameters trial5;  // TRAINING
+    public TrialParameters trial5;
     public TrialParameters trial6;
+
     public TrialParameters trial7;
     public TrialParameters trial8;
 
-    public TrialParameters trial9;
-    public TrialParameters trial10;
-    public TrialParameters trial11;
-    public TrialParameters trial12;
+    // public TrialParameters trial9;
+    // public TrialParameters trial10;
+    // public TrialParameters trial11;
+    // public TrialParameters trial12;
 
     // public TrialParameters trial13;
     // public TrialParameters trial14;
@@ -44,13 +47,14 @@ public class ManageMultimodal : MonoBehaviour
     private List<TrialParameters> unimodal_haptic;
     private List<TrialParameters> unimodal_visual;
     private List<TrialParameters> multimodal;
+    private List<TrialParameters> multimodal_tension;
     private TrialParameters currentTrial;
 
     public int selectedClass;
 
     public int current;
     private int cur;
-    public int[] order;
+    public int[] order = new int[]{0};
     private int temp;
     private int phase;
     private bool training;
@@ -60,9 +64,18 @@ public class ManageMultimodal : MonoBehaviour
         tension = GameObject.Find("VisualManager").GetComponent<SendTension>();        
         frequencyManager = GameObject.Find("VisualManager").GetComponent<SendFrequency>();
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
-        sp = GameObject.Find("SerialControlelr").GetComponent<ConnectSP>();
+        sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
         current = 0;
-        training = true;
+        phase = -1;
+
+        unimodal_haptic = new List<TrialParameters>(){trial1,trial2};
+        unimodal_visual = new List<TrialParameters>(){trial3,trial4};
+        multimodal = new List<TrialParameters>(){trial5,trial6};
+        multimodal_tension = new List<TrialParameters>(){trial7,trial8};
+
+        Debug.Log("in start");
+
+        changePhase();
 
         // experiment.experimentType = "Multimodal";
         // experiment.newStart = true;
@@ -71,34 +84,15 @@ public class ManageMultimodal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        unimodal_haptic = new List<TrialParameters>(){trial2,trial3,trial4};
-        unimodal_visual = new List<TrialParameters>(){trial6,trial7,trial8};
-        multimodal = new List<TrialParameters>(){trial9,trial10,trial11,trial12};
+        // unimodal_haptic = new List<TrialParameters>(){trial1,trial2};
+        // unimodal_visual = new List<TrialParameters>(){trial3,trial4};
+        // multimodal = new List<TrialParameters>(){trial5,trial6};
+        // multimodal_tension = new List<TrialParameters>(){trial7,trial8};
         // selectPhase();
 
-        if(!training){
-            display.counter = cur;
-            current = order[cur];
-            experiment.finishedUI.SetActive(false);
-            trainingButton.SetActive(false);
-
-            currentTrial = experiment.allParameters[current];
-        }
-        else{
-            display.counter = 0;
-            indicator.text = indicator.text + "Training";
-            trainingButton.SetActive(true);
-
-            if(phase == 0){
-                currentTrial = trial1;
-            }
-            else if(phase == 1){
-                currentTrial = trial5;
-            }
-            else if(phase == 3){
-                training = false;
-            }
-        }
+        display.counter = cur;
+        current = order[cur];
+        currentTrial = experiment.allParameters[current];
 
         visual.updateParameters(1, currentTrial.frequency_left, (-currentTrial.roughness_left/20), 1, currentTrial.frequency_right, (-currentTrial.roughness_right/20));
         amplitudeToTension(currentTrial);
@@ -106,52 +100,80 @@ public class ManageMultimodal : MonoBehaviour
         frequencyManager.right_roughness = (-currentTrial.roughness_right/20);
     }
     public void selectPhase(){
-        if(phase == 0){
+        if(phase == 1){
             experiment.allParameters = unimodal_haptic;
             indicator.text = "Haptic";
             visualblock.SetActive(true);
             sp.started = true;
-            order = new int[]{0,1,2,3,4,5};
+            training = true;
         }
-        else if(phase == 1){
+        else if(phase == 0){
             experiment.allParameters = unimodal_visual;
             indicator.text = "Visual";
             visualblock.SetActive(false);
             sp.started = false;
-            order = new int[]{0,1,2,3,4,5};
+            training = true;
         }
         else if(phase == 2){
             experiment.allParameters = multimodal;
-            indicator.text = "Multi";
+            indicator.text = "Multi 1";
             visualblock.SetActive(false);
             sp.started = true;
-            order = new int[]{0,1,2,3,4,5,6};
+            training = false;
+        }
+        else if(phase == 3){
+            experiment.allParameters = multimodal_tension;
+            indicator.text = "Multi 2";
+            visualblock.SetActive(false);
+            sp.started = true;
+            training = false;
         }
     }
     public void changePhase(){
-        if(phase < 2){
-            training = true;
+        if(phase < 3){
             phase += 1;
         } else{
             experiment.finished = true;
             phase = 0;
         }
+        Debug.Log("phase: "+phase);
 
         selectPhase();
-        Shuffle();
+
+        if(!training){
+            order = new int[]{0,1,0,1,0,1};
+            
+            experiment.finishedUI.SetActive(false);
+            trainingButton.SetActive(false);
+            selectButtons.SetActive(true);
+
+            Shuffle();
+        }
+        else{
+            order = new int[]{0,1};
+            
+            saved.text = "";
+            indicator.text = indicator.text + "Training";
+            trainingButton.SetActive(true);
+            selectButtons.SetActive(false);
+        }
     }
     public void endTraining(){
         training = false;
     }
 
     public void changeVisual(){
-        saved.text = "Saved for Pattern: " + (cur+1);
-
-        if(cur < 5){
+        if(cur < (order.Length-1)){
+            if(!training){
+                saveCurrentMultimodal(current);
+                saved.text = "Saved for Task: " + (cur+1);
+            }
             cur += 1;
         } else{
-            experiment.finishedUI.SetActive(true);
-            changePhase();
+            if(!training){
+                experiment.finishedUI.SetActive(true);
+                changePhase();
+            }
             cur = 0;
         }
     }
