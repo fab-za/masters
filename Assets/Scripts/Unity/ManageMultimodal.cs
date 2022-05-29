@@ -13,7 +13,7 @@ public class ManageMultimodal : MonoBehaviour
     public DisplayCount display;
     public Text saved;
     public Text indicator;
-    public GameObject visualblock;
+    public GameObject visualBlock;
     public GameObject trainingButton;
     public GameObject selectButtons;
 
@@ -58,9 +58,12 @@ public class ManageMultimodal : MonoBehaviour
     private int temp;
     private int phase;
     private bool training;
+
     private int frames;
     private int popupduration;
     private bool phase_complete;
+    private bool task_complete;
+
     void Start()
     {
         visual = GameObject.Find("VisualManager").GetComponent<ManageLineGrid>();
@@ -72,6 +75,7 @@ public class ManageMultimodal : MonoBehaviour
         current = 0;
         phase = -1;
         phase_complete = false;
+        task_complete = false;
         popupduration = 30;
         frames = 0;
 
@@ -98,6 +102,9 @@ public class ManageMultimodal : MonoBehaviour
         // selectPhase();
 
         popupFinish();
+        if(phase != 1){
+            popupBlock();
+        }        
 
         display.counter = cur;
         current = order[cur];
@@ -112,26 +119,26 @@ public class ManageMultimodal : MonoBehaviour
         if(phase == 1){
             experiment.allParameters = unimodal_haptic;
             indicator.text = "Haptic";
-            visualblock.SetActive(true);
+            visualBlock.SetActive(true);
             sp.started = true;
             training = true;
         }
         else if(phase == 0){
             experiment.allParameters = unimodal_visual;
             indicator.text = "Visual";
-            visualblock.SetActive(false);
+            visualBlock.SetActive(false);
             training = true;
         }
         else if(phase == 2){
             experiment.allParameters = multimodal;
             indicator.text = "Multi 1";
-            visualblock.SetActive(false);
+            visualBlock.SetActive(false);
             training = false;
         }
         else if(phase == 3){
             experiment.allParameters = multimodal_tension;
             indicator.text = "Multi 2";
-            visualblock.SetActive(false);
+            visualBlock.SetActive(false);
             training = false;
         }
     }
@@ -168,10 +175,13 @@ public class ManageMultimodal : MonoBehaviour
     }
     public void endTraining(){
         training = false;
+        cur = 0;
+        task_complete = true;
         checkTraining();
     }
 
     public void changeVisual(){
+        task_complete = true;
         if(cur < (order.Length-1)){
             if(!training){
                 saved.text = "Saved for Task: " + (cur+1);
@@ -244,6 +254,19 @@ public class ManageMultimodal : MonoBehaviour
                 experiment.finishedUI.SetActive(false);
                 frames = 0;
                 phase_complete = false;
+            }
+        }
+    }
+    public void popupBlock(){
+        if(task_complete){
+            if(frames < (popupduration/5)){
+                visualBlock.SetActive(true);
+                frames += 1;
+            }
+            else{
+                visualBlock.SetActive(false);
+                frames = 0;
+                task_complete = false;
             }
         }
     }
