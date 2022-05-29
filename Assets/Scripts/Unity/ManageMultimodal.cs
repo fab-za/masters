@@ -262,7 +262,7 @@ public class ManageMultimodal : MonoBehaviour
     }
     public void popupFinish(){
         if(phase_complete){
-            if(frames < popupduration){
+            if(frames < (popupduration*3)){
                 breakMessage.SetActive(true);
                 frames += 1;
             }
