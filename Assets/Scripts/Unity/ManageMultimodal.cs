@@ -48,7 +48,7 @@ public class ManageMultimodal : MonoBehaviour
     private List<TrialParameters> unimodal_visual;
     private List<TrialParameters> multimodal;
     private List<TrialParameters> multimodal_tension;
-    private TrialParameters currentTrial;
+    public TrialParameters currentTrial;
 
     public int selectedClass;
 
@@ -58,6 +58,9 @@ public class ManageMultimodal : MonoBehaviour
     private int temp;
     private int phase;
     private bool training;
+    private int frames;
+    private int popupduration;
+    private bool phase_complete;
     void Start()
     {
         visual = GameObject.Find("VisualManager").GetComponent<ManageLineGrid>();
@@ -65,15 +68,19 @@ public class ManageMultimodal : MonoBehaviour
         frequencyManager = GameObject.Find("VisualManager").GetComponent<SendFrequency>();
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
+
         current = 0;
         phase = -1;
+        phase_complete = false;
+        popupduration = 30;
+        frames = 0;
 
-        unimodal_haptic = new List<TrialParameters>(){trial1,trial2};
-        unimodal_visual = new List<TrialParameters>(){trial3,trial4};
+        unimodal_haptic = new List<TrialParameters>(){trial3,trial4};
+        unimodal_visual = new List<TrialParameters>(){trial1,trial2};
         multimodal = new List<TrialParameters>(){trial5,trial6};
         multimodal_tension = new List<TrialParameters>(){trial7,trial8};
 
-        Debug.Log("in start");
+        // Debug.Log("in start");
 
         changePhase();
 
@@ -89,6 +96,8 @@ public class ManageMultimodal : MonoBehaviour
         // multimodal = new List<TrialParameters>(){trial5,trial6};
         // multimodal_tension = new List<TrialParameters>(){trial7,trial8};
         // selectPhase();
+
+        popupFinish();
 
         display.counter = cur;
         current = order[cur];
@@ -111,21 +120,18 @@ public class ManageMultimodal : MonoBehaviour
             experiment.allParameters = unimodal_visual;
             indicator.text = "Visual";
             visualblock.SetActive(false);
-            sp.started = false;
             training = true;
         }
         else if(phase == 2){
             experiment.allParameters = multimodal;
             indicator.text = "Multi 1";
             visualblock.SetActive(false);
-            sp.started = true;
             training = false;
         }
         else if(phase == 3){
             experiment.allParameters = multimodal_tension;
             indicator.text = "Multi 2";
             visualblock.SetActive(false);
-            sp.started = true;
             training = false;
         }
     }
@@ -140,10 +146,12 @@ public class ManageMultimodal : MonoBehaviour
 
         selectPhase();
 
+        checkTraining();
+    }
+    public void checkTraining(){
         if(!training){
             order = new int[]{0,1,0,1,0,1};
-            
-            experiment.finishedUI.SetActive(false);
+
             trainingButton.SetActive(false);
             selectButtons.SetActive(true);
 
@@ -153,25 +161,25 @@ public class ManageMultimodal : MonoBehaviour
             order = new int[]{0,1};
             
             saved.text = "";
-            indicator.text = indicator.text + "Training";
+            indicator.text = indicator.text + " Training";
             trainingButton.SetActive(true);
             selectButtons.SetActive(false);
         }
     }
     public void endTraining(){
         training = false;
+        checkTraining();
     }
 
     public void changeVisual(){
         if(cur < (order.Length-1)){
             if(!training){
-                saveCurrentMultimodal(current);
                 saved.text = "Saved for Task: " + (cur+1);
             }
             cur += 1;
         } else{
             if(!training){
-                experiment.finishedUI.SetActive(true);
+                phase_complete = true;
                 changePhase();
             }
             cur = 0;
@@ -205,12 +213,15 @@ public class ManageMultimodal : MonoBehaviour
     }
     public void chooseLeft(){
         selectedClass = 1;
+        saveCurrentMultimodal(current);
     }
     public void chooseRight(){
         selectedClass = 2;
+        saveCurrentMultimodal(current);
     }
     public void saveCurrentMultimodal(int experimentIndex){
         MultimodalDataStruct multimodalFrame = new MultimodalDataStruct(
+            phase,
             experimentIndex, // index of experiment actually
             experiment.index, // participant index (my naming sucks sorry @ self)
 
@@ -222,5 +233,18 @@ public class ManageMultimodal : MonoBehaviour
         );
 
         experiment.saveMultimodal(multimodalFrame);
+    }
+    public void popupFinish(){
+        if(phase_complete){
+            if(frames < popupduration){
+                experiment.finishedUI.SetActive(true);
+                frames += 1;
+            }
+            else{
+                experiment.finishedUI.SetActive(false);
+                frames = 0;
+                phase_complete = false;
+            }
+        }
     }
 }

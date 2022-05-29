@@ -2803,7 +2803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87997512bf8279a4199e67dea4572061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 2
   title: {fileID: 314933701}
   slider: {fileID: 1783163937}
   sliderUI: {fileID: 1424157630}
@@ -2839,7 +2839,7 @@ MonoBehaviour:
   fullComparisonData: []
   fullMultimodalData: []
   csvWriter: {fileID: 1300657995}
-  index: 14
+  index: 16
   variableList: []
   allParameters: []
   newStart: 0
@@ -2943,26 +2943,26 @@ MonoBehaviour:
   trainingButton: {fileID: 1927494632}
   selectButtons: {fileID: 1095938165}
   trial1:
-    roughness_left: 0
+    roughness_left: 20
     amplitude_left: 2
-    frequency_left: 30
-    roughness_right: 0
+    frequency_left: 65
+    roughness_right: 20
     amplitude_right: 2
-    frequency_right: 30
+    frequency_right: 65
   trial2:
-    roughness_left: 0
+    roughness_left: 20
     amplitude_left: 2
-    frequency_left: 35
-    roughness_right: 0
+    frequency_left: 75
+    roughness_right: 20
     amplitude_right: 2
-    frequency_right: 35
+    frequency_right: 75
   trial3:
     roughness_left: -20
     amplitude_left: 2
     frequency_left: 0
-    roughness_right: 0
+    roughness_right: -20
     amplitude_right: 2
-    frequency_right: -20
+    frequency_right: 0
   trial4:
     roughness_left: -200
     amplitude_left: 2
@@ -2973,31 +2973,38 @@ MonoBehaviour:
   trial5:
     roughness_left: -20
     amplitude_left: 2
-    frequency_left: 30
+    frequency_left: 65
     roughness_right: -20
     amplitude_right: 2
-    frequency_right: 30
+    frequency_right: 65
   trial6:
     roughness_left: -200
     amplitude_left: 2
-    frequency_left: 35
+    frequency_left: 75
     roughness_right: -200
     amplitude_right: 2
-    frequency_right: 35
+    frequency_right: 75
   trial7:
     roughness_left: -20
     amplitude_left: 2
-    frequency_left: 30
+    frequency_left: 65
     roughness_right: -20
     amplitude_right: 2
-    frequency_right: 30
+    frequency_right: 65
   trial8:
     roughness_left: -200
     amplitude_left: 1
-    frequency_left: 35
+    frequency_left: 75
     roughness_right: -200
     amplitude_right: 1
-    frequency_right: 35
+    frequency_right: 75
+  currentTrial:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
   selectedClass: 0
   current: 0
   order: 
@@ -5675,7 +5682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -35}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1108564951
@@ -7327,7 +7334,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: endTraining
+        m_MethodName: changeVisual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7484,7 +7491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -35}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1690182189
@@ -7646,7 +7653,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: changeVisual
+        m_MethodName: chooseRight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7658,7 +7665,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: chooseRight
+        m_MethodName: changeVisual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8254,7 +8261,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: changeVisual
+        m_MethodName: chooseLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8266,11 +8273,23 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 499952021}
         m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: chooseLeft
+        m_MethodName: changeVisual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9086,7 +9105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0.9, y: -980}
+  m_AnchoredPosition: {x: 0.9, y: -950}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1892201147

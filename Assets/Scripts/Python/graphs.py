@@ -142,7 +142,7 @@ plotParameters["hapticFrequencyComparison_box"]["targetdf"] = createTargetArray(
 plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_dist"])
 
 # PLOT INDV RESULT
-# plotParameters["hapticFrequencyComparison_box"]["targetdf"] = pd.DataFrame(plotParameters["hapticFrequencyComparison_box"]["targetdf"].iloc[10]).T
+# plotParameters["hapticFrequencyComparison_box"]["targetdf"] = pd.DataFrame(plotParameters["hapticFrequencyComparison_box"]["targetdf"].iloc[14]).T
 
 # print(type(targetdf))
 

@@ -18,6 +18,12 @@ public class ConnectSP : MonoBehaviour
     {
         serialController = GameObject.Find("SerialController").GetComponent<SerialController>();
         Application.targetFrameRate = 25;
+
+        tensionModes = "SS";
+        vibrationModes = "AA";
+
+        combineMessages();
+        
     }
 
     // Update is called once per frame
