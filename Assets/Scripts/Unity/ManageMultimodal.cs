@@ -16,6 +16,7 @@ public class ManageMultimodal : MonoBehaviour
     public GameObject visualBlock;
     public GameObject trainingButton;
     public GameObject selectButtons;
+    public GameObject breakMessage;
 
     public TrialParameters trial1;
     public TrialParameters trial2;
@@ -64,6 +65,10 @@ public class ManageMultimodal : MonoBehaviour
     private bool phase_complete;
     private bool task_complete;
 
+    private float choiceMade;
+    private float lastChoiceMade;
+    private float responseTime;
+
     void Start()
     {
         visual = GameObject.Find("VisualManager").GetComponent<ManageLineGrid>();
@@ -104,9 +109,14 @@ public class ManageMultimodal : MonoBehaviour
         popupFinish();
         if(phase != 1){
             popupBlock();
-        }        
+        }      
 
-        display.counter = cur;
+        if(!training){
+            display.counter = cur;
+        }  
+        else{
+            display.T.text = "PATTERN #" + (cur+1);
+        }
         current = order[cur];
         currentTrial = experiment.allParameters[current];
 
@@ -149,7 +159,7 @@ public class ManageMultimodal : MonoBehaviour
             experiment.finished = true;
             phase = 0;
         }
-        Debug.Log("phase: "+phase);
+        // Debug.Log("phase: "+phase);
 
         selectPhase();
 
@@ -178,6 +188,7 @@ public class ManageMultimodal : MonoBehaviour
         cur = 0;
         task_complete = true;
         checkTraining();
+        lastChoiceMade = Time.time;
     }
 
     public void changeVisual(){
@@ -222,11 +233,15 @@ public class ManageMultimodal : MonoBehaviour
         }
     }
     public void chooseLeft(){
-        selectedClass = 1;
+        selectedClass = 0;
+        choiceMade = Time.time;
+        calculateResponseTime();
         saveCurrentMultimodal(current);
     }
     public void chooseRight(){
-        selectedClass = 2;
+        selectedClass = 1;
+        choiceMade = Time.time;
+        calculateResponseTime();
         saveCurrentMultimodal(current);
     }
     public void saveCurrentMultimodal(int experimentIndex){
@@ -239,7 +254,8 @@ public class ManageMultimodal : MonoBehaviour
             currentTrial.roughness_left,
             currentTrial.amplitude_left,
 
-            selectedClass            
+            selectedClass,
+            responseTime           
         );
 
         experiment.saveMultimodal(multimodalFrame);
@@ -247,11 +263,11 @@ public class ManageMultimodal : MonoBehaviour
     public void popupFinish(){
         if(phase_complete){
             if(frames < popupduration){
-                experiment.finishedUI.SetActive(true);
+                breakMessage.SetActive(true);
                 frames += 1;
             }
             else{
-                experiment.finishedUI.SetActive(false);
+                breakMessage.SetActive(false);
                 frames = 0;
                 phase_complete = false;
             }
@@ -259,7 +275,7 @@ public class ManageMultimodal : MonoBehaviour
     }
     public void popupBlock(){
         if(task_complete){
-            if(frames < (popupduration/5)){
+            if(frames < (popupduration/4)){
                 visualBlock.SetActive(true);
                 frames += 1;
             }
@@ -269,5 +285,9 @@ public class ManageMultimodal : MonoBehaviour
                 task_complete = false;
             }
         }
+    }
+    public void calculateResponseTime(){
+        responseTime = choiceMade - lastChoiceMade;
+        lastChoiceMade = choiceMade;
     }
 }

@@ -134,11 +134,11 @@ public class CsvWriter : MonoBehaviour
     }
 
     public void addToMultimodalCSV(MultimodalDataStruct frame){
-        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Frequency, Trial Amplitude, Participant Class");
+        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Frequency, Trial Amplitude, Participant Class, Response Time, Class Error");
         titles.Append('\n');
         
         var result = new StringBuilder("");
-        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.trialAmplitude.ToString()).Append(',').Append(frame.participantClass.ToString()).Append('\n');
+        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.trialAmplitude.ToString()).Append(',').Append(frame.participantClass.ToString()).Append(',').Append(frame.responseTime.ToString()).Append(',').Append(frame.errorClass.ToString()).Append('\n');
         result.ToString();
 
         //---------- WRITE PER PARTICIPANT INDEX

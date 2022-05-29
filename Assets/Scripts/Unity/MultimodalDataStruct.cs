@@ -12,8 +12,10 @@ public class MultimodalDataStruct
     public float trialHapticFrequency;
     public float trialAmplitude;
     public int participantClass;
+    public int errorClass;
+    public float responseTime;
     public MultimodalDataStruct(){}
-    public MultimodalDataStruct(int ph, int e, int p, float tvf, float thf, float ta, int c)
+    public MultimodalDataStruct(int ph, int e, int p, float tvf, float thf, float ta, int c, float rt)
     {
         phase = ph;
         experimentIndex = e;
@@ -24,5 +26,7 @@ public class MultimodalDataStruct
         trialAmplitude = ta;
 
         participantClass = c;
+        responseTime = rt;
+        errorClass = c-e;
     }
 }
