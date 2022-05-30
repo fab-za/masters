@@ -2849,6 +2849,7 @@ GameObject:
   - component: {fileID: 499952019}
   - component: {fileID: 499952020}
   - component: {fileID: 499952021}
+  - component: {fileID: 499952022}
   m_Layer: 0
   m_Name: ExperimentManager
   m_TagString: Untagged
@@ -2883,7 +2884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87997512bf8279a4199e67dea4572061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 2
+  mode: 0
   title: {fileID: 314933701}
   slider: {fileID: 1783163937}
   sliderUI: {fileID: 1424157630}
@@ -2895,6 +2896,8 @@ MonoBehaviour:
   modalUI: {fileID: 2759325}
   finished: 0
   finishedUI: {fileID: 1032845812}
+  LineGrid: {fileID: 1783163932}
+  LineJND: {fileID: 1783163938}
   fullData: []
   currentData_left:
     trialFrequency: 0
@@ -2919,7 +2922,7 @@ MonoBehaviour:
   fullComparisonData: []
   fullMultimodalData: []
   csvWriter: {fileID: 1300657995}
-  index: 2
+  index: 17
   variableList: []
   allParameters: []
   newStart: 0
@@ -3089,6 +3092,84 @@ MonoBehaviour:
   selectedClass: 0
   current: 0
   order: 
+--- !u!114 &499952022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499952017}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8432583e1854e8442ab1d8640d106f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  display: {fileID: 0}
+  saved: {fileID: 0}
+  indicator: {fileID: 0}
+  visualBlock: {fileID: 0}
+  trainingButton: {fileID: 0}
+  selectButtons: {fileID: 0}
+  breakMessage: {fileID: 0}
+  trial1:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial2:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial3:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial4:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial5:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial6:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial7:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  trial8:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  selectedClass: 0
+  current: 0
+  order: 00000000
 --- !u!1 &510165513
 GameObject:
   m_ObjectHideFlags: 0
@@ -8081,6 +8162,7 @@ GameObject:
   - component: {fileID: 1783163932}
   - component: {fileID: 1783163937}
   - component: {fileID: 1783163936}
+  - component: {fileID: 1783163938}
   m_Layer: 0
   m_Name: VisualManager
   m_TagString: Untagged
@@ -8146,6 +8228,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00a9af046d30164cb42441fa79671c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alphabet:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  - G
+  - H
+  - I
+  - J
+  - K
+  - L
+  - M
+  - N
+  - O
+  - P
+  - Q
+  - R
+  - S
+  - T
+  - U
+  - V
+  - W
+  - X
+  - Y
+  - Z
   mouse: {fileID: 651745673}
   message: 
   left_roughness: 0
@@ -8228,6 +8337,31 @@ MonoBehaviour:
     frequency_right: 0
   tempLeftRoughness: 1
   tempRightRoughness: 2
+--- !u!114 &1783163938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783163931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f415cbbb655a54e4380704bfde4c85dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftLine:
+    haptic_frequency: 0
+    side: 0
+    visual_frequency: 0
+    lineRenderer: {fileID: 0}
+    positions: []
+  rightLine:
+    haptic_frequency: 0
+    side: 0
+    visual_frequency: 0
+    lineRenderer: {fileID: 0}
+    positions: []
+  samplingRate: 0
 --- !u!1 &1784579732
 GameObject:
   m_ObjectHideFlags: 0

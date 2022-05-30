@@ -32,6 +32,9 @@ int train1 = 20;
 int train2 = 110;
 int train3 = 200;
 
+int baseline = 110;
+float percent = 0.03;
+
 int test1 = 280;
 int test2 = 260;
 int test3 = 290;
@@ -156,12 +159,27 @@ int vibrationModeToFrequency(long m) {
   else if(c == 'C'){frequency = train1;}  
   else if(c == 'G'){frequency = train2;}
   else if(c == 'L'){frequency = train3;}
-  
-  else if(c == 'E'){frequency = test1;}
-  else if(c == 'F'){frequency = test2;}
-  else if(c == 'G'){frequency = test3;}
-//  else if(c == 'H'){frequency = test4;}
-//  else if(c == 'I'){frequency = test5;}
+
+  else if(c == 'B'){frequency = baseline * (1+(percent*1));}  
+  else if(c == 'D'){frequency = baseline * (1+(percent*2));}
+  else if(c == 'E'){frequency = baseline * (1+(percent*3));}
+  else if(c == 'F'){frequency = baseline * (1+(percent*4));}
+  else if(c == 'H'){frequency = baseline * (1+(percent*5));}
+  else if(c == 'I'){frequency = baseline * (1+(percent*6));}
+  else if(c == 'J'){frequency = baseline * (1+(percent*7));}
+  else if(c == 'K'){frequency = baseline * (1+(percent*8));}
+  else if(c == 'M'){frequency = baseline * (1+(percent*9));}
+  else if(c == 'N'){frequency = baseline * (1+(percent*10));}
+  else if(c == 'O'){frequency = baseline * (1+(percent*11));}
+  else if(c == 'P'){frequency = baseline * (1+(percent*12));}
+  else if(c == 'Q'){frequency = baseline * (1+(percent*13));}
+  else if(c == 'R'){frequency = baseline * (1+(percent*14));}
+  else if(c == 'U'){frequency = baseline * (1+(percent*15));}
+  else if(c == 'V'){frequency = baseline * (1+(percent*16));}
+  else if(c == 'W'){frequency = baseline * (1+(percent*17));}
+  else if(c == 'X'){frequency = baseline * (1+(percent*18));}
+  else if(c == 'Y'){frequency = baseline * (1+(percent*19));}
+  else if(c == 'Z'){frequency = baseline * (1+(percent*20));}
 
   return frequency;
 }

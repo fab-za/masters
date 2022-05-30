@@ -24,6 +24,9 @@ public class ManageTraining : MonoBehaviour
         visual = visualManager.GetComponent<ManageLineGrid>();
         tension = GameObject.Find("VisualManager").GetComponent<SendTension>();        
         frequencyManager = GameObject.Find("VisualManager").GetComponent<SendFrequency>();
+
+        frequencyManager.alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    
         currentTraining = 0;
     }
 

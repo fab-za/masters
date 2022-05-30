@@ -17,6 +17,8 @@ public class ManageExperiment : MonoBehaviour
     public GameObject modalUI;
     public bool finished = false;
     public GameObject finishedUI;
+    public ManageLineGrid LineGrid;
+    public ManageLineForJND LineJND;
     public List<DataStruct> fullData;
     public DataStruct currentData_left;
     public DataStruct currentData_right;

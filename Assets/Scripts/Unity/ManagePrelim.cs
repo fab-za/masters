@@ -33,6 +33,8 @@ public class ManagePrelim : MonoBehaviour
         tension = GameObject.Find("VisualManager").GetComponent<SendTension>();
         frequencyManager = GameObject.Find("VisualManager").GetComponent<SendFrequency>();
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
+        frequencyManager.alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    
         current = 0;
 
         // experiment.train1 = prelim1;

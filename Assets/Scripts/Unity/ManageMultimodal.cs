@@ -77,6 +77,8 @@ public class ManageMultimodal : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
+        frequencyManager.alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+
         current = 0;
         phase = -1;
         phase_complete = false;

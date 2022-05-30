@@ -8,7 +8,7 @@ public class SendFrequency : MonoBehaviour
     // private ManageGridSlider visual;
     // private ManageLineGrid visual;
     private ConnectSP sp;
-    private string[] alphabet = new string[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z"};
+    public string[] alphabet;
     private Vector3 prevPosition;
     public FollowMouse mouse;
     public string message;
