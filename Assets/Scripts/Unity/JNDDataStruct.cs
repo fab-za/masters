@@ -10,7 +10,7 @@ public class JNDDataStruct
     public int participantIndex;
     public float trialVisualFrequency;
     public float trialHapticFrequency;
-    public float accuracyRougher;
+    public float accuracySmoother;
     public JNDDataStruct(){}
     public JNDDataStruct(int ph, int e, int p, float tvf, float thf, float a)
     {
@@ -20,6 +20,6 @@ public class JNDDataStruct
 
         trialVisualFrequency = tvf;
         trialHapticFrequency = thf;
-        accuracyRougher = a;
+        accuracySmoother = a;
     }
 }

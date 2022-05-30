@@ -189,7 +189,7 @@ public class CsvWriter : MonoBehaviour
         titles.Append('\n');
         
         var result = new StringBuilder("");
-        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.accuracyRougher.ToString()).Append('\n');
+        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.accuracySmoother.ToString()).Append('\n');
         result.ToString();
 
         //---------- WRITE PER PARTICIPANT INDEX

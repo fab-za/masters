@@ -640,6 +640,7 @@ RectTransform:
   - {fileID: 310837098}
   - {fileID: 2041844509}
   - {fileID: 1116084439}
+  - {fileID: 305244250}
   m_Father: {fileID: 138947714}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1899,6 +1900,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 249697109}
   m_CullTransparentMesh: 0
+--- !u!1 &305244249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 305244250}
+  - component: {fileID: 305244251}
+  - component: {fileID: 305244252}
+  m_Layer: 5
+  m_Name: passed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &305244250
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305244249}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 92915152}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 350}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &305244251
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305244249}
+  m_CullTransparentMesh: 0
+--- !u!114 &305244252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305244249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
 --- !u!1 &307228362
 GameObject:
   m_ObjectHideFlags: 0
@@ -2414,7 +2494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &374389246
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2433,7 +2513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -35}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &384429809
@@ -3116,7 +3196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87997512bf8279a4199e67dea4572061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 4
   title: {fileID: 314933701}
   slider: {fileID: 1783163937}
   sliderUI: {fileID: 1424157630}
@@ -3132,6 +3212,9 @@ MonoBehaviour:
   finishedUI: {fileID: 1032845812}
   lineGrid: {fileID: 1783163932}
   lineJND: {fileID: 1783163938}
+  frequencyManager: {fileID: 1783163934}
+  tensionManager: {fileID: 1783163933}
+  finger: {fileID: 12488863}
   fullData: []
   currentData_left:
     trialFrequency: 0
@@ -3341,6 +3424,7 @@ MonoBehaviour:
   display: {fileID: 161506948}
   saved: {fileID: 1892201147}
   indicator: {fileID: 1116084440}
+  passed: {fileID: 305244252}
   visualBlock: {fileID: 310837097}
   leftLine: {fileID: 1356587093}
   rightLine: {fileID: 1824193200}
@@ -3354,7 +3438,15 @@ MonoBehaviour:
     roughness_right: 1
     amplitude_right: 2
     frequency_right: 52.5
+  JNDList: []
+  possibleTrials: []
   selectedClass: 0
+  rndIndex: 0
+  task_complete: 0
+  correctCount: 0
+  incorrectCount: 0
+  totalCount: 0
+  accuracy: 0
 --- !u!1 &510165513
 GameObject:
   m_ObjectHideFlags: 0
@@ -3500,7 +3592,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ROUGHER
+  m_Text: SMOOTHER
 --- !u!222 &515907688
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3735,7 +3827,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: -334.8}
+  m_AnchoredPosition: {x: 0, y: -334.8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &599814902
@@ -8934,22 +9026,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783163931}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f415cbbb655a54e4380704bfde4c85dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftLine:
-    side: 0
-    visual_frequency: 0
-    lineRenderer: {fileID: 0}
+    side: -1
+    visual_frequency: 52.5
+    lineRenderer: {fileID: 1356587095}
     positions: []
+    offset: 0
   rightLine:
-    side: 0
-    visual_frequency: 0
-    lineRenderer: {fileID: 0}
+    side: 1
+    visual_frequency: 52.5
+    lineRenderer: {fileID: 1824193201}
     positions: []
-  samplingRate: 0
+    offset: 0
+  samplingRate: 1010
 --- !u!1 &1784579732
 GameObject:
   m_ObjectHideFlags: 0
@@ -9749,9 +9843,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 499952021}
-        m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: chooseLeft
+      - m_Target: {fileID: 499952022}
+        m_TargetAssemblyTypeName: ManageJND, Assembly-CSharp
+        m_MethodName: chooseEqual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9763,7 +9857,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 499952022}
         m_TargetAssemblyTypeName: ManageJND, Assembly-CSharp
-        m_MethodName: chooseEqual
+        m_MethodName: changeVisual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10827,7 +10921,7 @@ GameObject:
   - component: {fileID: 2075397551}
   - component: {fileID: 2075397550}
   m_Layer: 5
-  m_Name: RougherButton
+  m_Name: SmootherButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10896,9 +10990,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 499952021}
-        m_TargetAssemblyTypeName: ManageMultimodal, Assembly-CSharp
-        m_MethodName: chooseRight
+      - m_Target: {fileID: 499952022}
+        m_TargetAssemblyTypeName: ManageJND, Assembly-CSharp
+        m_MethodName: chooseDifferent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10910,7 +11004,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 499952022}
         m_TargetAssemblyTypeName: ManageJND, Assembly-CSharp
-        m_MethodName: chooseRougher
+        m_MethodName: changeVisual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

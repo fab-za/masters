@@ -13,12 +13,14 @@ public class ManageLineForJND : MonoBehaviour
         public float visual_frequency;
         public LineRenderer lineRenderer;
         public Vector3[] positions;
+        public float offset;
 
         public LineParameters(int s, float vf, float o, LineRenderer l, Vector3[] pos){
             side = s;
             visual_frequency = vf;
             lineRenderer = l;
             positions = pos;
+            offset = o;
 
         }
     }
@@ -43,9 +45,12 @@ public class ManageLineForJND : MonoBehaviour
 
     }
 
-    public void updateParameters(float left_frequency, float right_frequency){
+    public void updateParameters(float left_frequency, float left_offset, float right_frequency, float right_offset){
         leftLine.visual_frequency = left_frequency;
         rightLine.visual_frequency = right_frequency;
+
+        leftLine.offset = left_offset;
+        rightLine.offset = right_offset;
 
     }
 
@@ -61,10 +66,9 @@ public class ManageLineForJND : MonoBehaviour
         Vector3[] positions = new Vector3[samplingRate];
 
         double[] x = Generate.LinearSpaced(samplingRate, 0, (10*panel.side));
-        float offset = Random.Range(0.0f, 1.0f);
 
         for(int i = 0; i < x.Length; i++){
-            float y = (0.05f * Mathf.Sin((panel.visual_frequency * (float)x[i]) + offset));
+            float y = (0.05f * Mathf.Sin((panel.visual_frequency * (float)x[i]) + panel.offset));
             Vector3 coord = new Vector3((float)x[i], y, 0);
 
             positions[i] = coord;

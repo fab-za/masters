@@ -29,6 +29,11 @@ public class ManageExperiment : MonoBehaviour
     public ManageLineGrid lineGrid;
     public ManageLineForJND lineJND;
 
+    public SendFrequency frequencyManager;
+    public SendTension tensionManager;
+
+    public GameObject finger;
+
     public List<DataStruct> fullData;
     public DataStruct currentData_left;
     public DataStruct currentData_right;
@@ -70,8 +75,12 @@ public class ManageExperiment : MonoBehaviour
 
         if(mode == 0){
             title.text = "TRAINING MODE";
+
             lineGrid.enabled = true;
             lineJND.enabled = false;
+            frequencyManager.enabled = true;
+            tensionManager.enabled = true;
+            finger.SetActive(true);
 
             initParticipantCSVs();
 
@@ -92,6 +101,9 @@ public class ManageExperiment : MonoBehaviour
 
             lineGrid.enabled = true;
             lineJND.enabled = false;
+            frequencyManager.enabled = true;
+            tensionManager.enabled = true;
+            finger.SetActive(true);
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -113,6 +125,9 @@ public class ManageExperiment : MonoBehaviour
 
             lineGrid.enabled = true;
             lineJND.enabled = false;
+            frequencyManager.enabled = true;
+            tensionManager.enabled = true;
+            finger.SetActive(true);
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -134,6 +149,9 @@ public class ManageExperiment : MonoBehaviour
 
             lineGrid.enabled = true;
             lineJND.enabled = false;
+            frequencyManager.enabled = true;
+            tensionManager.enabled = true;
+            finger.SetActive(true);
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -150,11 +168,14 @@ public class ManageExperiment : MonoBehaviour
             JND.enabled = false;
             JNDUI.SetActive(false);
         }
-        else if(mode == 3){
+        else if(mode == 4){
             title.text = "JND EXPERIMENT";
 
             lineGrid.enabled = false;
             lineJND.enabled = true;
+            frequencyManager.enabled = false;
+            tensionManager.enabled = true;
+            finger.SetActive(false);
             
             training.enabled = false;
             trainingUI.SetActive(false);

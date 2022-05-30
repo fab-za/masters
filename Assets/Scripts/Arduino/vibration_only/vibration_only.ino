@@ -32,8 +32,9 @@ int train1 = 20;
 int train2 = 110;
 int train3 = 200;
 
-int baseline = 110;
+int baseline = 20;
 float percent = 0.03;
+float increments[20];
 
 int test1 = 280;
 int test2 = 260;
@@ -54,6 +55,8 @@ void setup() {
   testVibrate(hapticPin_right, 100);
 
   Serial.begin(9600);
+
+  initIncrements();
 }
 
 void loop() {
@@ -182,4 +185,10 @@ int vibrationModeToFrequency(long m) {
   else if(c == 'Z'){frequency = baseline * (1+(percent*20));}
 
   return frequency;
+}
+
+void initIncrements(){
+  for(int i=0; i<20; i++){
+    increments[i] = 180*exp(-0.25*i);
+  }
 }
