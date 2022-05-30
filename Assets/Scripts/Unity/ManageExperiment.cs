@@ -7,38 +7,40 @@ public class ManageExperiment : MonoBehaviour
 {
     public int mode;
     public Text title;
+
     public ManageSlider slider;
     public GameObject sliderUI;
+
     public ManageTraining training;
     public GameObject trainingUI;
+
     public ManagePrelim prelim;
     public GameObject prelimUI;
+
     public ManageMultimodal modal;
     public GameObject modalUI;
+
+    public ManageJND JND;
+    public GameObject JNDUI;
+
     public bool finished = false;
     public GameObject finishedUI;
-    public ManageLineGrid LineGrid;
-    public ManageLineForJND LineJND;
+
+    public ManageLineGrid lineGrid;
+    public ManageLineForJND lineJND;
+
     public List<DataStruct> fullData;
     public DataStruct currentData_left;
     public DataStruct currentData_right;
     public List<ComparisonDataStruct> fullComparisonData;
     public List<MultimodalDataStruct> fullMultimodalData;
+
     public CsvWriter csvWriter;
     public int index;
+
     public List<float> variableList;
-    // public float weightAmplitude;
-    // public float weightFrequency;
     public List<TrialParameters> allParameters;
-    // public TrialParameters train1;
-    // public TrialParameters train2;
-    // public TrialParameters train3;
-    // public TrialParameters trial1;
-    // public TrialParameters trial2;
-    // public TrialParameters trial3;
-    // public TrialParameters trial4;
-    // public TrialParameters trial5;
-    // public TrialParameters trial6;
+
     public bool newStart = false;
     public string experimentType;
 
@@ -68,6 +70,9 @@ public class ManageExperiment : MonoBehaviour
 
         if(mode == 0){
             title.text = "TRAINING MODE";
+            lineGrid.enabled = true;
+            lineJND.enabled = false;
+
             initParticipantCSVs();
 
             training.enabled = true;
@@ -84,6 +89,9 @@ public class ManageExperiment : MonoBehaviour
         } 
         else if(mode == 3){
             title.text = "SLIDER";
+
+            lineGrid.enabled = true;
+            lineJND.enabled = false;
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -96,9 +104,15 @@ public class ManageExperiment : MonoBehaviour
 
             modal.enabled = false;
             modalUI.SetActive(false);
+
+            JND.enabled = false;
+            JNDUI.SetActive(false);
         }
         else if(mode == 1){
             title.text = "PRELIM EXPERIMENT";
+
+            lineGrid.enabled = true;
+            lineJND.enabled = false;
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -111,9 +125,15 @@ public class ManageExperiment : MonoBehaviour
 
             modal.enabled = false;
             modalUI.SetActive(false);
+
+            JND.enabled = false;
+            JNDUI.SetActive(false);
         }
         else if(mode == 2){
             title.text = "MODAL EXPERIMENT";
+
+            lineGrid.enabled = true;
+            lineJND.enabled = false;
             
             training.enabled = false;
             trainingUI.SetActive(false);
@@ -126,6 +146,30 @@ public class ManageExperiment : MonoBehaviour
 
             modal.enabled = true;
             modalUI.SetActive(true);
+            
+            JND.enabled = false;
+            JNDUI.SetActive(false);
+        }
+        else if(mode == 3){
+            title.text = "JND EXPERIMENT";
+
+            lineGrid.enabled = false;
+            lineJND.enabled = true;
+            
+            training.enabled = false;
+            trainingUI.SetActive(false);
+
+            slider.enabled = false;      
+            sliderUI.SetActive(false);
+
+            prelim.enabled = false;
+            prelimUI.SetActive(false);
+
+            modal.enabled = false;
+            modalUI.SetActive(false);
+
+            JND.enabled = true;
+            JNDUI.SetActive(true);
         }
 
         if(finished){
@@ -178,5 +222,9 @@ public class ManageExperiment : MonoBehaviour
     public void saveMultimodal(MultimodalDataStruct data){
         data.experimentIndex = modal.current;
         csvWriter.addToMultimodalCSV(data);        
+    }
+    public void saveJND(JNDDataStruct data){
+        data.experimentIndex = modal.current;
+        csvWriter.addToJNDCSV(data);        
     }
 }

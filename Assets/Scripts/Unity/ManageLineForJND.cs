@@ -9,14 +9,12 @@ public class ManageLineForJND : MonoBehaviour
     
     [System.Serializable]
     public struct LineParameters{
-        public float haptic_frequency;
         public int side;    // left = -1, right = +1
         public float visual_frequency;
         public LineRenderer lineRenderer;
         public Vector3[] positions;
 
-        public LineParameters(float h, int s, float vf, float o, LineRenderer l, Vector3[] pos){
-            haptic_frequency = h;
+        public LineParameters(int s, float vf, float o, LineRenderer l, Vector3[] pos){
             side = s;
             visual_frequency = vf;
             lineRenderer = l;
@@ -45,12 +43,9 @@ public class ManageLineForJND : MonoBehaviour
 
     }
 
-    public void updateParameters(float left_frequency, float left_roughness, float right_frequency, float right_roughness){
+    public void updateParameters(float left_frequency, float right_frequency){
         leftLine.visual_frequency = left_frequency;
-        leftLine.haptic_frequency = left_roughness;
-
         rightLine.visual_frequency = right_frequency;
-        rightLine.haptic_frequency = right_roughness;
 
     }
 
@@ -61,6 +56,7 @@ public class ManageLineForJND : MonoBehaviour
         rightLine.lineRenderer.positionCount = rightLine.positions.Length;
         rightLine.lineRenderer.SetPositions(rightLine.positions);
     }
+
     public Vector3[] parametersToPositions(LineParameters panel){
         Vector3[] positions = new Vector3[samplingRate];
 
