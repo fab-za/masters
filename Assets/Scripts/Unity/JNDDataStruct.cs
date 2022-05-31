@@ -9,16 +9,18 @@ public class JNDDataStruct
     public int experimentIndex;
     public int participantIndex;
     public float trialVisualFrequency;
+    public float trialHapticIndex;
     public float trialHapticFrequency;
     public float accuracySmoother;
     public JNDDataStruct(){}
-    public JNDDataStruct(int ph, int e, int p, float tvf, float thf, float a)
+    public JNDDataStruct(int ph, int e, int p, float tvf, float thi, float thf, float a)
     {
         phase = ph;
         experimentIndex = e;
         participantIndex = p;
 
         trialVisualFrequency = tvf;
+        trialHapticIndex = thi;
         trialHapticFrequency = thf;
         accuracySmoother = a;
     }

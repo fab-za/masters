@@ -163,26 +163,26 @@ int vibrationModeToFrequency(long m) {
   else if(c == 'G'){frequency = train2;}
   else if(c == 'L'){frequency = train3;}
 
-  else if(c == 'B'){frequency = baseline * (1+(percent*1));}  
-  else if(c == 'D'){frequency = baseline * (1+(percent*2));}
-  else if(c == 'E'){frequency = baseline * (1+(percent*3));}
-  else if(c == 'F'){frequency = baseline * (1+(percent*4));}
-  else if(c == 'H'){frequency = baseline * (1+(percent*5));}
-  else if(c == 'I'){frequency = baseline * (1+(percent*6));}
-  else if(c == 'J'){frequency = baseline * (1+(percent*7));}
-  else if(c == 'K'){frequency = baseline * (1+(percent*8));}
-  else if(c == 'M'){frequency = baseline * (1+(percent*9));}
-  else if(c == 'N'){frequency = baseline * (1+(percent*10));}
-  else if(c == 'O'){frequency = baseline * (1+(percent*11));}
-  else if(c == 'P'){frequency = baseline * (1+(percent*12));}
-  else if(c == 'Q'){frequency = baseline * (1+(percent*13));}
-  else if(c == 'R'){frequency = baseline * (1+(percent*14));}
-  else if(c == 'U'){frequency = baseline * (1+(percent*15));}
-  else if(c == 'V'){frequency = baseline * (1+(percent*16));}
-  else if(c == 'W'){frequency = baseline * (1+(percent*17));}
-  else if(c == 'X'){frequency = baseline * (1+(percent*18));}
-  else if(c == 'Y'){frequency = baseline * (1+(percent*19));}
-  else if(c == 'Z'){frequency = baseline * (1+(percent*20));}
+  else if(c == 'B'){frequency = baseline + increments[19];}  
+  else if(c == 'D'){frequency = baseline + increments[18];}
+  else if(c == 'E'){frequency = baseline + increments[17];}
+  else if(c == 'F'){frequency = baseline + increments[16];}
+  else if(c == 'H'){frequency = baseline + increments[15];}
+  else if(c == 'I'){frequency = baseline + increments[14];}
+  else if(c == 'J'){frequency = baseline + increments[13];}
+  else if(c == 'K'){frequency = baseline + increments[12];}
+  else if(c == 'M'){frequency = baseline + increments[11];}
+  else if(c == 'N'){frequency = baseline + increments[10];}
+  else if(c == 'O'){frequency = baseline + increments[9];}
+  else if(c == 'P'){frequency = baseline + increments[8];}
+  else if(c == 'Q'){frequency = baseline + increments[7];}
+  else if(c == 'R'){frequency = baseline + increments[6];}
+  else if(c == 'U'){frequency = baseline + increments[5];}
+  else if(c == 'V'){frequency = baseline + increments[4];}
+  else if(c == 'W'){frequency = baseline + increments[3];}
+  else if(c == 'X'){frequency = baseline + increments[2];}
+  else if(c == 'Y'){frequency = baseline + increments[1];}
+  else if(c == 'Z'){frequency = baseline + increments[0];}
 
   return frequency;
 }

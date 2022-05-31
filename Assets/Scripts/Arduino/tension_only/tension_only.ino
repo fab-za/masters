@@ -13,10 +13,10 @@ int outputPins[2][5] = {{5,4,3,2,A5}, {A4,A3,A2,A1,A0}};
 char buf[5];
 
 int slack_right = 108;
-int tense_right = 126;
+int tense_right = 128;
 
 int slack_left = 89;
-int tense_left = 80;
+int tense_left = 78;
 
 long frequencyMode_left = 0;
 long frequencyMode_right = 0;
@@ -44,10 +44,10 @@ void setup() {
   tensionMotor_left.write(tense_left);
   tensionMotor_right.write(tense_right);
 
-  delay(1000);
-
-  tensionMotor_left.write(slack_left);
-  tensionMotor_right.write(slack_right);
+//  delay(1000);
+//
+//  tensionMotor_left.write(slack_left);
+//  tensionMotor_right.write(slack_right);
 
 
 //  Serial.print("start");

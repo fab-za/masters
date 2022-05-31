@@ -245,7 +245,7 @@ public class ManageExperiment : MonoBehaviour
         csvWriter.addToMultimodalCSV(data);        
     }
     public void saveJND(JNDDataStruct data){
-        data.experimentIndex = modal.current;
+        data.experimentIndex = JND.cur;
         csvWriter.addToJNDCSV(data);        
     }
 }

@@ -184,12 +184,14 @@ public class CsvWriter : MonoBehaviour
         writer2.Close();
         Debug.Log($"experiment multimodal result CSV file written to \"{experimentpath}\"");
     }
+
     public void addToJNDCSV(JNDDataStruct frame){
-        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Frequency, Percentage Perceived Rougher");
+        // Debug.Log(frame.experimentIndex);
+        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Index, Trial Haptic Frequency, Percentage Perceived Rougher");
         titles.Append('\n');
         
         var result = new StringBuilder("");
-        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.accuracySmoother.ToString()).Append('\n');
+        result.Append(frame.phase.ToString()).Append(',').Append(frame.experimentIndex.ToString()).Append(',').Append(frame.participantIndex.ToString()).Append(',').Append(frame.trialVisualFrequency.ToString()).Append(',').Append(frame.trialHapticIndex.ToString()).Append(',').Append(frame.trialHapticFrequency.ToString()).Append(',').Append(frame.accuracySmoother.ToString()).Append('\n');
         result.ToString();
 
         //---------- WRITE PER PARTICIPANT INDEX
@@ -212,11 +214,13 @@ public class CsvWriter : MonoBehaviour
         var writer = new StreamWriter(participantpath, true); // true for append, false for overwrite
         writer.Write(result);
         writer.Close();
-        Debug.Log($"participant multimodal result CSV file written to \"{participantpath}\"");
+        Debug.Log($"participant JND result CSV file written to \"{participantpath}\"");
 
         //---------- WRITE PER EXPERIMENT INDEX
 
-        string experimentFolder = Application.dataPath + "/Data/JND/Pairings/" + frame.phase + frame.experimentIndex;
+        string experimentFolder = Application.dataPath + "/Data/JND/Pairings/" + frame.phase + "_" + frame.experimentIndex;
+        // Debug.Log(experimentFolder);
+
         if(!System.IO.File.Exists(experimentFolder)){
             Directory.CreateDirectory(experimentFolder);
         }
@@ -233,6 +237,6 @@ public class CsvWriter : MonoBehaviour
         var writer2 = new StreamWriter(experimentpath, true); // true for append, false for overwrite
         writer2.Write(result);
         writer2.Close();
-        Debug.Log($"experiment multimodal result CSV file written to \"{experimentpath}\"");
+        Debug.Log($"experiment JND result CSV file written to \"{experimentpath}\"");
     }
 }

@@ -10,7 +10,7 @@ public class ManageJND : MonoBehaviour
     private SendTension tension;
     private ConnectSP sp;
 
-    string[] alphabet = new string[]{"A", "G", "B", "D", "E", "F", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "U", "V", "W", "X", "Y", "Z"};
+    string[] alphabet = new string[]{"A", "C", "B", "D", "E", "F", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "U", "V", "W", "X", "Y", "Z"};
     
     public DisplayCount display;
     public Text saved;
@@ -31,28 +31,30 @@ public class ManageJND : MonoBehaviour
 
     private float percent;
 
-    public int selectedClass;
-
-    private int cur;
-    public int rndIndex;
-    
-    private int phase;
+    public int phase;
     private bool training;
     private string title;
     private bool noHaptic;
+
+    private int selectedClass;
+
+    public int cur;
+    private int rndIndex;
 
     private float blockDuration;
     private float textDuration;
     private float presentDuration;
 
     private bool phase_complete;
-    public bool task_complete;
+    private bool task_complete;
     private int direction;
 
     public float correctCount;
     public float incorrectCount;
     public float totalCount;
     public float accuracy;
+    private float lastChoiceMade;
+    public float streak;
 
     void Start()
     {
@@ -61,17 +63,18 @@ public class ManageJND : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
-        percent = 0.03f;
-        phase = 0;
+        percent = 0.01f;
         phase_complete = false;
         task_complete = false;
+        passed.enabled = false;
         
-        blockDuration = 0.5f;
+        blockDuration = 0.1f;
         textDuration = 4;
         presentDuration = 2;      
         
         cur = 0;
-        rndIndex = 0;
+        rndIndex = 1;
+        direction = 0;
         
         JNDList = new List<TrialParameters>();
         initTrialList();
@@ -93,57 +96,59 @@ public class ManageJND : MonoBehaviour
 
             // Debug.Log("experiment mode");
 
-            if(correctCount > 4){
-                passed.text = "PASSED 5 TIMES";
+            if((correctCount > 4) && (streak > 4)){
+                passed.text = "PASSED 5 TIMES, DECREASING";
+                StartCoroutine(popupPass());
+
                 correctCount = 0;
                 incorrectCount = 0;
-                if(direction == -1){
-                    changePhase();
-                }
+                streak = 0;
                 direction = 1;
                 changeCurrentTrial(direction);
             }
-            else if(incorrectCount > 4){
+            else if((incorrectCount > 4) && (streak > 4)){
                 passed.text = "FAILED 5 TIMES, INCREASING";
+                StartCoroutine(popupPass());
+
                 correctCount = 0;
                 incorrectCount = 0;
+                streak = 0;
                 direction = -1;
                 changeCurrentTrial(direction);
             }
 
             if(task_complete){
-                // Debug.Log("in if task complete");
-
                 task_complete = false;
-
-                popupSaved();
                 StartCoroutine(presentPairs());
             }
         }   
         else{
-            possibleTrials = new List<TrialParameters>(){baseline, JNDList[0]};
+            possibleTrials = new List<TrialParameters>(){baseline, JNDList[0], JNDList[0], JNDList[0], JNDList[0], JNDList[0]};
 
-            cur = -1;
             indicator.text = title + "TRAINING";
             trainingButton.SetActive(true);
-            // selectButtons.SetActive(false);
 
-            if(correctCount > 4){
+            if((correctCount > 4) && (streak > 4)){
                 passed.text = "PASSED 5 TIMES, DECREASING";
+                StartCoroutine(popupPass());
+
                 correctCount = 0;
                 incorrectCount = 0;
+                streak = 0;
             }
-            else if(incorrectCount > 4){
+            else if((incorrectCount > 4) && (streak > 4)){
                 passed.text = "FAILED 5 TIMES, INCREASING";
+                StartCoroutine(popupPass());
+
                 correctCount = 0;
                 incorrectCount = 0;
+                streak = 0;
             }
 
 
             if(task_complete){
                 task_complete = false;
 
-                popupSaved();
                 StartCoroutine(presentPairs());
             }
         }
@@ -154,7 +159,7 @@ public class ManageJND : MonoBehaviour
         for(int i=20; i>0; i--){
             TrialParameters trial = new TrialParameters(
                 baseline.roughness_left + i,
-                Random.Range(0.0f, 1.0f),
+                Random.Range(0.5f, 2.5f),
                 baseline.frequency_left * (1+(percent*i)),
 
                 baseline.roughness_right + i,
@@ -186,14 +191,13 @@ public class ManageJND : MonoBehaviour
         }
     }
     public void changePhase(){
-        if(phase < 1){
-            phase += 1;
-        } else{
-            experiment.finished = true;
-            phase = 0;
-        }
+        // if(phase < 0){
+        //     phase += 1;
+        // } else{
+        //     experiment.finished = true;
+        //     phase = 0;
+        // }
         // Debug.Log("phase: "+phase);
-
         selectPhase();
     }
 
@@ -201,33 +205,47 @@ public class ManageJND : MonoBehaviour
         training = false;
         cur = 0;
         task_complete = true;
+        correctCount = 0;
+        incorrectCount = 0;
         // Debug.Log("training ended so task complete: " + task_complete);
     }
 
     public void changeVisual(){
         checkAccuracy(selectedClass);
+        checkStreak(selectedClass);
+        StartCoroutine(popupSaved());
+
         task_complete = true;
 
         if(phase == 1){
             noHaptic = false;
         }
+        
+        // StartCoroutine(popupBlock());
 
-        rndIndex = Random.Range(0,2);
+        // rndIndex = Random.Range(0,6);
     }
 
 
     public void changeCurrentTrial(int direction){
         saveCurrentJND(cur);
+        totalCount = 0;
 
-        if((cur < (JNDList.Count-1)) && (cur > 0) ){
+        if((cur < (JNDList.Count-1)) && (cur > -1) ){
             cur = cur + (1*direction);
         }
         else{
             if(!training){
                 phase_complete = true;
-                changePhase();
+                // changePhase();
+                experiment.finished = true;
             }
             cur = 0;
+        }
+
+        if(cur == -1){
+            phase_complete = true;
+            changePhase();
         }
 
         updateCurrentTrial();
@@ -235,7 +253,7 @@ public class ManageJND : MonoBehaviour
 
     public void updateCurrentTrial(){
         currentTrial = JNDList[cur];     
-        possibleTrials = new List<TrialParameters>(){baseline, currentTrial};
+        possibleTrials = new List<TrialParameters>(){baseline, currentTrial, currentTrial, currentTrial, currentTrial, currentTrial};
     }
 
     public IEnumerator popupBlock(){  
@@ -255,19 +273,31 @@ public class ManageJND : MonoBehaviour
 
         saved.text = "";
     }
+    public IEnumerator popupPass(){
+        passed.enabled = true;
+
+        yield return new WaitForSeconds(textDuration);
+
+        passed.enabled = false;
+    }
 
     public IEnumerator presentPairs(){
 
         selectButtons.SetActive(false);
+        visualBlock.SetActive(true);
 
         // Debug.Log("baseline 1: " + noHaptic);
 
         visual.updateParameters(baseline.frequency_left, baseline.amplitude_left, baseline.frequency_right, baseline.amplitude_left);
 
+        yield return new WaitForSeconds(blockDuration);
+        
         if(!noHaptic){
             // Debug.Log("setting vibration code: "+ alphabet[(int)baseline.roughness_left]);
             sp.vibrationModes = alphabet[(int)baseline.roughness_left] + alphabet[(int)baseline.roughness_right];
         }
+
+        visualBlock.SetActive(false);
 
         yield return new WaitForSeconds(presentDuration);
 
@@ -276,19 +306,21 @@ public class ManageJND : MonoBehaviour
         sp.vibrationModes = "AA";
         visualBlock.SetActive(true);
 
-        yield return new WaitForSeconds(blockDuration);
-
         noHaptic = false;
-        visualBlock.SetActive(false);
 
         // Debug.Log("comparing 1: " + noHaptic);
+        comparingTrial.amplitude_left = Random.Range(0.5f, 2.5f);
 
         visual.updateParameters(comparingTrial.frequency_left, comparingTrial.amplitude_left, comparingTrial.frequency_right, comparingTrial.amplitude_left);
+
+        yield return new WaitForSeconds(blockDuration);
 
         if(!noHaptic){
             // Debug.Log("setting vibration code: "+ alphabet[(int)comparingTrial.roughness_left]);
             sp.vibrationModes = alphabet[(int)comparingTrial.roughness_left] + alphabet[(int)comparingTrial.roughness_right];
         }
+
+        visualBlock.SetActive(false);
 
         yield return new WaitForSeconds(presentDuration);
 
@@ -297,17 +329,17 @@ public class ManageJND : MonoBehaviour
         sp.vibrationModes = "AA";
         visualBlock.SetActive(true);
 
-        yield return new WaitForSeconds(blockDuration);
-
-        visualBlock.SetActive(false);
-
         // Debug.Log("baseline 2: " + noHaptic);
 
         visual.updateParameters(baseline.frequency_left, baseline.amplitude_left, baseline.frequency_right, baseline.amplitude_left);
 
+        yield return new WaitForSeconds(blockDuration);
+
         if(!noHaptic){
             sp.vibrationModes = alphabet[(int)baseline.roughness_left] + alphabet[(int)baseline.roughness_right];
         }
+
+        visualBlock.SetActive(false);
 
         yield return new WaitForSeconds(presentDuration);
 
@@ -316,18 +348,21 @@ public class ManageJND : MonoBehaviour
         sp.vibrationModes = "AA";
         visualBlock.SetActive(true);
 
-        yield return new WaitForSeconds(blockDuration);
-
         noHaptic = false;
-        visualBlock.SetActive(false);
 
         // Debug.Log("comparing 2: " + noHaptic);
 
+        comparingTrial.amplitude_left = Random.Range(0.5f, 2.5f);
+
         visual.updateParameters(comparingTrial.frequency_left, comparingTrial.amplitude_left, comparingTrial.frequency_right, comparingTrial.amplitude_left);
+
+        yield return new WaitForSeconds(blockDuration);
 
         if(!noHaptic){
             sp.vibrationModes = alphabet[(int)comparingTrial.roughness_left] + alphabet[(int)comparingTrial.roughness_right];
         }
+
+        visualBlock.SetActive(false);
 
         yield return new WaitForSeconds(presentDuration);
 
@@ -345,6 +380,7 @@ public class ManageJND : MonoBehaviour
     }
 
     public void checkAccuracy(float choice){
+        lastChoiceMade = choice;
         if(rndIndex == 1){
             totalCount += 1;
 
@@ -354,9 +390,25 @@ public class ManageJND : MonoBehaviour
                 incorrectCount += 1;
             }
 
-            Debug.Log(correctCount/totalCount);
+            // Debug.Log(correctCount/totalCount);
             accuracy = correctCount/totalCount;
         }
+    }
+
+    public void checkStreak(float choice){
+        if(choice == lastChoiceMade){
+            streak += 1;
+        }
+        else{
+            streak = 0;
+        }
+    }
+
+    public void giveUp(){
+        phase = 0;
+        saveCurrentJND(cur);
+        totalCount = 0;
+        experiment.finished = true;
     }
 
     public void saveCurrentJND(int experimentIndex){
@@ -367,8 +419,13 @@ public class ManageJND : MonoBehaviour
 
             currentTrial.frequency_left,
             currentTrial.roughness_left,
+            180.0f * Mathf.Exp(-0.25f*(currentTrial.roughness_left-1)),
             accuracy
         );
+
+        // Debug.Log(cur);
+        // Debug.Log(experimentIndex);
+        // Debug.Log(JNDFrame.experimentIndex);
 
         experiment.saveJND(JNDFrame);
     }
