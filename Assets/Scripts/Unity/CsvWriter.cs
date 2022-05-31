@@ -187,7 +187,7 @@ public class CsvWriter : MonoBehaviour
 
     public void addToJNDCSV(JNDDataStruct frame){
         // Debug.Log(frame.experimentIndex);
-        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Index, Trial Haptic Frequency, Percentage Perceived Rougher");
+        var titles  = new StringBuilder("Phase, Experiment Index, Participant Index, Trial Visual Frequency, Trial Haptic Index, Trial Haptic Frequency, Percentage Perceived Smoother");
         titles.Append('\n');
         
         var result = new StringBuilder("");

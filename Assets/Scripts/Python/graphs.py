@@ -32,6 +32,15 @@ multimodalCols = ["Phase", "Experiment Index", "Participant Index", "Trial Visua
 multimodalTitles = ["Unimodal Visual", "Unimodal Haptic", "Multimodal", "Multimodal + Tension"]
 multimodalPatterns = ["Rougher", "Smoother"]
 
+JNDDir = "JND\Pairings"
+JNDVisualInds = ["0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6","0_7","0_8","0_9","0_10","0_11","0_12","0_13","0_14","0_15","0_16","0_17","0_18","0_19"]
+JNDHapticInds = ["1_0", "1_1", "1_2", "1_3", "1_4", "1_5", "1_6","1_7","1_8","1_9","1_10","1_11","1_12","1_13","1_14","1_15","1_16","1_17","1_18","1_19"]
+JNDInds = JNDVisualInds + JNDHapticInds
+JNDFile = "JND_result.csv"
+JNDCols = ["Phase", "Experiment Index", "Participant Index", "Trial Visual Frequency", "Trial Haptic Index", "Trial Haptic Frequency", "Percentage Perceived Smoother"]
+# JNDTitles = ["Unimodal Visual", "Unimodal Haptic", "Multimodal", "Multimodal + Tension"]
+# JNDPatterns = ["Rougher", "Smoother"]
+
 #---------- READING FUNCTIONS
 def readCSV(targetDir, targetFile, indArray, columnArray):
     compiledFileDict = dict.fromkeys(indArray)
@@ -40,11 +49,15 @@ def readCSV(targetDir, targetFile, indArray, columnArray):
         fileDir = os.path.join(fileDir, str(i))
         fileDir = os.path.join(fileDir, targetFile)
 
-        currentFileDict = dict.fromkeys(columnArray)
-        for c in columnArray:
-            currentFileDict[c] = pd.read_csv(fileDir, skipinitialspace=True,index_col=False, usecols=[c], delimiter=",").T
+        if(os.path.exists(fileDir)):
+            currentFileDict = dict.fromkeys(columnArray)
 
-        compiledFileDict[i] = currentFileDict
+            for c in columnArray:
+                currentFileDict[c] = pd.read_csv(fileDir, skipinitialspace=True,index_col=False, usecols=[c], delimiter=",").T
+
+            compiledFileDict[i] = currentFileDict
+        else:
+            print("file did not exist: ", fileDir)
     
     return compiledFileDict
 
@@ -79,6 +92,8 @@ def compileAccuracies():
 #--------- READ FILES
 comparisonDict = readCSV(comparisonDir, comparisonFile, comparisonInds, comparisonCols) 
 multimodalDict = readCSV(multimodalDir, multimodalFile, multimodalInds, multimodalCols) 
+JNDVisualDict = readCSV(JNDDir, JNDFile, JNDVisualInds, JNDCols) 
+JNDHapticDict = readCSV(JNDDir, JNDFile, JNDHapticInds, JNDCols) 
 
 numComparisonPoints = comparisonDict[0]["Participant Index"].T.iat[-1,0] +1
 numMultimodalPoints = multimodalDict["00"]["Participant Index"].T.iat[-1,0] +1
