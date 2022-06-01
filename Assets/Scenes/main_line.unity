@@ -3522,6 +3522,7 @@ MonoBehaviour:
   JNDList: []
   phase: 0
   cur: 0
+  baselineLoc: 0
   correctCount: 0
   incorrectCount: 0
   totalCount: 0
@@ -10408,7 +10409,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 499952022}
         m_TargetAssemblyTypeName: ManageJND, Assembly-CSharp
-        m_MethodName: chooseRight
+        m_MethodName: chooseLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

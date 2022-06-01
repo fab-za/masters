@@ -56,7 +56,7 @@ public class ManageJND : MonoBehaviour
     public float totalCount;
     public float accuracy;
     private float passTextCounter;    
-    private float lastChoiceMade;
+    private bool lastChoiceMade;
     public bool correctChoice;
     public float incorrectStreak;
     public float correctStreak;
@@ -68,7 +68,7 @@ public class ManageJND : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
-        percent = 0.0075f;
+        percent = 0.009f;
         task_complete = false;
         // question.SetActive(false);
         
@@ -79,7 +79,7 @@ public class ManageJND : MonoBehaviour
         cur = 0;
         baselineLoc = 1;
         direction = 0;
-        lastChoiceMade = 1;
+        // lastChoiceMade = 1;
         incorrectStreak = 0;
         correctStreak = 0;
         
@@ -441,20 +441,20 @@ public class ManageJND : MonoBehaviour
     }
 
     public void checkStreak(float choice){
-        if(choice == lastChoiceMade && correctChoice){
+        if(correctChoice == lastChoiceMade && correctChoice){
             correctStreak += 1;
             incorrectStreak = 0;
             
         }
-        else if(choice == lastChoiceMade && !correctChoice){
+        else if(correctChoice == lastChoiceMade && !correctChoice){
             correctStreak = 0;
             incorrectStreak += 1;
         }
-        else if(choice != lastChoiceMade && correctChoice){
+        else if(correctChoice != lastChoiceMade && correctChoice){
             correctStreak = 1;
             incorrectStreak = 0;
         }
-        else if(choice != lastChoiceMade && !correctChoice){
+        else if(correctChoice != lastChoiceMade && !correctChoice){
             correctStreak = 0;
             incorrectStreak = 1;
         }
@@ -463,7 +463,7 @@ public class ManageJND : MonoBehaviour
             incorrectStreak = 0;
         }
 
-        lastChoiceMade = choice;
+        lastChoiceMade = correctChoice;
     }
 
     public void giveUp(){
