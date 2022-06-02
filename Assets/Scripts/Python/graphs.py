@@ -40,6 +40,8 @@ JNDFile = "JND_result.csv"
 JNDCols = ["Phase", "Experiment Index", "Participant Index", "Trial Visual Frequency", "Trial Haptic Index", "Trial Haptic Frequency", "Percentage Perceived Smoother"]
 # JNDTitles = ["Unimodal Visual", "Unimodal Haptic", "Multimodal", "Multimodal + Tension"]
 # JNDPatterns = ["Rougher", "Smoother"]
+JNDVisualBaseline = 35
+JNDHapticBaseline = 20
 
 #---------- READING FUNCTIONS
 def readCSV(targetDir, targetFile, indArray, columnArray):
@@ -89,6 +91,38 @@ def compileAccuracies():
 
     multimodalDict["Accuracies"] = accuraciesdf
 
+def reject_outliers(data, m):
+    return data[abs(data - np.mean(data)) < m * np.std(data)]
+
+def compileJND(phaseInds, targetDict, xVariable, baseline):
+    JNDdf = initEmptyDataFrame(len(phaseInds),["empty"])
+    xFrequencies = []
+    JNDdf.index = phaseInds
+
+    for i in phaseInds:
+        numJNDindv = len(targetDict[i]["Participant Index"].columns)
+        frequency = targetDict[i][xVariable].T.iat[-1,0]
+        xFrequencies.append(frequency)
+
+        data = targetDict[i]["Percentage Perceived Smoother"].loc["Percentage Perceived Smoother"]
+        filtered_data = reject_outliers(data, 5)
+
+        print(len(data), len(filtered_data))
+
+        total = 0
+        for val in filtered_data:
+            total += val
+        
+        mean = total/numJNDindv
+        JNDdf.loc[i] = mean
+    
+    JNDdf.columns = ["Average Percentage Perceived Smoother"]
+    JNDdf.index = xFrequencies
+    JNDdf.loc[baseline] = [0]
+    targetDict["Compiled Means"] = JNDdf
+
+    
+
 #--------- READ FILES
 comparisonDict = readCSV(comparisonDir, comparisonFile, comparisonInds, comparisonCols) 
 multimodalDict = readCSV(multimodalDir, multimodalFile, multimodalInds, multimodalCols) 
@@ -97,8 +131,10 @@ JNDHapticDict = readCSV(JNDDir, JNDFile, JNDHapticInds, JNDCols)
 
 numComparisonPoints = comparisonDict[0]["Participant Index"].T.iat[-1,0] +1
 numMultimodalPoints = multimodalDict["00"]["Participant Index"].T.iat[-1,0] +1
-
 compileAccuracies()
+
+compileJND(JNDVisualInds, JNDVisualDict, "Trial Visual Frequency", JNDVisualBaseline)
+compileJND(JNDHapticInds, JNDHapticDict, "Trial Haptic Frequency", JNDHapticBaseline)
 
 #--------- PLOT PARAMETERS
 def definePlots():
@@ -204,6 +240,40 @@ def definePlots():
             "ymin": 0,
             "ymax": 60,
             "xNames": multimodalTitles
+        },
+        "JNDVisual_scatterline": {
+            "data": JNDVisualDict,
+            "targetdf": JNDVisualDict["Compiled Means"],
+            "indArray": JNDVisualInds,
+            "numDataPoints": 0, # polyfit parameter
+            "targetVariable": "Average Percentage Perceived Smoother",
+            "suptitle": "Just Noticeable Difference",
+            "subplt_titles": [""],
+            "plt_num": 1,
+            "xlabel": "Frequency (Hz)",
+            "ylabel": "Average Percentage Perceived Smoother (%)",
+            "xmin":35,
+            "xmax": 40,
+            "ymin": 0,
+            "ymax": 110,
+            "xNames": 0
+        },
+        "JNDHaptic_scatterline": {
+            "data": JNDHapticDict,
+            "targetdf": JNDHapticDict["Compiled Means"].iloc[9:21],
+            "indArray": JNDHapticInds,
+            "numDataPoints": 0, # polyfit parameter
+            "targetVariable": "Average Percentage Perceived Smoother",
+            "suptitle": "Just Noticeable Difference",
+            "subplt_titles": [""],
+            "plt_num": 1,
+            "xlabel": "Frequency (Hz)",
+            "ylabel": "Average Percentage Perceived Smoother (%)",
+            "xmin":20,
+            "xmax": 40,
+            "ymin": 0,
+            "ymax": 110,
+            "xNames": 0
         }
     }
     return pltParameters
@@ -274,6 +344,66 @@ def findWilcoxonSignRank(cur):
         w, pvalue = stats.wilcoxon(cur["targetdf"][subplot], cur["targetdf"][subplot+3], alternative="greater")
         print(cur["xNames"][subplot], w, pvalue)
     
+def plotScatter(cur):
+    figD, axsS = plt.subplots(ncols=cur["plt_num"], squeeze=False, figsize=(8,8))
+    figD.suptitle(cur["suptitle"])
+
+    for subplot in range(cur["plt_num"]):
+        x = cur["targetdf"].index
+        y = cur["targetdf"][cur["targetVariable"]]
+        xEven = np.linspace(cur["xmin"], cur["xmax"], 21)
+
+        axsS[0,subplot].scatter(x,y, ec='k') 
+
+        yFit, JNDPoint, PSEPoint = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
+        axsS[0,subplot].plot(xEven,yFit) 
+
+        print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
+
+        axsS[0,subplot].plot(x, np.full((len(x),),75), "g--")
+        axsS[0,subplot].plot(np.full((len(x),),JNDPoint), y, "g--")
+        axsS[0,subplot].plot(x, np.full((len(x),),50), "r--")
+        axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
+
+        axsS[0,subplot].set_xlabel(cur["xlabel"])
+        axsS[0,0].set_ylabel(cur["ylabel"])
+        # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
+
+        axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
+        axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
+
+
+def selectFit(mode, x, y, baseline, xEven):
+    if(mode == 0):
+        coefficients = np.polyfit(x, y, 3)
+        poly = np.poly1d(coefficients)
+        yFit = poly(xEven)
+        JNDPoint = (poly - 75).r
+        PSEPoint = (poly - 50).r
+    elif(mode == 1):
+        coefficients = np.polyfit(np.log(x), y, 1)
+        yFit = coefficients[0]*np.log(xEven) + coefficients[1]
+        JNDPoint = np.exp((75 - coefficients[1])/coefficients[0])
+        PSEPoint = np.exp((50 - coefficients[1])/coefficients[0])
+    elif(mode == 2):
+        coefficients = np.polyfit(x, y, 6)
+        poly = np.poly1d(coefficients)
+        yFit = poly(xEven)
+        JNDPoint = (poly - 75).r
+        PSEPoint = (poly - 50).r
+    
+    JNDPoint = [np.real(d) for d in JNDPoint if np.isreal(d)]
+    PSEPoint = [np.real(p) for p in PSEPoint if np.isreal(p)]
+
+    JNDPoint = [d for d in JNDPoint if d > baseline]
+    PSEPoint = [p for p in PSEPoint if p > baseline]
+
+    JNDPoint = min(JNDPoint)
+    PSEPoint = min(PSEPoint)
+    
+    return yFit, JNDPoint, PSEPoint
+
+
 #----------- CALL PLOT FUNCTIONS
 plt.close('all')
 plotParameters = definePlots()
@@ -309,6 +439,10 @@ plotBox(plotParameters["multimodalTimeSmooth_box"])
 
 #--- RUN WILCOXON SIGN RANK TEST
 # findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
+
+#--- PLOT SCATTER AND LINE FOR JND
+plotScatter(plotParameters["JNDVisual_scatterline"])
+plotScatter(plotParameters["JNDHaptic_scatterline"])
 
 #------------- SHOW PLOTS
 plt.show()

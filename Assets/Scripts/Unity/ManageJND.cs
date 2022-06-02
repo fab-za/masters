@@ -30,6 +30,7 @@ public class ManageJND : MonoBehaviour
     public List<List<TrialParameters>> possibleTrials;
     private TrialParameters currentTrial;
     private List<TrialParameters> comparingTrial;
+    private List<TrialParameters> notAttemptedTrials;
 
     private float percent;
 
@@ -41,7 +42,9 @@ public class ManageJND : MonoBehaviour
     private int selectedClass;
 
     public int cur;
+    public int[] curs;
     public int baselineLoc;
+    private int highestTrial;
 
     private float blockDuration;
     private float textDuration;
@@ -68,7 +71,7 @@ public class ManageJND : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
-        percent = 0.009f;
+        percent = 0.0075f;
         task_complete = false;
         // question.SetActive(false);
         
@@ -76,8 +79,10 @@ public class ManageJND : MonoBehaviour
         textDuration = 4;
         presentDuration = 2;      
         
-        cur = 0;
+        curs = new int[]{0,9};
+        cur = curs[phase];
         baselineLoc = 1;
+        highestTrial = 0;
         direction = 0;
         // lastChoiceMade = 1;
         incorrectStreak = 0;
@@ -127,8 +132,8 @@ public class ManageJND : MonoBehaviour
                 direction = -1;
                 changeCurrentTrial(direction);
             }
-            else if(incorrectCount > 5){
-                passed.text = "FAILED 6 TIMES, STEP UP";
+            else if(incorrectCount > 4){
+                passed.text = "FAILED 5 TIMES, STEP UP";
                 StartCoroutine(popupPass());
 
                 correctCount = 0;
@@ -167,8 +172,8 @@ public class ManageJND : MonoBehaviour
                 incorrectStreak = 0;
                 correctStreak = 0;
             }
-            else if(incorrectCount > 5){
-                passed.text = "FAILED 6 TIMES, STEP UP";
+            else if(incorrectCount > 4){
+                passed.text = "FAILED 5 TIMES, STEP UP";
                 StartCoroutine(popupPass());
 
                 correctCount = 0;
@@ -236,7 +241,7 @@ public class ManageJND : MonoBehaviour
 
     public void endTraining(){
         training = false;
-        cur = 0;
+        cur = curs[phase];
         task_complete = true;
         correctCount = 0;
         incorrectCount = 0;
@@ -266,17 +271,25 @@ public class ManageJND : MonoBehaviour
     public void changeCurrentTrial(int direction){
         saveCurrentJND(cur);
         totalCount = 0;
+        
+        trackHighestTrial();
 
         if((cur < (JNDList.Count-1)) && (cur > -1) ){
+            cur = cur + (1*direction);
+        }
+        else if((cur == (JNDList.Count-1) && (direction == -1))){
             cur = cur + (1*direction);
         }
         else{
             if(!training){
                 // changePhase();
                 experiment.finished = true;
+                if(highestTrial != 19){
+                    addEmptyForNotAttempted();
+                }
                 this.enabled = false;
             }
-            cur = 0;
+            cur = curs[phase];
         }
 
         updateCurrentTrial();
@@ -285,6 +298,12 @@ public class ManageJND : MonoBehaviour
     public void updateCurrentTrial(){
         currentTrial = JNDList[cur];     
         possibleTrials = new List<List<TrialParameters>>(){new List<TrialParameters>(){baseline, currentTrial},new List<TrialParameters>(){currentTrial, baseline}};
+    }
+
+    public void trackHighestTrial(){
+        if(cur > highestTrial){
+            highestTrial = cur;
+        }
     }
 
     public IEnumerator popupBlock(){  
@@ -468,6 +487,9 @@ public class ManageJND : MonoBehaviour
 
     public void giveUp(){
         saveCurrentJND(cur);
+        if(highestTrial != 19){
+            addEmptyForNotAttempted();
+        }
         phase = 0;
         totalCount = 0;
         experiment.finished = true;
@@ -491,6 +513,27 @@ public class ManageJND : MonoBehaviour
         // Debug.Log(JNDFrame.experimentIndex);
 
         experiment.saveJND(JNDFrame);
+    }
+
+    public void addEmptyForNotAttempted(){
+        for(int i=(highestTrial+1); i<(JNDList.Count); i++){
+            // add to not attempted list and then write empty result so that index doesnt go whack
+            // notAttemptedTrials.Add(JNDList[i]);
+
+            JNDDataStruct JNDFrame = new JNDDataStruct(
+                phase,
+                i, // index of experiment actually, in this case the level of difference
+                experiment.index, // participant index (my naming sucks sorry @ self)
+
+                JNDList[i].frequency_left,
+                JNDList[i].roughness_left,
+                20 + (180.0f * Mathf.Exp(-0.25f*(Mathf.Abs(JNDList[i].roughness_left-21)))),
+                0
+            );
+
+            experiment.saveJND(JNDFrame);
+        }
+
     }
 
 }
