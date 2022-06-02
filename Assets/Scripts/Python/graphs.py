@@ -35,13 +35,19 @@ multimodalPatterns = ["Rougher", "Smoother"]
 JNDDir = "JND\Pairings"
 JNDVisualInds = ["0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6","0_7","0_8","0_9","0_10","0_11","0_12","0_13","0_14","0_15","0_16","0_17","0_18","0_19"]
 JNDHapticInds = ["1_0", "1_1", "1_2", "1_3", "1_4", "1_5", "1_6","1_7","1_8","1_9","1_10","1_11","1_12","1_13","1_14","1_15","1_16","1_17","1_18","1_19"]
-JNDInds = JNDVisualInds + JNDHapticInds
+JNDMulti0Inds = ["2_9","2_10","2_11","2_12","2_13","2_14","2_15","2_16","2_17","2_18","2_19"]
+JNDMulti50Inds = ["3_9","3_10","3_11","3_12","3_13","3_14","3_15","3_16","3_17","3_18","3_19"]
+JNDMulti100Inds = ["4_9","4_10","4_11","4_12","4_13","4_14","4_15","4_16","4_17","4_18","4_19"]
+JNDInds = JNDVisualInds + JNDHapticInds + JNDMulti0Inds + JNDMulti50Inds + JNDMulti100Inds
+
 JNDFile = "JND_result.csv"
 JNDCols = ["Phase", "Experiment Index", "Participant Index", "Trial Visual Frequency", "Trial Haptic Index", "Trial Haptic Frequency", "Percentage Perceived Smoother"]
-# JNDTitles = ["Unimodal Visual", "Unimodal Haptic", "Multimodal", "Multimodal + Tension"]
+JNDTitles = ["Multimodal 0% Noise ", "Multimodal 50% Noise", "Multimodal 100% Noise"]
 # JNDPatterns = ["Rougher", "Smoother"]
 JNDVisualBaseline = 35
 JNDHapticBaseline = 20
+JNDMultiVisualBaseline = 37
+JNDMultiHapticBaseline = 20
 
 #---------- READING FUNCTIONS
 def readCSV(targetDir, targetFile, indArray, columnArray):
@@ -105,7 +111,8 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
         xFrequencies.append(frequency)
 
         data = targetDict[i]["Percentage Perceived Smoother"].loc["Percentage Perceived Smoother"]
-        filtered_data = reject_outliers(data, 2)
+        # filtered_data = reject_outliers(data, 5)
+        filtered_data = data
 
         # print(len(data), len(filtered_data))
 
@@ -121,7 +128,13 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
     JNDdf.loc[baseline] = [0]
     targetDict["Compiled Means"] = JNDdf
 
-    
+def compileJNDMulti():
+    df = initEmptyDataFrame(len(JNDMulti0Inds), JNDTitles)
+    df = pd.concat([JNDMulti0Dict["Compiled Means"], JNDMulti50Dict["Compiled Means"]], axis=1)
+    df = pd.concat([df, JNDMulti100Dict["Compiled Means"]], axis=1)
+    df.columns = JNDTitles
+    return df
+
 
 #--------- READ FILES
 comparisonDict = readCSV(comparisonDir, comparisonFile, comparisonInds, comparisonCols) 
@@ -129,12 +142,22 @@ multimodalDict = readCSV(multimodalDir, multimodalFile, multimodalInds, multimod
 JNDVisualDict = readCSV(JNDDir, JNDFile, JNDVisualInds, JNDCols) 
 JNDHapticDict = readCSV(JNDDir, JNDFile, JNDHapticInds, JNDCols) 
 
+JNDMulti0Dict = readCSV(JNDDir, JNDFile, JNDMulti0Inds, JNDCols) 
+JNDMulti50Dict = readCSV(JNDDir, JNDFile, JNDMulti50Inds, JNDCols) 
+JNDMulti100Dict = readCSV(JNDDir, JNDFile, JNDMulti100Inds, JNDCols) 
+
 numComparisonPoints = comparisonDict[0]["Participant Index"].T.iat[-1,0] +1
 numMultimodalPoints = multimodalDict["00"]["Participant Index"].T.iat[-1,0] +1
 compileAccuracies()
 
 compileJND(JNDVisualInds, JNDVisualDict, "Trial Visual Frequency", JNDVisualBaseline)
 compileJND(JNDHapticInds, JNDHapticDict, "Trial Haptic Frequency", JNDHapticBaseline)
+
+compileJND(JNDMulti0Inds, JNDMulti0Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
+compileJND(JNDMulti50Inds, JNDMulti50Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
+compileJND(JNDMulti100Inds, JNDMulti100Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
+
+JNDMultidf = compileJNDMulti()
 
 #--------- PLOT PARAMETERS
 def definePlots():
@@ -247,7 +270,7 @@ def definePlots():
             "indArray": JNDVisualInds,
             "numDataPoints": 0, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
-            "suptitle": "Just Noticeable Difference",
+            "suptitle": "Unimodal Visual - Just Noticeable Difference",
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Frequency (Hz)",
@@ -264,7 +287,24 @@ def definePlots():
             "indArray": JNDHapticInds,
             "numDataPoints": 0, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
-            "suptitle": "Just Noticeable Difference",
+            "suptitle": "Unimodal Haptic - Just Noticeable Difference",
+            "subplt_titles": [""],
+            "plt_num": 1,
+            "xlabel": "Frequency (Hz)",
+            "ylabel": "Average Percentage Perceived Smoother (%)",
+            "xmin":20,
+            "xmax": 40,
+            "ymin": 0,
+            "ymax": 110,
+            "xNames": np.arange(20, 41,5)
+        },
+        "JNDMulti_scatterline": {
+            "data": JNDMultidf,
+            "targetdf": JNDMultidf,
+            "indArray": JNDMulti0Inds,
+            "numDataPoints": 0, # polyfit parameter
+            "targetVariable": JNDTitles,
+            "suptitle": "Multimodal - Just Noticeable Difference",
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Frequency (Hz)",
@@ -373,7 +413,37 @@ def plotScatter(cur):
         # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
         axsS[0,subplot].set_xticks(cur["xNames"])
         
+def plotMultiScatter(cur):
+    figD, axsS = plt.subplots(ncols=cur["plt_num"], squeeze=False, figsize=(8,8))
+    figD.suptitle(cur["suptitle"])
 
+    for subplot in range(cur["plt_num"]):
+        x = cur["targetdf"].index
+        for target in cur["targetVariable"]:
+            y = cur["targetdf"][target]
+            xEven = np.linspace(cur["xmin"], cur["xmax"], 21)
+
+            axsS[0,subplot].scatter(x,y, ec='k') 
+
+            yFit, JNDPoint, PSEPoint = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
+            axsS[0,subplot].plot(xEven,yFit, label=target) 
+
+            print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
+
+        # axsS[0,subplot].plot(x, np.full((len(x),),75), "g--")
+        # axsS[0,subplot].plot(np.full((len(x),),JNDPoint), y, "g--")
+        # axsS[0,subplot].plot(x, np.full((len(x),),50), "r--")
+        # axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
+
+        axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
+        axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
+
+        axsS[0,subplot].set_xlabel(cur["xlabel"])
+        axsS[0,0].set_ylabel(cur["ylabel"])
+        # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
+        axsS[0,subplot].set_xticks(cur["xNames"])
+
+        axsS[0,subplot].legend()
 
 def selectFit(mode, x, y, baseline, xEven):
     if(mode == 0):
@@ -427,11 +497,11 @@ plotParameters["multimodalTimeSmooth_box"]["targetdf"] = createTargetArray(plotP
 #--- PLOT BOX
 # plotBox(plotParameters["hapticFrequencyComparison_box"])
 
-plotBox(plotParameters["multimodalAccuraciesRough_box"])
-plotBox(plotParameters["multimodalAccuraciesSmooth_box"])
+# plotBox(plotParameters["multimodalAccuraciesRough_box"])
+# plotBox(plotParameters["multimodalAccuraciesSmooth_box"])
 
-plotBox(plotParameters["multimodalTimeRough_box"])
-plotBox(plotParameters["multimodalTimeSmooth_box"])
+# plotBox(plotParameters["multimodalTimeRough_box"])
+# plotBox(plotParameters["multimodalTimeSmooth_box"])
 
 # could create an analysis for percentage of people who thought X was rougher than Y
 # ie. do a check between left and right results for each pair
@@ -445,6 +515,8 @@ plotBox(plotParameters["multimodalTimeSmooth_box"])
 #--- PLOT SCATTER AND LINE FOR JND
 plotScatter(plotParameters["JNDVisual_scatterline"])
 plotScatter(plotParameters["JNDHaptic_scatterline"])
+
+plotMultiScatter(plotParameters["JNDMulti_scatterline"])
 
 #------------- SHOW PLOTS
 plt.show()

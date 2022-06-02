@@ -195,7 +195,7 @@ public class ManageJND : MonoBehaviour
     }
 
     public void initTrialList(){
-        Debug.Log("init Trials");
+        // Debug.Log("init Trials");
         for(int i=20; i>0; i--){
             TrialParameters trial = new TrialParameters(
                 baselineUni.roughness_left + i,
@@ -207,7 +207,7 @@ public class ManageJND : MonoBehaviour
                 baselineUni.frequency_right * (1+(percentInterval*i))
             );
 
-            Debug.Log("trial exists, attempt add");
+            // Debug.Log("trial exists, attempt add");
 
             JNDList.Add(trial);
         }
