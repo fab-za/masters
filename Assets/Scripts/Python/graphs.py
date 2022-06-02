@@ -46,7 +46,8 @@ JNDTitles = ["Multimodal 0% Noise ", "Multimodal 50% Noise", "Multimodal 100% No
 # JNDPatterns = ["Rougher", "Smoother"]
 JNDVisualBaseline = 35
 JNDHapticBaseline = 20
-JNDMultiVisualBaseline = 37
+JNDMultiVisualBaseline = 38
+JNDMultiVisualEqBaseline = 20+4*(JNDMultiVisualBaseline-JNDVisualBaseline)
 JNDMultiHapticBaseline = 20
 
 #---------- READING FUNCTIONS
@@ -313,7 +314,7 @@ def definePlots():
             "xmax": 40,
             "ymin": 0,
             "ymax": 110,
-            "xNames": np.arange(20, 41,5)
+            "xNames": np.arange(19, 41,5)
         }
     }
     return pltParameters
@@ -421,7 +422,8 @@ def plotMultiScatter(cur):
         x = cur["targetdf"].index
         for target in cur["targetVariable"]:
             y = cur["targetdf"][target]
-            xEven = np.linspace(cur["xmin"], cur["xmax"], 21)
+            xEven = np.linspace(cur["xmin"]-1, cur["xmax"], 21)
+            yEven = np.linspace(cur["ymin"]-1, cur["ymax"], 21)
 
             axsS[0,subplot].scatter(x,y, ec='k') 
 
@@ -430,10 +432,8 @@ def plotMultiScatter(cur):
 
             print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
 
-        # axsS[0,subplot].plot(x, np.full((len(x),),75), "g--")
-        # axsS[0,subplot].plot(np.full((len(x),),JNDPoint), y, "g--")
-        # axsS[0,subplot].plot(x, np.full((len(x),),50), "r--")
-        # axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
+        axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiVisualEqBaseline), yEven, "k--", label="$Baseline Visual Frequency, f_v$")
+        axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiHapticBaseline), yEven, "r--", label="$Baseline Haptic Frequency, f_h$")
 
         axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
         axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
