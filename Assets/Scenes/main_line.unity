@@ -3513,16 +3513,29 @@ MonoBehaviour:
   selectButtons: {fileID: 374389245}
   breakMessage: {fileID: 454090371}
   baseline:
+    roughness_left: 0
+    amplitude_left: 0
+    frequency_left: 0
+    roughness_right: 0
+    amplitude_right: 0
+    frequency_right: 0
+  baselineUni:
     roughness_left: 1
     amplitude_left: 2
     frequency_left: 35
     roughness_right: 1
     amplitude_right: 2
     frequency_right: 35
+  baselineMulti:
+    roughness_left: 1
+    amplitude_left: 2
+    frequency_left: 38
+    roughness_right: 1
+    amplitude_right: 2
+    frequency_right: 38
   JNDList: []
-  phase: 0
+  phase: 3
   cur: 0
-  curs: 
   baselineLoc: 0
   correctCount: 0
   incorrectCount: 0
@@ -9609,6 +9622,7 @@ MonoBehaviour:
     positions: []
     offset: 0
   samplingRate: 1010
+  percent: 0
 --- !u!1 &1784579732
 GameObject:
   m_ObjectHideFlags: 0

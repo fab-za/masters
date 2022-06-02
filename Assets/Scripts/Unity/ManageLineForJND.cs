@@ -27,11 +27,12 @@ public class ManageLineForJND : MonoBehaviour
     public LineParameters leftLine;
     public LineParameters rightLine;
     public int samplingRate;
+    public float percent;
     
     
     void Start()
     {
-        
+        percent = 0;
     }
 
     // Update is called once per frame
@@ -71,9 +72,33 @@ public class ManageLineForJND : MonoBehaviour
             float y = (0.05f * Mathf.Sin((panel.visual_frequency * (float)x[i]) + panel.offset));
             Vector3 coord = new Vector3((float)x[i], y, 0);
 
-            positions[i] = coord;
+            float limit = percent/5000;
+            Vector3 noise = new Vector3(RandomGaussian(-limit,limit), RandomGaussian(-limit,limit), RandomGaussian(-limit,limit));
+            positions[i] = coord + noise;
+            
         }
 
         return positions;
+    }
+
+    public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f){
+        float u, v, S;
+
+        do
+        {
+            u = 2.0f * Random.value - 1.0f;
+            v = 2.0f * Random.value - 1.0f;
+            S = u * u + v * v;
+        }
+        while (S >= 1.0f);
+
+        // Standard Normal Distribution
+        float std = u * Mathf.Sqrt(-2.0f * Mathf.Log(S) / S);
+
+        // Normal Distribution centered between the min and max value
+        // and clamped following the "three-sigma rule"
+        float mean = (minValue + maxValue) / 2.0f;
+        float sigma = (maxValue - mean) / 3.0f;
+        return Mathf.Clamp(std * sigma + mean, minValue, maxValue);
     }
 }

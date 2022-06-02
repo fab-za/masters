@@ -26,13 +26,16 @@ public class ManageJND : MonoBehaviour
     public GameObject breakMessage;
 
     public TrialParameters baseline;  // STANDARD
+    public TrialParameters baselineUni;  // STANDARD UNIMODAL
+    public TrialParameters baselineMulti;  // STANDARD MULTIMODAL, fv IS HIGHER THAN TRUE
+
     public List<TrialParameters> JNDList;
     public List<List<TrialParameters>> possibleTrials;
     private TrialParameters currentTrial;
     private List<TrialParameters> comparingTrial;
     private List<TrialParameters> notAttemptedTrials;
 
-    private float percent;
+    private float percentInterval;
 
     public int phase;
     private bool training;
@@ -42,7 +45,7 @@ public class ManageJND : MonoBehaviour
     private int selectedClass;
 
     public int cur;
-    public int[] curs;
+    private int[] curs;
     public int baselineLoc;
     private int highestTrial;
 
@@ -71,7 +74,7 @@ public class ManageJND : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
-        percent = 0.0075f;
+        percentInterval = 0.0075f;
         task_complete = false;
         // question.SetActive(false);
         
@@ -79,7 +82,7 @@ public class ManageJND : MonoBehaviour
         textDuration = 4;
         presentDuration = 2;      
         
-        curs = new int[]{0,9};
+        curs = new int[]{0,9,9,9,9};
         cur = curs[phase];
         baselineLoc = 1;
         highestTrial = 0;
@@ -192,19 +195,19 @@ public class ManageJND : MonoBehaviour
     }
 
     public void initTrialList(){
-        // Debug.Log("init Trials");
+        Debug.Log("init Trials");
         for(int i=20; i>0; i--){
             TrialParameters trial = new TrialParameters(
-                baseline.roughness_left + i,
+                baselineUni.roughness_left + i,
                 Random.Range(0.5f, 2.5f),
-                baseline.frequency_left * (1+(percent*i)),
+                baselineUni.frequency_left * (1+(percentInterval*i)),
 
-                baseline.roughness_right + i,
-                baseline.amplitude_right,
-                baseline.frequency_right * (1+(percent*i))
+                baselineUni.roughness_right + i,
+                baselineUni.amplitude_right,
+                baselineUni.frequency_right * (1+(percentInterval*i))
             );
 
-            // Debug.Log("trial exists, attempt add");
+            Debug.Log("trial exists, attempt add");
 
             JNDList.Add(trial);
         }
@@ -218,6 +221,8 @@ public class ManageJND : MonoBehaviour
             rightLine.SetActive(false);
             training = true;
             noHaptic = false;
+            baseline = baselineUni;
+            visual.percent = 0;
         }
         else if(phase == 0){
             title = "Visual ";
@@ -226,6 +231,35 @@ public class ManageJND : MonoBehaviour
             training = true;
             noHaptic = true;
             sp.vibrationModes = "AA";
+            baseline = baselineUni;
+            visual.percent = 0;
+        }
+        else if(phase == 2){
+            title = "Multi ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 0;
+        }
+        else if(phase == 3){
+            title = "Multi 50 ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 50;
+        }
+        else if(phase == 4){
+            title = "Multi 100 ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 100;
         }
     }
     public void changePhase(){

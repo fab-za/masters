@@ -105,9 +105,9 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
         xFrequencies.append(frequency)
 
         data = targetDict[i]["Percentage Perceived Smoother"].loc["Percentage Perceived Smoother"]
-        filtered_data = reject_outliers(data, 5)
+        filtered_data = reject_outliers(data, 2)
 
-        print(len(data), len(filtered_data))
+        # print(len(data), len(filtered_data))
 
         total = 0
         for val in filtered_data:
@@ -256,7 +256,7 @@ def definePlots():
             "xmax": 40,
             "ymin": 0,
             "ymax": 110,
-            "xNames": 0
+            "xNames": np.arange(35, 41,1)
         },
         "JNDHaptic_scatterline": {
             "data": JNDHapticDict,
@@ -273,7 +273,7 @@ def definePlots():
             "xmax": 40,
             "ymin": 0,
             "ymax": 110,
-            "xNames": 0
+            "xNames": np.arange(20, 41,5)
         }
     }
     return pltParameters
@@ -365,12 +365,14 @@ def plotScatter(cur):
         axsS[0,subplot].plot(x, np.full((len(x),),50), "r--")
         axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
 
+        axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
+        axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
+
         axsS[0,subplot].set_xlabel(cur["xlabel"])
         axsS[0,0].set_ylabel(cur["ylabel"])
         # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
-
-        axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
-        axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
+        axsS[0,subplot].set_xticks(cur["xNames"])
+        
 
 
 def selectFit(mode, x, y, baseline, xEven):
