@@ -5,11 +5,12 @@ from numpy.core.numeric import NaN
 from numpy.lib.twodim_base import tri
 import pandas as pd
 import matplotlib.pyplot as plt
-# import scipy.optimize.curve_fit as cf
 import os
 import math
 import pingouin as pg
 import scipy.stats as stats
+import scipy as sy
+from scipy.optimize import curve_fit as cf
 
 #----------- INITIALISE GLOBAL VARIABLES
 
@@ -133,6 +134,10 @@ def compileJNDMulti():
     df = initEmptyDataFrame(len(JNDMulti0Inds), JNDTitles)
     df = pd.concat([JNDMulti0Dict["Compiled Means"], JNDMulti50Dict["Compiled Means"]], axis=1)
     df = pd.concat([df, JNDMulti100Dict["Compiled Means"]], axis=1)
+    # df.loc[18] = 10
+    # df.loc[17] = 10
+    # df.loc[16] = 10
+    # df.loc[15] = 10
     df.columns = JNDTitles
     return df
 
@@ -269,7 +274,7 @@ def definePlots():
             "data": JNDVisualDict,
             "targetdf": JNDVisualDict["Compiled Means"],
             "indArray": JNDVisualInds,
-            "numDataPoints": 0, # polyfit parameter
+            "numDataPoints": 3, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
             "suptitle": "Unimodal Visual - Just Noticeable Difference",
             "subplt_titles": [""],
@@ -279,14 +284,14 @@ def definePlots():
             "xmin":35,
             "xmax": 40,
             "ymin": 0,
-            "ymax": 110,
+            "ymax": 1.10,
             "xNames": np.arange(35, 41,1)
         },
         "JNDHaptic_scatterline": {
             "data": JNDHapticDict,
             "targetdf": JNDHapticDict["Compiled Means"].iloc[9:21],
             "indArray": JNDHapticInds,
-            "numDataPoints": 0, # polyfit parameter
+            "numDataPoints": 3, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
             "suptitle": "Unimodal Haptic - Just Noticeable Difference",
             "subplt_titles": [""],
@@ -296,14 +301,14 @@ def definePlots():
             "xmin":20,
             "xmax": 40,
             "ymin": 0,
-            "ymax": 110,
+            "ymax": 1.10,
             "xNames": np.arange(20, 41,5)
         },
         "JNDMulti_scatterline": {
             "data": JNDMultidf,
             "targetdf": JNDMultidf,
             "indArray": JNDMulti0Inds,
-            "numDataPoints": 0, # polyfit parameter
+            "numDataPoints": 3, # polyfit parameter
             "targetVariable": JNDTitles,
             "suptitle": "Multimodal - Just Noticeable Difference",
             "subplt_titles": [""],
@@ -313,7 +318,7 @@ def definePlots():
             "xmin":20,
             "xmax": 40,
             "ymin": 0,
-            "ymax": 110,
+            "ymax": 1.1,
             "xNames": np.arange(19, 41,5)
         }
     }
@@ -391,8 +396,8 @@ def plotScatter(cur):
 
     for subplot in range(cur["plt_num"]):
         x = cur["targetdf"].index
-        y = cur["targetdf"][cur["targetVariable"]]
-        xEven = np.linspace(cur["xmin"], cur["xmax"], 21)
+        y = cur["targetdf"][cur["targetVariable"]]/100
+        xEven = np.linspace(cur["xmin"], cur["xmax"], 50)
 
         axsS[0,subplot].scatter(x,y, ec='k') 
 
@@ -401,9 +406,9 @@ def plotScatter(cur):
 
         print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
 
-        axsS[0,subplot].plot(x, np.full((len(x),),75), "g--")
+        axsS[0,subplot].plot(x, np.full((len(x),),0.75), "g--")
         axsS[0,subplot].plot(np.full((len(x),),JNDPoint), y, "g--")
-        axsS[0,subplot].plot(x, np.full((len(x),),50), "r--")
+        axsS[0,subplot].plot(x, np.full((len(x),),0.50), "r--")
         axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
 
         axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
@@ -413,6 +418,7 @@ def plotScatter(cur):
         axsS[0,0].set_ylabel(cur["ylabel"])
         # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
         axsS[0,subplot].set_xticks(cur["xNames"])
+        axsS[0,subplot].set_yticklabels(["0","20","40","60","80","100"])
         
 def plotMultiScatter(cur):
     figD, axsS = plt.subplots(ncols=cur["plt_num"], squeeze=False, figsize=(8,8))
@@ -421,8 +427,8 @@ def plotMultiScatter(cur):
     for subplot in range(cur["plt_num"]):
         x = cur["targetdf"].index
         for target in cur["targetVariable"]:
-            y = cur["targetdf"][target]
-            xEven = np.linspace(cur["xmin"]-1, cur["xmax"], 21)
+            y = cur["targetdf"][target]/100
+            xEven = np.linspace(cur["xmin"]-1, cur["xmax"], 50)
             yEven = np.linspace(cur["ymin"]-1, cur["ymax"], 21)
 
             axsS[0,subplot].scatter(x,y, ec='k') 
@@ -442,8 +448,16 @@ def plotMultiScatter(cur):
         axsS[0,0].set_ylabel(cur["ylabel"])
         # axsS[0,subplot].set_xticklabels(labels=cur["xNames"], fontsize=8, ha="right")
         axsS[0,subplot].set_xticks(cur["xNames"])
+        # axsS[0,subplot].set_yticks(np.arange(0, 110, 10))
+        axsS[0,subplot].set_yticklabels(["0","20","40","60","80","100"])
 
         axsS[0,subplot].legend()
+
+def pf(x, alpha, beta):
+    return 1. / (1 + np.exp( -(x-alpha)/beta))
+
+def reversepf(y, alpha, beta):
+    return alpha - beta*np.log((1/y)-1)
 
 def selectFit(mode, x, y, baseline, xEven):
     if(mode == 0):
@@ -458,20 +472,27 @@ def selectFit(mode, x, y, baseline, xEven):
         JNDPoint = np.exp((75 - coefficients[1])/coefficients[0])
         PSEPoint = np.exp((50 - coefficients[1])/coefficients[0])
     elif(mode == 2):
-        coefficients = np.polyfit(x, y, 6)
+        coefficients = np.polyfit(x, y, 4)
         poly = np.poly1d(coefficients)
         yFit = poly(xEven)
         JNDPoint = (poly - 75).r
         PSEPoint = (poly - 50).r
+    elif(mode == 3):
+        cof0 = np.array([30., 1.])
+        coefficients, ext = cf(pf, x, y, cof0)
+        yFit = pf(xEven, coefficients[0], coefficients[1])
+        JNDPoint = reversepf(0.75, coefficients[0], coefficients[1])
+        PSEPoint = reversepf(0.50, coefficients[0], coefficients[1])
     
-    JNDPoint = [np.real(d) for d in JNDPoint if np.isreal(d)]
-    PSEPoint = [np.real(p) for p in PSEPoint if np.isreal(p)]
-
-    JNDPoint = [d for d in JNDPoint if d > baseline]
-    PSEPoint = [p for p in PSEPoint if p > baseline]
-
-    JNDPoint = min(JNDPoint)
-    PSEPoint = min(PSEPoint)
+    if(isinstance(JNDPoint,np.ndarray)):
+        JNDPoint = [np.real(d) for d in JNDPoint if np.isreal(d)]
+        JNDPoint = [d for d in JNDPoint if d > baseline]
+        JNDPoint = min(JNDPoint)
+    if(isinstance(PSEPoint,np.ndarray)):
+        PSEPoint = [np.real(p) for p in PSEPoint if np.isreal(p)]    
+        PSEPoint = [p for p in PSEPoint if p > baseline]    
+        PSEPoint = min(PSEPoint)
+    
     
     return yFit, JNDPoint, PSEPoint
 

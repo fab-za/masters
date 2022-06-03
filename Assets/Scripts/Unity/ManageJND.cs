@@ -32,7 +32,7 @@ public class ManageJND : MonoBehaviour
     public List<TrialParameters> JNDList;
     public List<List<TrialParameters>> possibleTrials;
     private TrialParameters currentTrial;
-    private List<TrialParameters> comparingTrial;
+    public List<TrialParameters> comparingTrial;
     private List<TrialParameters> notAttemptedTrials;
 
     private float percentInterval;
@@ -43,6 +43,9 @@ public class ManageJND : MonoBehaviour
     private bool noHaptic;
 
     private int selectedClass;
+
+    public int JNDHaptic;
+    public float JNDVisual;
 
     public int cur;
     private int[] curs;
@@ -74,7 +77,7 @@ public class ManageJND : MonoBehaviour
         experiment = GameObject.Find("ExperimentManager").GetComponent<ManageExperiment>();
         sp = GameObject.Find("SerialController").GetComponent<ConnectSP>();
 
-        percentInterval = 0.0075f;
+        percentInterval = 0.017f;
         task_complete = false;
         // question.SetActive(false);
         
@@ -93,8 +96,8 @@ public class ManageJND : MonoBehaviour
         
         JNDList = new List<TrialParameters>();
         initTrialList();
-        updateCurrentTrial();
         changePhase();
+        updateCurrentTrial();
     }
 
     // Update is called once per frame
@@ -153,8 +156,6 @@ public class ManageJND : MonoBehaviour
             }
         }   
         else{
-            possibleTrials = new List<List<TrialParameters>>(){new List<TrialParameters>(){baseline, JNDList[0]},new List<TrialParameters>(){JNDList[0], baseline}};
-
             indicator.text = title + "TRAINING";
 
             if(correctStreak > 4){
@@ -202,16 +203,19 @@ public class ManageJND : MonoBehaviour
                 Random.Range(0.5f, 2.5f),
                 baselineUni.frequency_left * (1+(percentInterval*i)),
 
-                baselineUni.roughness_right + i,
+                // baselineUni.roughness_right + i,
+                // Random.Range(0.5f, 2.5f),
+                // baselineUni.frequency_right * (1+(percentInterval*i))
+
+                (baselineUni.roughness_right + i) + JNDHaptic,
                 baselineUni.amplitude_right,
-                baselineUni.frequency_right * (1+(percentInterval*i))
+                (baselineUni.frequency_right * (1+(percentInterval*i))) * (1-JNDVisual)
             );
 
             // Debug.Log("trial exists, attempt add");
 
             JNDList.Add(trial);
         }
-        possibleTrials = new List<List<TrialParameters>>(){new List<TrialParameters>(){baseline, JNDList[0]},new List<TrialParameters>(){JNDList[0], baseline}};
     }
 
     public void selectPhase(){
@@ -330,8 +334,26 @@ public class ManageJND : MonoBehaviour
     }
 
     public void updateCurrentTrial(){
-        currentTrial = JNDList[cur];     
+        currentTrial = JNDList[cur];
+        // baselineMulti = new TrialParameters(JNDList[cur]);
+        // if(phase > 1){
+        //     baselineMulti = flipSides(baselineMulti);
+        //     baseline = baselineMulti;
+        // }
         possibleTrials = new List<List<TrialParameters>>(){new List<TrialParameters>(){baseline, currentTrial},new List<TrialParameters>(){currentTrial, baseline}};
+    }
+
+    public TrialParameters flipSides(TrialParameters trial){
+        TrialParameters temp = new TrialParameters(trial);
+        trial.frequency_left = temp.frequency_right;
+        trial.amplitude_left = temp.amplitude_right;
+        trial.roughness_left = temp.roughness_right;
+
+        trial.frequency_right = temp.frequency_left;
+        trial.amplitude_right = temp.amplitude_left;
+        trial.roughness_right = temp.roughness_left;
+
+        return trial;
     }
 
     public void trackHighestTrial(){
@@ -376,13 +398,13 @@ public class ManageJND : MonoBehaviour
         possibleTrials[0][1].amplitude_left = Random.Range(0.5f, 2.5f); // generate new offset for currentTrial
         possibleTrials[1][0].amplitude_left = Random.Range(0.5f, 2.5f);
 
-        visual.updateParameters(comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left, comparingTrial[0].frequency_right, comparingTrial[0].amplitude_left);
+        visual.updateParameters(comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left, comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left);
 
         yield return new WaitForSeconds(blockDuration);
         
         if(!noHaptic){
             // Debug.Log("setting vibration code: "+ alphabet[(int)baseline.roughness_left]);
-            sp.vibrationModes = alphabet[(int)comparingTrial[0].roughness_left] + alphabet[(int)comparingTrial[0].roughness_right];
+            sp.vibrationModes = alphabet[(int)comparingTrial[0].roughness_left] + alphabet[(int)comparingTrial[0].roughness_left];
         }
 
         question.text = "WHICH PATTERN HAD SMALLER BUMPS? NOW SHOWING 1";
@@ -400,13 +422,13 @@ public class ManageJND : MonoBehaviour
         // Debug.Log("comparing 1: " + noHaptic);
         // comparingTrial[1].amplitude_left = Random.Range(0.5f, 2.5f);
 
-        visual.updateParameters(comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left, comparingTrial[1].frequency_right, comparingTrial[1].amplitude_left);
+        visual.updateParameters(comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left, comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left);
 
         yield return new WaitForSeconds(blockDuration);
 
         if(!noHaptic){
             // Debug.Log("setting vibration code: "+ alphabet[(int)comparingTrial.roughness_left]);
-            sp.vibrationModes = alphabet[(int)comparingTrial[1].roughness_left] + alphabet[(int)comparingTrial[1].roughness_right];
+            sp.vibrationModes = alphabet[(int)comparingTrial[1].roughness_left] + alphabet[(int)comparingTrial[1].roughness_left];
         }
 
         question.text = "WHICH PATTERN HAD SMALLER BUMPS? NOW SHOWING 2";
@@ -421,12 +443,12 @@ public class ManageJND : MonoBehaviour
 
         // Debug.Log("baseline 2: " + noHaptic);
 
-        visual.updateParameters(comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left, comparingTrial[0].frequency_right, comparingTrial[0].amplitude_left);
+        visual.updateParameters(comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left, comparingTrial[0].frequency_left, comparingTrial[0].amplitude_left);
 
         yield return new WaitForSeconds(blockDuration);
 
         if(!noHaptic){
-            sp.vibrationModes = alphabet[(int)comparingTrial[0].roughness_left] + alphabet[(int)comparingTrial[0].roughness_right];
+            sp.vibrationModes = alphabet[(int)comparingTrial[0].roughness_left] + alphabet[(int)comparingTrial[0].roughness_left];
         }
 
         question.text = "WHICH PATTERN HAD SMALLER BUMPS? NOW SHOWING 1";
@@ -445,12 +467,12 @@ public class ManageJND : MonoBehaviour
 
         // comparingTrial[1].amplitude_left = Random.Range(0.5f, 2.5f);
 
-        visual.updateParameters(comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left, comparingTrial[1].frequency_right, comparingTrial[1].amplitude_left);
+        visual.updateParameters(comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left, comparingTrial[1].frequency_left, comparingTrial[1].amplitude_left);
 
         yield return new WaitForSeconds(blockDuration);
 
         if(!noHaptic){
-            sp.vibrationModes = alphabet[(int)comparingTrial[1].roughness_left] + alphabet[(int)comparingTrial[1].roughness_right];
+            sp.vibrationModes = alphabet[(int)comparingTrial[1].roughness_left] + alphabet[(int)comparingTrial[1].roughness_left];
         }
 
         question.text = "WHICH PATTERN HAD SMALLER BUMPS? NOW SHOWING 2";
