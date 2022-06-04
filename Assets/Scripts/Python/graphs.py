@@ -113,8 +113,8 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
         xFrequencies.append(frequency)
 
         data = targetDict[i]["Percentage Perceived Smoother"].loc["Percentage Perceived Smoother"]
-        # filtered_data = reject_outliers(data, 5)
-        filtered_data = data
+        filtered_data = reject_outliers(data, 2)
+        # filtered_data = data
 
         # print(len(data), len(filtered_data))
 
