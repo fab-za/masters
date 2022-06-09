@@ -59,13 +59,15 @@ void loop() {
 //  Serial.println(Serial.available());
 //  Serial.println(millis());
 
+//  check = micros();
+
   
   if(Serial.available() > 0){
     Serial.readBytesUntil('\n', buf, 5);
   }
 
-//  check = millis();
-//  endcheck = millis();
+
+
   
 //  Serial.println(String(buf[0])+String(buf[1])+String(buf[2])+String(buf[3]));
 
@@ -88,6 +90,7 @@ void loop() {
     moveTensionMotorRight(tensionMode_right);
   }
 
+//  endcheck = micros();
 //  Serial.println(check);
 //  Serial.println(endcheck);
 //  Serial.println(endcheck - check);

@@ -95,6 +95,9 @@ public class ManageExperiment : MonoBehaviour
 
             modal.enabled = false;
             modalUI.SetActive(false);
+
+            JND.enabled = false;
+            JNDUI.SetActive(false);
         } 
         else if(mode == 3){
             title.text = "SLIDER";

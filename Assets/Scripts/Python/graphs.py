@@ -23,6 +23,8 @@ comparisonInds_reordered = [0,3,1,4,2,5]
 comparisonFile = "comparison_result.csv"
 comparisonCols = ["Experiment Index", "Participant Index", "Trial Left Frequency", "Trial Left Roughness", "Trial Left Amplitude", "Trial Right Frequency", "Trial Right Roughness", "Trial Right Amplitude", "Left Frequency", "Left Roughness", "Left Amplitude", "Right Frequency", "Right Roughness", "Right Amplitude", "Visual Frequency Difference Between Sides", "Haptic Frequency Difference Between Sides", "Amplitude Difference Between Sides"]
 comparisonPatterns = ["20 Hz Tensioned","20 Hz Control","110 Hz Tensioned","110 Hz Control","200 Hz Tensioned","200 Hz Control"]
+comparisonPatternsInt = {0: 20, 1: 20, 2:110, 3:110, 4:200, 5:200}
+# [20,20,110,110,200,200]
 
 multimodalDir = "Multimodal\Pairings"
 multimodalInds = ["00", "01", "10", "11", "20", "21", "30", "31"]
@@ -141,6 +143,13 @@ def compileJNDMulti():
     df.columns = JNDTitles
     return df
 
+def compilePercentageDiff():
+    for key in comparisonDict.keys():
+        for ind in comparisonDict[key]["Haptic Frequency Difference Between Sides"]:
+            val = comparisonDict[key]["Haptic Frequency Difference Between Sides"].iat[0, ind]
+            percentageDiff = val/comparisonPatternsInt[key]
+            comparisonDict[key]["Haptic Frequency Difference Between Sides"].iat[0, ind] = percentageDiff
+
 
 #--------- READ FILES
 comparisonDict = readCSV(comparisonDir, comparisonFile, comparisonInds, comparisonCols) 
@@ -155,6 +164,7 @@ JNDMulti100Dict = readCSV(JNDDir, JNDFile, JNDMulti100Inds, JNDCols)
 numComparisonPoints = comparisonDict[0]["Participant Index"].T.iat[-1,0] +1
 numMultimodalPoints = multimodalDict["00"]["Participant Index"].T.iat[-1,0] +1
 compileAccuracies()
+compilePercentageDiff()
 
 compileJND(JNDVisualInds, JNDVisualDict, "Trial Visual Frequency", JNDVisualBaseline)
 compileJND(JNDHapticInds, JNDHapticDict, "Trial Haptic Frequency", JNDHapticBaseline)
@@ -178,11 +188,11 @@ def definePlots():
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Pattern",
-            "ylabel": "Frequency (Hz)",
+            "ylabel": "Difference in Perceived Frequency (% Actual Frequency)",
             "xmin": 0,
-            "xmax": 10,
+            "xmax": 7,
             "ymin": 0,
-            "ymax": 160,
+            "ymax": 12,
             "xNames": comparisonPatterns
         },
         "hapticFrequencyComparison_dist": {
@@ -194,7 +204,7 @@ def definePlots():
             "suptitle": "Distribution",
             "subplt_titles": comparisonPatterns,
             "plt_num": 6,
-            "xlabel": "Frequency (Hz)",
+            "xlabel": "Difference in Perceived Frequency (% Actual Frequency)",
             "ylabel": "Distribution",
             "xmin": 0,
             "xmax": 4,
@@ -276,7 +286,7 @@ def definePlots():
             "indArray": JNDVisualInds,
             "numDataPoints": 3, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
-            "suptitle": "Unimodal Visual - Just Noticeable Difference",
+            "suptitle": "Unimodal Visual",
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Frequency (Hz)",
@@ -293,7 +303,7 @@ def definePlots():
             "indArray": JNDHapticInds,
             "numDataPoints": 3, # polyfit parameter
             "targetVariable": "Average Percentage Perceived Smoother",
-            "suptitle": "Unimodal Haptic - Just Noticeable Difference",
+            "suptitle": "Unimodal Haptic",
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Frequency (Hz)",
@@ -310,7 +320,7 @@ def definePlots():
             "indArray": JNDMulti0Inds,
             "numDataPoints": 3, # polyfit parameter
             "targetVariable": JNDTitles,
-            "suptitle": "Multimodal - Just Noticeable Difference",
+            "suptitle": "Multimodal",
             "subplt_titles": [""],
             "plt_num": 1,
             "xlabel": "Frequency (Hz)",
@@ -382,12 +392,12 @@ def checkDistribution(cur):
 
         axsD[0,subplot].hist(cur["targetdf"][subplot], bins=10, histtype='bar', ec='k') 
         axsD[0,subplot].set_title(cur["subplt_titles"][subplot])
-        axsD[0,subplot].set_xlabel(cur["xlabel"])
+        axsD[0,2].set_xlabel(cur["xlabel"])
         axsD[0,0].set_ylabel(cur["ylabel"])
 
 def findWilcoxonSignRank(cur):
     for subplot in range((int)(cur["plt_num"]/2)):
-        w, pvalue = stats.wilcoxon(cur["targetdf"][subplot], cur["targetdf"][subplot+3], alternative="greater")
+        w, pvalue = stats.wilcoxon(cur["targetdf"][subplot], cur["targetdf"][subplot+3])
         print(cur["xNames"][subplot], w, pvalue)
     
 def plotScatter(cur):
@@ -501,14 +511,14 @@ def selectFit(mode, x, y, baseline, xEven):
 plt.close('all')
 plotParameters = definePlots()
 
-# plotParameters["hapticFrequencyComparison_box"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_box"])
-# plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_dist"])
+plotParameters["hapticFrequencyComparison_box"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_box"])
+plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray(plotParameters["hapticFrequencyComparison_dist"])
 
-plotParameters["multimodalAccuraciesRough_box"]["targetdf"] = createSubsetDataframe(plotParameters["multimodalAccuraciesRough_box"])
-plotParameters["multimodalAccuraciesSmooth_box"]["targetdf"] = createSubsetDataframe(plotParameters["multimodalAccuraciesSmooth_box"])
+# plotParameters["multimodalAccuraciesRough_box"]["targetdf"] = createSubsetDataframe(plotParameters["multimodalAccuraciesRough_box"])
+# plotParameters["multimodalAccuraciesSmooth_box"]["targetdf"] = createSubsetDataframe(plotParameters["multimodalAccuraciesSmooth_box"])
 
-plotParameters["multimodalTimeRough_box"]["targetdf"] = createTargetArray(plotParameters["multimodalTimeRough_box"])
-plotParameters["multimodalTimeSmooth_box"]["targetdf"] = createTargetArray(plotParameters["multimodalTimeSmooth_box"])
+# plotParameters["multimodalTimeRough_box"]["targetdf"] = createTargetArray(plotParameters["multimodalTimeRough_box"])
+# plotParameters["multimodalTimeSmooth_box"]["targetdf"] = createTargetArray(plotParameters["multimodalTimeSmooth_box"])
 
 # PLOT INDV RESULT
 # plotParameters["hapticFrequencyComparison_box"]["targetdf"] = pd.DataFrame(plotParameters["hapticFrequencyComparison_box"]["targetdf"].iloc[14]).T
@@ -516,7 +526,7 @@ plotParameters["multimodalTimeSmooth_box"]["targetdf"] = createTargetArray(plotP
 # print(type(targetdf))
 
 #--- PLOT BOX
-# plotBox(plotParameters["hapticFrequencyComparison_box"])
+plotBox(plotParameters["hapticFrequencyComparison_box"])
 
 # plotBox(plotParameters["multimodalAccuraciesRough_box"])
 # plotBox(plotParameters["multimodalAccuraciesSmooth_box"])
@@ -528,16 +538,16 @@ plotParameters["multimodalTimeSmooth_box"]["targetdf"] = createTargetArray(plotP
 # ie. do a check between left and right results for each pair
 
 #--- CHECK DISTRIBUTION (PLOT HISTOGRAMS)
-# checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
+checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
 
 #--- RUN WILCOXON SIGN RANK TEST
-# findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
+findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
 
 #--- PLOT SCATTER AND LINE FOR JND
-plotScatter(plotParameters["JNDVisual_scatterline"])
-plotScatter(plotParameters["JNDHaptic_scatterline"])
+# plotScatter(plotParameters["JNDVisual_scatterline"])
+# plotScatter(plotParameters["JNDHaptic_scatterline"])
 
-plotMultiScatter(plotParameters["JNDMulti_scatterline"])
+# plotMultiScatter(plotParameters["JNDMulti_scatterline"])
 
 #------------- SHOW PLOTS
 plt.show()
