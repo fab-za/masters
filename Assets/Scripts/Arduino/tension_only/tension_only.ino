@@ -44,10 +44,10 @@ void setup() {
   tensionMotor_left.write(tense_left);
   tensionMotor_right.write(tense_right);
 
-//  delay(1000);
-//
-//  tensionMotor_left.write(slack_left);
-//  tensionMotor_right.write(slack_right);
+  delay(1000);
+
+  tensionMotor_left.write(slack_left);
+  tensionMotor_right.write(slack_right);
 
 
 //  Serial.print("start");

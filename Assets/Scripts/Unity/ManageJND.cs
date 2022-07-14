@@ -85,7 +85,7 @@ public class ManageJND : MonoBehaviour
         textDuration = 4;
         presentDuration = 2;      
         
-        curs = new int[]{0,9,9,9,9};
+        curs = new int[]{0,9,9,9,9,9,9,9};
         cur = curs[phase];
         baselineLoc = 1;
         highestTrial = 0;
@@ -264,6 +264,33 @@ public class ManageJND : MonoBehaviour
             noHaptic = false;
             baseline = baselineMulti;
             visual.percent = 100;
+        }
+        else if(phase == 5){
+            title = "Multi 12 ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 12.5f;
+        }
+        else if(phase == 6){
+            title = "Multi 25 ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 25;
+        }
+        else if(phase == 7){
+            title = "Multi 37 ";
+            leftLine.SetActive(true);
+            rightLine.SetActive(true);
+            training = true;
+            noHaptic = false;
+            baseline = baselineMulti;
+            visual.percent = 37.5f;
         }
     }
     public void changePhase(){
