@@ -266,32 +266,32 @@ public class ManageJND : MonoBehaviour
             visual.percent = 100;
         }
         else if(phase == 5){
-            title = "Multi 12 ";
+            title = "Multi 16 ";
             leftLine.SetActive(true);
             rightLine.SetActive(true);
             training = true;
             noHaptic = false;
             baseline = baselineMulti;
-            visual.percent = 12.5f;
+            visual.percent = 16f;
         }
         else if(phase == 6){
-            title = "Multi 25 ";
+            title = "Multi 33 ";
             leftLine.SetActive(true);
             rightLine.SetActive(true);
             training = true;
             noHaptic = false;
             baseline = baselineMulti;
-            visual.percent = 25;
+            visual.percent = 33;
         }
-        else if(phase == 7){
-            title = "Multi 37 ";
-            leftLine.SetActive(true);
-            rightLine.SetActive(true);
-            training = true;
-            noHaptic = false;
-            baseline = baselineMulti;
-            visual.percent = 37.5f;
-        }
+        // else if(phase == 7){
+        //     title = "Multi 37 ";
+        //     leftLine.SetActive(true);
+        //     rightLine.SetActive(true);
+        //     training = true;
+        //     noHaptic = false;
+        //     baseline = baselineMulti;
+        //     visual.percent = 37.5f;
+        // }
     }
     public void changePhase(){
         // if(phase < 0){
