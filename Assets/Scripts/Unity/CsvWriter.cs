@@ -235,7 +235,7 @@ public class CsvWriter : MonoBehaviour
         }
         
         var writer2 = new StreamWriter(experimentpath, true); // true for append, false for overwrite
-        // writer2.Write(result);
+        writer2.Write(result);
         writer2.Close();
         Debug.Log($"experiment JND result CSV file written to \"{experimentpath}\"");
     }

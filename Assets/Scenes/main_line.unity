@@ -2819,7 +2819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc5f48af2cffd747a079fe8c632e2c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portName: COM8
+  portName: COM3
   baudRate: 9600
   messageListener: {fileID: 0}
   reconnectionDelay: 1000
@@ -3318,7 +3318,7 @@ MonoBehaviour:
   fullComparisonData: []
   fullMultimodalData: []
   csvWriter: {fileID: 1300657995}
-  index: 30
+  index: 31
   variableList: []
   allParameters: []
   newStart: 0
@@ -3535,7 +3535,7 @@ MonoBehaviour:
     frequency_right: 37
   JNDList: []
   comparingTrial: []
-  phase: 5
+  phase: 4
   JNDHaptic: 8
   JNDVisual: 0.1
   cur: 0
