@@ -3535,7 +3535,7 @@ MonoBehaviour:
     frequency_right: 37
   JNDList: []
   comparingTrial: []
-  phase: 4
+  phase: 6
   JNDHaptic: 8
   JNDVisual: 0.1
   cur: 0
