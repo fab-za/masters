@@ -39,13 +39,15 @@ JNDDir = "JND\Pairings"
 JNDVisualInds = ["0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6","0_7","0_8","0_9","0_10","0_11","0_12","0_13","0_14","0_15","0_16","0_17","0_18","0_19"]
 JNDHapticInds = ["1_0", "1_1", "1_2", "1_3", "1_4", "1_5", "1_6","1_7","1_8","1_9","1_10","1_11","1_12","1_13","1_14","1_15","1_16","1_17","1_18","1_19"]
 JNDMulti0Inds = ["2_9","2_10","2_11","2_12","2_13","2_14","2_15","2_16","2_17","2_18","2_19"]
+JNDMulti16Inds = ["5_9","5_10","5_11","5_12","5_13","5_14","5_15","5_16","5_17","5_18","5_19"]
+JNDMulti33Inds = ["6_9","6_10","6_11","6_12","6_13","6_14","6_15","6_16","6_17","6_18","6_19"]
 JNDMulti50Inds = ["3_9","3_10","3_11","3_12","3_13","3_14","3_15","3_16","3_17","3_18","3_19"]
 JNDMulti100Inds = ["4_9","4_10","4_11","4_12","4_13","4_14","4_15","4_16","4_17","4_18","4_19"]
-JNDInds = JNDVisualInds + JNDHapticInds + JNDMulti0Inds + JNDMulti50Inds + JNDMulti100Inds
+JNDInds = JNDVisualInds + JNDHapticInds + JNDMulti0Inds + JNDMulti16Inds + JNDMulti33Inds + JNDMulti50Inds + JNDMulti100Inds
 
 JNDFile = "JND_result.csv"
 JNDCols = ["Phase", "Experiment Index", "Participant Index", "Trial Visual Frequency", "Trial Haptic Index", "Trial Haptic Frequency", "Percentage Perceived Smoother"]
-JNDTitles = ["Multimodal 0% Noise ", "Multimodal 50% Noise", "Multimodal 100% Noise"]
+JNDTitles = ["0% Noise ", "16% Noise", "33% Noise", "50% Noise", "100% Noise"]
 # JNDPatterns = ["Rougher", "Smoother"]
 JNDVisualBaseline = 35
 JNDHapticBaseline = 20
@@ -115,8 +117,8 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
         xFrequencies.append(frequency)
 
         data = targetDict[i]["Percentage Perceived Smoother"].loc["Percentage Perceived Smoother"]
-        filtered_data = reject_outliers(data, 2)
-        # filtered_data = data
+        # filtered_data = reject_outliers(data, 2)
+        filtered_data = data
 
         # print(len(data), len(filtered_data))
 
@@ -134,7 +136,9 @@ def compileJND(phaseInds, targetDict, xVariable, baseline):
 
 def compileJNDMulti():
     df = initEmptyDataFrame(len(JNDMulti0Inds), JNDTitles)
-    df = pd.concat([JNDMulti0Dict["Compiled Means"], JNDMulti50Dict["Compiled Means"]], axis=1)
+    df = pd.concat([JNDMulti0Dict["Compiled Means"], JNDMulti16Dict["Compiled Means"]], axis=1)
+    df = pd.concat([df, JNDMulti33Dict["Compiled Means"]], axis=1)
+    df = pd.concat([df, JNDMulti50Dict["Compiled Means"]], axis=1)
     df = pd.concat([df, JNDMulti100Dict["Compiled Means"]], axis=1)
     # df.loc[18] = 10
     # df.loc[17] = 10
@@ -158,6 +162,8 @@ JNDVisualDict = readCSV(JNDDir, JNDFile, JNDVisualInds, JNDCols)
 JNDHapticDict = readCSV(JNDDir, JNDFile, JNDHapticInds, JNDCols) 
 
 JNDMulti0Dict = readCSV(JNDDir, JNDFile, JNDMulti0Inds, JNDCols) 
+JNDMulti16Dict = readCSV(JNDDir, JNDFile, JNDMulti16Inds, JNDCols) 
+JNDMulti33Dict = readCSV(JNDDir, JNDFile, JNDMulti33Inds, JNDCols) 
 JNDMulti50Dict = readCSV(JNDDir, JNDFile, JNDMulti50Inds, JNDCols) 
 JNDMulti100Dict = readCSV(JNDDir, JNDFile, JNDMulti100Inds, JNDCols) 
 
@@ -170,6 +176,8 @@ compileJND(JNDVisualInds, JNDVisualDict, "Trial Visual Frequency", JNDVisualBase
 compileJND(JNDHapticInds, JNDHapticDict, "Trial Haptic Frequency", JNDHapticBaseline)
 
 compileJND(JNDMulti0Inds, JNDMulti0Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
+compileJND(JNDMulti16Inds, JNDMulti16Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
+compileJND(JNDMulti33Inds, JNDMulti33Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
 compileJND(JNDMulti50Inds, JNDMulti50Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
 compileJND(JNDMulti100Inds, JNDMulti100Dict, "Trial Haptic Frequency", JNDMultiHapticBaseline)
 
@@ -526,7 +534,7 @@ plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray
 # print(type(targetdf))
 
 #--- PLOT BOX
-plotBox(plotParameters["hapticFrequencyComparison_box"])
+# plotBox(plotParameters["hapticFrequencyComparison_box"])
 
 # plotBox(plotParameters["multimodalAccuraciesRough_box"])
 # plotBox(plotParameters["multimodalAccuraciesSmooth_box"])
@@ -538,16 +546,16 @@ plotBox(plotParameters["hapticFrequencyComparison_box"])
 # ie. do a check between left and right results for each pair
 
 #--- CHECK DISTRIBUTION (PLOT HISTOGRAMS)
-checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
+# checkDistribution(plotParameters["hapticFrequencyComparison_dist"])
 
 #--- RUN WILCOXON SIGN RANK TEST
-findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
+# findWilcoxonSignRank(plotParameters["hapticFrequencyComparison_dist"])
 
 #--- PLOT SCATTER AND LINE FOR JND
 # plotScatter(plotParameters["JNDVisual_scatterline"])
 # plotScatter(plotParameters["JNDHaptic_scatterline"])
 
-# plotMultiScatter(plotParameters["JNDMulti_scatterline"])
+plotMultiScatter(plotParameters["JNDMulti_scatterline"])
 
 #------------- SHOW PLOTS
 plt.show()
