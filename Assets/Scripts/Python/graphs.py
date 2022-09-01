@@ -449,12 +449,12 @@ def plotMultiScatter(cur):
             xEven = np.linspace(cur["xmin"]-1, cur["xmax"], 50)
             yEven = np.linspace(cur["ymin"]-1, cur["ymax"], 21)
 
-            axsS[0,subplot].scatter(x,y, ec='k') 
+            axsS[0,subplot].scatter(x,y, ec='k') # scatter dots
 
             yFit, JNDPoint, PSEPoint = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
             axsS[0,subplot].plot(xEven,yFit, label=target) 
 
-            print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
+            print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]), " at ", PSEPoint)
 
         axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiVisualEqBaseline), yEven, "k--", label="$Baseline Visual Frequency, f_v$")
         axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiHapticBaseline), yEven, "r--", label="$Baseline Haptic Frequency, f_h$")

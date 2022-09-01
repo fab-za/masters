@@ -3318,7 +3318,7 @@ MonoBehaviour:
   fullComparisonData: []
   fullMultimodalData: []
   csvWriter: {fileID: 1300657995}
-  index: 36
+  index: 38
   variableList: []
   allParameters: []
   newStart: 0
@@ -3535,7 +3535,7 @@ MonoBehaviour:
     frequency_right: 37
   JNDList: []
   comparingTrial: []
-  phase: 6
+  phase: 5
   JNDHaptic: 8
   JNDVisual: 0.1
   cur: 0
