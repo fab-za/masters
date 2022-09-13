@@ -419,15 +419,19 @@ def plotScatter(cur):
 
         axsS[0,subplot].scatter(x,y, ec='k') 
 
-        yFit, JNDPoint, PSEPoint = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
+        yFit, JNDPoint, PSEPoint, coefficients = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
         axsS[0,subplot].plot(xEven,yFit) 
 
         print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]))
+        printCoefficients(coefficients)
 
-        axsS[0,subplot].plot(x, np.full((len(x),),0.75), "g--")
-        axsS[0,subplot].plot(np.full((len(x),),JNDPoint), y, "g--")
-        axsS[0,subplot].plot(x, np.full((len(x),),0.50), "r--")
-        axsS[0,subplot].plot(np.full((len(x),),PSEPoint), y, "r--")
+        xLine = np.append(x.values, 40)
+        yLine = np.append(y.values, 110)
+
+        axsS[0,subplot].plot(xLine, np.full((len(xLine),),0.75), "g:")
+        axsS[0,subplot].plot(np.full((len(yLine),),JNDPoint), yLine, "g:")
+        axsS[0,subplot].plot(xLine, np.full((len(xLine),),0.50), "r:")
+        axsS[0,subplot].plot(np.full((len(yLine),),PSEPoint), yLine, "r:")
 
         axsS[0,subplot].set_xlim(cur["xmin"], cur["xmax"])
         axsS[0,subplot].set_ylim(cur["ymin"], cur["ymax"])
@@ -449,12 +453,13 @@ def plotMultiScatter(cur):
             xEven = np.linspace(cur["xmin"]-1, cur["xmax"], 50)
             yEven = np.linspace(cur["ymin"]-1, cur["ymax"], 21)
 
-            axsS[0,subplot].scatter(x,y, ec='k') # scatter dots
+            # axsS[0,subplot].scatter(x,y, ec='k') # scatter dots
 
-            yFit, JNDPoint, PSEPoint = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
+            yFit, JNDPoint, PSEPoint, coefficients = selectFit(cur["numDataPoints"], x, y, cur["xmin"], xEven)        
             axsS[0,subplot].plot(xEven,yFit, label=target) 
 
             print("JND: ", (100*(JNDPoint-cur["xmin"])/cur["xmin"]), "PSE: ", (100*(PSEPoint-cur["xmin"])/cur["xmin"]), " at ", PSEPoint)
+            printCoefficients(coefficients)
 
         axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiVisualEqBaseline), yEven, "k--", label="$Baseline Visual Frequency, f_v$")
         axsS[0,subplot].plot(np.full((len(yEven),),JNDMultiHapticBaseline), yEven, "r--", label="$Baseline Haptic Frequency, f_h$")
@@ -512,7 +517,11 @@ def selectFit(mode, x, y, baseline, xEven):
         PSEPoint = min(PSEPoint)
     
     
-    return yFit, JNDPoint, PSEPoint
+    return yFit, JNDPoint, PSEPoint, coefficients
+
+def printCoefficients(coefs):
+    for c in coefs:
+        print(c)
 
 
 #----------- CALL PLOT FUNCTIONS
@@ -558,6 +567,9 @@ plotParameters["hapticFrequencyComparison_dist"]["targetdf"] = createTargetArray
 plotMultiScatter(plotParameters["JNDMulti_scatterline"])
 
 #------------- SHOW PLOTS
+# to calculate weights: point - 20 / 12 = visual weight
+# plt.rc({'axes.titlesize': 50, 'lines.linewidth': 3})
+# plt.rc('axes', titlesize=50)
 plt.show()
 
 print("done")
